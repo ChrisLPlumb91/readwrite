@@ -13,9 +13,10 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+from django.contrib.messages import constants as messages
 if os.path.isfile('env.py'):
     import env
-from django.contrib.messages import constants as messages
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,6 +32,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-hhtyd*%v!b-+@1tz2=sy%
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 ALLOWED_HOSTS = ['clp1991-readwrite.herokuapp.com', 'localhost']
 
