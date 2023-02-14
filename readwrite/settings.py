@@ -37,6 +37,7 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 ALLOWED_HOSTS = ['clp1991-readwrite.herokuapp.com', 'localhost']
 
+# ALLOWED_HOSTS = ['http://*', 'https://*']
 
 # Application definition
 
@@ -163,6 +164,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
+# CSRF_COOKIE_SECURE = False
+
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'http')
+
+CSRF_TRUSTED_ORIGINS = ['https://8000-chrislplumb91-readwrite-i932bn3szkb.ws-eu86.gitpod.io', 'http://127.0.0.1:8000/']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
