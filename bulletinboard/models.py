@@ -11,7 +11,7 @@ class Bulletin(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, 
                                related_name='bulletins')
     content = models.TextField()
-    link = models.EmailField()
+    link = models.URLField()
     created_on = models.DateTimeField(auto_now_add=True)
     status = models.IntegerField(choices=STATUS, default=0)
     likes = models.ManyToManyField(User, related_name='bulletin_likes')
