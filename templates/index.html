@@ -2,4 +2,28 @@
 
 {% block content %}
 
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-9">
+            {% for bulletin in bulletin_list %}
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            {{ bulletin.title }}
+                            <p>{{ bulletin.created_on }}</p>
+                        </div>
+                        <div class="card-body">
+                            <a href="{{ bulletin.link }}">{{ bulletin.link }}</a>
+                            <p><i class="far fa-thumbs-up mx-1"></i>{{ bulletin.number_of_likes }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="col-3"></div>
+    </div>
+</div>
+
 {% endblock %}

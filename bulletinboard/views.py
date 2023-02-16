@@ -25,7 +25,7 @@ class BulletinDetail(View):
             request,
             'bulletin.html',
             {
-                'post': post,
+                'bulletin': bulletin,
                 'comments': comments,
                 'commented': False,
                 'liked': liked,
