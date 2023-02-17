@@ -26,10 +26,46 @@ body {
     text-shadow: 0 1px #175fe6;
 }
 
+.card {
+    box-shadow: 10px 10px 10px #292d35b9;
+}
+
+.rules {
+    height: 95vh;
+    width: 22.6vw;
+}
+
+.rules-fixed {
+    position: fixed;
+    top: 15px;
+}
+
+.rules-fixed-bottom {
+    position: absolute;
+    bottom: 15px;
+}
+
+.card-header {
+    color:aliceblue;
+}
+
+.card-header > h2 {
+    color: #000000a6;
+    font-weight: bold;
+}
+
 .card-header > p {
     display: inline-block;
     float: right;
     font-size: 1rem;
+}
+
+.blue-header {
+    background-color: #175fe6;
+}
+
+.red-header {
+    background-color: #e6174b;
 }
 
 .card-body > a {

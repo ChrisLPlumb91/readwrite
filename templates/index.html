@@ -2,14 +2,15 @@
 
 {% block content %}
 
-<div class="container-fluid">
+<div class="container-fluid my-5 px-5" id="bulletin_list_container">
     <div class="row">
         <div class="col-9">
             {% for bulletin in bulletin_list %}
-            <div class="row">
+            {% if forloop.counter == 1 %}
+            <div class="row mb-3">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header blue-header">
                             {{ bulletin.title }}
                             <p>{{ bulletin.created_on }}</p>
                         </div>
@@ -20,9 +21,50 @@
                     </div>
                 </div>
             </div>
+            {% else %}
+            <div class="row my-3">
+                <div class="col-12">
+                    <div class="card">
+                        {% if forloop.counter|divisibleby:2 %}
+                        <div class="card-header red-header">
+                            {{ bulletin.title }}
+                            <p>{{ bulletin.created_on }}</p>
+                        </div>
+                        {% else %}
+                        <div class="card-header blue-header">
+                            {{ bulletin.title }}
+                            <p>{{ bulletin.created_on }}</p>
+                        </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <a href="{{ bulletin.link }}">{{ bulletin.link }}</a>
+                            <p><i class="far fa-thumbs-up mx-1"></i>{{ bulletin.number_of_likes }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
             {% endfor %}
         </div>
-        <div class="col-3"></div>
+        <div class="col-3">
+            <div class="card rules">
+                <div class="card-header">
+                    <h2 class="text-center">RULES</h2>
+                </div>
+                <div class="card-body">
+                    <ol class="mx-5">
+                        <li>No self-promotion.</li>
+                        <li>No bigotry.</li>
+                        <li>No paywalled articles.</li>
+                        <li>No spam.</li>
+                        <li>No explicit content.</li>
+                        <li>No trolling.</li>
+                        <li>No posting with the intent to mislead.</li>
+                        <li>No duplicates.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
