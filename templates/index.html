@@ -11,7 +11,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header blue-header">
-                            {{ bulletin.title }}
+                            <a href="{% url 'post' bulletin.slug %}">{{ bulletin.title }}</a>
                             <p>{{ bulletin.created_on }}</p>
                         </div>
                         <div class="card-body">
@@ -27,17 +27,17 @@
                     <div class="card">
                         {% if forloop.counter|divisibleby:2 %}
                         <div class="card-header red-header">
-                            {{ bulletin.title }}
+                            <a href="{% url 'post' bulletin.slug %}">{{ bulletin.title }}</a>
                             <p>{{ bulletin.created_on }}</p>
                         </div>
                         {% else %}
                         <div class="card-header blue-header">
-                            {{ bulletin.title }}
+                            <a href="{% url 'post' bulletin.slug %}">{{ bulletin.title }}</a>
                             <p>{{ bulletin.created_on }}</p>
                         </div>
                         {% endif %}
                         <div class="card-body">
-                            <a href="{{ bulletin.link }}">{{ bulletin.link }}</a>
+                            <a href="{{ bulletin.link }}" target="_blank">{{ bulletin.link }}</a>
                             <p><i class="far fa-thumbs-up mx-1"></i>{{ bulletin.number_of_likes }}</p>
                         </div>
                     </div>
@@ -47,6 +47,11 @@
             {% endfor %}
         </div>
         <div class="col-3">
+            <row>
+                <div class="col-12 text-center">
+                    <a href="{% url 'add' %}" class="btn btn-lg new-bulletin-button my-4">New Bulletin</a>
+                </div>
+            </row>
             <div class="card rules">
                 <div class="card-header">
                     <h2 class="text-center">RULES</h2>

@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.views import generic, View
 from django.http import HttpResponseRedirect
-from .models import Bulletin
+from .models import Bulletin, Comment
+from .forms import BulletinForm, CommentForm
 
 
 class BulletinList(generic.ListView):
@@ -29,6 +30,41 @@ class BulletinDetail(View):
                 'comments': comments,
                 'commented': False,
                 'liked': liked,
-                'comment_form': Comment_Form()
+                'comment_form': CommentForm()
             },
         )
+
+
+class AddBulletin(View):
+    def get(self, request):
+
+        return render(
+            request,
+            'add_bulletin.html',
+            {
+                'bulletin_form': BulletinForm()
+            },
+        )
+        
+    def post(self, request, slug, *args, **kwargs):
+        bulletin_form = BulletinForm(data=request.POST)
+
+        if bulletin_form.is_valid():
+            bulletin_form.instance.author = request.user.username
+            bulletin_form.save()
+        else:
+            bulletin_form = BulletinForm()
+
+        queryset = Bulletin.objects.filter(status=1)
+        bulletin = get_object_or_404(queryset, slug=slug)
+
+        return render(
+            request,
+            'bulletin.html',
+            {
+                'bulletin': bulletin,
+                'comment_form': CommentForm(),
+            }
+        )
+
+
