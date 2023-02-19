@@ -3,6 +3,7 @@ from django.views import generic, View
 from django.http import HttpResponseRedirect
 from .models import Bulletin, Comment
 from .forms import BulletinForm, CommentForm
+from django.template.defaultfilters import slugify
 
 
 class BulletinList(generic.ListView):
@@ -45,26 +46,16 @@ class AddBulletin(View):
                 'bulletin_form': BulletinForm()
             },
         )
-        
-    def post(self, request, slug, *args, **kwargs):
+
+    def post(self, request, *args, **kwargs):
         bulletin_form = BulletinForm(data=request.POST)
 
         if bulletin_form.is_valid():
-            bulletin_form.instance.author = request.user.username
-            bulletin_form.save()
+            post = bulletin_form.save(commit=False)
+            post.slug = slugify(post.title)
+            post.author = request.user
+            post.save()
         else:
             bulletin_form = BulletinForm()
 
-        queryset = Bulletin.objects.filter(status=1)
-        bulletin = get_object_or_404(queryset, slug=slug)
-
-        return render(
-            request,
-            'bulletin.html',
-            {
-                'bulletin': bulletin,
-                'comment_form': CommentForm(),
-            }
-        )
-
-
+        return redirect('home')
