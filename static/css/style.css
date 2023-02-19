@@ -26,9 +26,13 @@ body {
     text-shadow: 0 1px #175fe6;
 }
 
+.button-container {
+    width: 22.6vw;
+}
+
 .new-bulletin-button {
     background-color:#18b15d;
-    color: rgb(255, 255, 255);
+    color: #ffffff;
     border: 2px solid #292d35b9;
     font-weight: bold;
     font-size: 2rem;
@@ -43,14 +47,37 @@ body {
     box-shadow: 10px 10px 10px #292d35b9;
 }
 
+.card-header > a {
+    color: #fff; 
+    text-decoration: none;
+}
+
+.red-header > a:hover {
+    text-shadow: 0 2px #175fe6;
+}
+
+.blue-header > a:hover {
+    text-shadow: 0 2px #e6174b;
+}
+
 .rules {
-    height: 95vh;
+    height: 85vh;
     width: 22.6vw;
+}
+
+.button-fixed {
+    position: fixed;
+    top: 10px;
 }
 
 .rules-fixed {
     position: fixed;
-    top: 15px;
+    top: 127px;
+}
+
+.button-fixed-bottom {
+    position: absolute;
+    bottom: 820px;
 }
 
 .rules-fixed-bottom {

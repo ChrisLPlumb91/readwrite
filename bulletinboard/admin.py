@@ -14,5 +14,5 @@ class BulletinAdmin(SummernoteModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('author', 'comment', 'post', 'created_on')
+    list_display = ('author', 'comment', 'bulletin', 'created_on')
     search_fields = ['author', 'comment']

@@ -2,4 +2,46 @@
 
 {% block content %}
 
+{% load crispy_forms_tags %}
+
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h2>{{ bulletin.title }}</h2>
+            </div>
+            <div class="card-body">
+                <a href="{{ bulletin.link }}">{{ bulletin.link }}</a>
+                <p>{{ bulletin.content }}</p>
+                <p><i class="far fa-thumbs-up mx-1"></i>{{ bulletin.number_of_likes }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12">
+        <form method="post">
+            {{ comment_form | crispy }}
+            {% csrf_token %}
+            <div class="text-end">
+                <button type="submit" class="btn btn-signup btn-primary btn-lg">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% for comment in comments %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <p>{{ comment.comment }}</p>
+                <p><i class="far fa-thumbs-up mx-1"></i>{{ comment.number_of_likes }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
 {% endblock %}

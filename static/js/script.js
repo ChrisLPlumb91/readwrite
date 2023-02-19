@@ -1,19 +1,25 @@
 $(document).scroll(function() {
     var y = $(document).scrollTop();    
-    var rulescard = $('.rules');
+    var rulesCard = $('.rules');
+    var newBulletinButton = $('.button-container');
     var coldiv = $('div>.col-3');
     
     if(y > 195 && y < 848)  {
         coldiv.removeClass('position-relative');
-        rulescard.removeClass('rules-fixed-bottom');
-        rulescard.addClass('rules-fixed');
+        rulesCard.removeClass('rules-fixed-bottom');
+        newBulletinButton.removeClass('button-fixed-bottom');
+        rulesCard.addClass('rules-fixed');
+        newBulletinButton.addClass('button-fixed');
         document.addClass('me-2');
     } else if(y >= 848) {
-        rulescard.removeClass('rules-fixed');
+        rulesCard.removeClass('rules-fixed');
+        newBulletinButton.removeClass('button-fixed');
         coldiv.addClass('position-relative');
-        rulescard.addClass('rules-fixed-bottom');
+        newBulletinButton.addClass('button-fixed-bottom');
+        rulesCard.addClass('rules-fixed-bottom');
     } else {
-        rulescard.removeClass('rules-fixed');
+        rulesCard.removeClass('rules-fixed');
+        newBulletinButton.removeClass('button-fixed');
         document.removeClass('me-2');
     }
 });

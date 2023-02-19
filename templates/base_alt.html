@@ -62,43 +62,9 @@
     </nav>
 
     <!-- Stuff unique to a page -->
+    {% block content %}
+    {% endblock content %}
 
-    <div class="container-fluid my-5 px-5" id="bulletin_list_container">
-        <div class="row">
-            
-            <div class="col-9">
-            {% block content %}
-            {% endblock content %}
-            </div>
-
-            <div class="col-3">
-
-                <div class="text-center button-container">
-                    <a href="{% url 'add' %}" class="btn btn-lg new-bulletin-button my-4">New Bulletin</a>
-                </div>
-                
-                <div class="card rules">
-                    <div class="card-header">
-                        <h2 class="text-center">RULES</h2>
-                    </div>
-                    <div class="card-body">
-                        <ol class="mx-5">
-                            <li>No self-promotion.</li>
-                            <li>No bigotry.</li>
-                            <li>No paywalled articles.</li>
-                            <li>No spam.</li>
-                            <li>No explicit content.</li>
-                            <li>No trolling.</li>
-                            <li>No posting with the intent to mislead.</li>
-                            <li>No duplicates.</li>
-                        </ol>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
 
     <!-- Footer -->
     <footer class="container-fluid">

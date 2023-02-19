@@ -28,9 +28,9 @@ class Bulletin(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(Bulletin, on_delete=models.CASCADE, 
-                             related_name='comments_on_post')
-    author = models.ForeignKey(User, on_delete=models.CASCADE, 
+    bulletin = models.ForeignKey(Bulletin, on_delete=models.CASCADE,
+                                 related_name='comments_on_post')
+    author = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name='comments_by_user')
     comment = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
@@ -44,3 +44,4 @@ class Comment(models.Model):
 
     def number_of_likes(self):
         return self.likes.count()
+
