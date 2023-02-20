@@ -86,7 +86,40 @@ class AddBulletin(View):
             post.slug = slugify(post.title)
             post.author = request.user
             post.save()
+            return redirect('bulletin', slug=post.slug)
         else:
             bulletin_form = BulletinForm()
+            return redirect('home')
 
-        return redirect('home')
+
+class EditBulletin(View):
+    def get(self, request, slug, *args, **kwargs):
+        queryset = Bulletin.objects.filter(status=1)
+        bulletin = get_object_or_404(queryset, slug=slug)
+
+        bulletin_form = BulletinForm(instance=bulletin)
+
+        return render(
+            request,
+            'edit_bulletin.html',
+            {
+                'bulletin_form': bulletin_form,
+                'bulletin': bulletin,
+            },
+        )
+
+    def post(self, request, slug, *args, **kwargs):
+        queryset = Bulletin.objects.filter(status=1)
+        bulletin = get_object_or_404(queryset, slug=slug)
+
+        bulletin_form = BulletinForm(data=request.POST, instance=bulletin)
+
+        if bulletin_form.is_valid():
+            post = bulletin_form.save(commit=False)
+            post.slug = slugify(post.title)
+            post.author = request.user
+            post.save()
+            return redirect('bulletin', slug=post.slug)
+        else:
+            bulletin_form = BulletinForm()
+            return redirect('home')

@@ -2,4 +2,19 @@
 
 {% block content %}
 
-{% endblock %}
+{% load crispy_forms_tags %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-8 offset-2 my-4">
+            <form method="post">
+                {{ bulletin_form | crispy }}
+                {% csrf_token %}
+                <button type="submit" action="{% url 'edit' bulletin.slug %}" class="btn btn-signup btn-primary btn-lg">Submit</button>
+                <a href="{% url 'home' %}" class="btn btn-secondary btn-lg">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

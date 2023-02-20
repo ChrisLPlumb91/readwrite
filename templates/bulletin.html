@@ -9,11 +9,11 @@
         <div class="card">
             <div class="card-header">
                 <h2>{{ bulletin.title }}</h2>
+                <a class="bulletin-link" href="{{ bulletin.link }}" target="_blank">{{ bulletin.link }}</a>
             </div>
             <div class="card-body">
-                <a href="{{ bulletin.link }}">{{ bulletin.link }}</a>
-                <p>{{ bulletin.content }}</p>
-                <p><i class="far fa-thumbs-up mx-1"></i>{{ bulletin.number_of_likes }}</p>
+                <p class="float-none">{{ bulletin.content }}</p>
+                <div class="text-end"><i class="far fa-thumbs-up mx-1"></i>{{ bulletin.number_of_likes }}</div>
             </div>
         </div>
     </div>

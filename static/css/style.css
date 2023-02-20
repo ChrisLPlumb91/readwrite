@@ -60,6 +60,19 @@ body {
     text-shadow: 0 2px #e6174b;
 }
 
+.edit-bulletin-button {
+    background-color:#9218b1;
+    color: #ffffff;
+    border: 2px solid #292d35b9;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.edit-bulletin-button:hover {
+    background-color:#b678df;
+    border: 2px solid #292d35b9;
+}
+
 .rules {
     height: 85vh;
     width: 22.6vw;
@@ -94,6 +107,11 @@ body {
     font-weight: bold;
 }
 
+.bulletin-link {
+    color: #175fe6 !important;
+    font-size: 1.5rem;
+}
+
 .card-header > p {
     display: inline-block;
     float: right;
@@ -113,7 +131,6 @@ body {
 }
 
 .card-body > p {
-    display: inline-block;
     float: right;
 }
 
