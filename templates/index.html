@@ -12,9 +12,15 @@
                     <p>{{ bulletin.created_on }}</p>
                 </div>
                 <div class="card-body">
-                    <a href="{{ bulletin.link }}">{{ bulletin.link }}</a>
+                    <div class="link-container d-inline-block">
+                        <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2" target="_blank">{{ bulletin.link }}</a>
+                    </div>
                     <p><i class="far fa-thumbs-up mx-1 float-end"></i>{{ bulletin.number_of_likes }}</p>
-                    <a href="{% url 'edit' bulletin.slug %}" class="btn btn-lg float-end edit-bulletin-button me-5">Edit</a>   
+                    <a href="{% url 'edit' bulletin.slug %}" class="btn btn-lg float-end edit-bulletin-button me-5">Edit</a>
+                    <form method="post" action="{% url 'post_delete' bulletin.slug %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-lg float-end delete-bulletin-button me-2" data-bs-toggle="modal" data-bs-target="#delete-dialog">Delete</a>
+                    </form>   
                 </div>
             </div>
         </div>
@@ -26,7 +32,7 @@
                 {% if forloop.counter|divisibleby:2 %}
                 <div class="card-header red-header">
                     <a href="{% url 'bulletin' bulletin.slug %}">{{ bulletin.title }}</a>
-                    <p>{{ bulletin.created_on }}</p>
+                    <p><em><strong>Posted: </strong>{{ bulletin.created_on }}</em></p>
                 </div>
                 {% else %}
                 <div class="card-header blue-header">
@@ -35,9 +41,15 @@
                 </div>
                 {% endif %}
                 <div class="card-body">
-                    <a href="{{ bulletin.link }}" target="_blank">{{ bulletin.link }}</a>
+                    <div class="link-container d-inline-block">
+                        <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2" target="_blank">{{ bulletin.link }}</a>
+                    </div>
                     <p><i class="far fa-thumbs-up mx-1 float-end"></i>{{ bulletin.number_of_likes }}</p>
                     <a href="{% url 'edit' bulletin.slug %}" class="btn btn-lg float-end edit-bulletin-button me-5">Edit</a>
+                    <form method="post" action="{% url 'post_delete' bulletin.slug %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" value="Delete" class="btn btn-lg float-end delete-bulletin-button me-2" data-bs-toggle="modal" data-bs-target="#delete-dialog">Delete</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -45,3 +57,25 @@
     {% endif %}
 {% endfor %}
 {% endblock %}
+
+{% block modal %}
+<div class="modal" tabindex="-1" role="dialog" id="delete-dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Bulletin</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this bulletin?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <a href="#" class="btn btn-primary">Yes</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

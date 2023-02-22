@@ -60,6 +60,21 @@ body {
     text-shadow: 0 2px #e6174b;
 }
 
+.link-container {
+    width: 60%;
+    border: 2px solid #a9bae6b9;
+    border-radius: 10px;
+    box-shadow: 0 3px #575d69b9;
+    background-color: #eaecee;
+}
+
+.link-ellipsis {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .edit-bulletin-button {
     background-color:#9218b1;
     color: #ffffff;
@@ -70,6 +85,19 @@ body {
 
 .edit-bulletin-button:hover {
     background-color:#b678df;
+    border: 2px solid #292d35b9;
+}
+
+.delete-bulletin-button {
+    background-color:#b11846;
+    color: #ffffff;
+    border: 2px solid #292d35b9;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.delete-bulletin-button:hover {
+    background-color:#df7892;
     border: 2px solid #292d35b9;
 }
 
@@ -126,7 +154,7 @@ body {
     background-color: #e6174b;
 }
 
-.card-body > a {
+.card-body a {
     font-size: 1rem;
 }
 

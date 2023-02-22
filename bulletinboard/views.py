@@ -89,7 +89,7 @@ class AddBulletin(View):
             return redirect('bulletin', slug=post.slug)
         else:
             bulletin_form = BulletinForm()
-            return redirect('home')
+            return redirect('home', slug=None)
 
 
 class EditBulletin(View):
@@ -122,4 +122,19 @@ class EditBulletin(View):
             return redirect('bulletin', slug=post.slug)
         else:
             bulletin_form = BulletinForm()
-            return redirect('home')
+            return redirect('home', slug=None)
+
+
+class DeleteBulletin(View):
+    def post(self, request, slug, *args, **kwargs):
+        return HttpResponseRedirect(reverse('home'), args=[slug])
+
+
+def delete_bulletin(request, slug):
+    queryset = Bulletin.objects.filter(status=1)
+    bulletin = get_object_or_404(queryset, slug=slug)
+    bulletin.delete()
+
+    return redirect('home', slug=None)
+
+
