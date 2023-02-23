@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.views import generic, View
+from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from .models import Bulletin, Comment
 from .forms import BulletinForm, CommentForm
@@ -89,7 +90,7 @@ class AddBulletin(View):
             return redirect('bulletin', slug=post.slug)
         else:
             bulletin_form = BulletinForm()
-            return redirect('home', slug=None)
+            return redirect('home')
 
 
 class EditBulletin(View):
@@ -122,19 +123,44 @@ class EditBulletin(View):
             return redirect('bulletin', slug=post.slug)
         else:
             bulletin_form = BulletinForm()
-            return redirect('home', slug=None)
+            return redirect('home')
+
+
+class ConfirmDeleteBulletin(View):
+    def post(self, request, slug, *args, **kwargs):
+        return HttpResponseRedirect(reverse('home_alt', args=[slug]))
+
+
+class BulletinListAlt(View):
+    def get(self, request, slug, *args, **kwargs):
+        queryset = Bulletin.objects.filter(status=1)
+        paginator = Paginator(queryset, 10)
+        bulletin = get_object_or_404(queryset, slug=slug)
+        comments = bulletin.comments_on_post.order_by('likes')
+        liked = False
+
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        return render(
+            request,
+            'index_alt.html',
+            {
+                'bulletin_list': queryset,
+                'specific_bulletin': bulletin,
+                'comments': comments,
+                'commented': True,
+                'liked': liked,
+                'page_obj': page_obj,
+            },
+        )
 
 
 class DeleteBulletin(View):
     def post(self, request, slug, *args, **kwargs):
-        return HttpResponseRedirect(reverse('home'), args=[slug])
+        queryset = Bulletin.objects.filter(status=1)
+        bulletin = get_object_or_404(queryset, slug=slug)
+        print(bulletin.slug)
+        bulletin.delete()
 
-
-def delete_bulletin(request, slug):
-    queryset = Bulletin.objects.filter(status=1)
-    bulletin = get_object_or_404(queryset, slug=slug)
-    bulletin.delete()
-
-    return redirect('home', slug=None)
-
-
+        return redirect('home')

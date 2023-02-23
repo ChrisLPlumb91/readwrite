@@ -7,6 +7,10 @@ urlpatterns = [
     path('add', views.AddBulletin.as_view(), name='add'),
     path('<slug:slug>/', views.BulletinDetail.as_view(), name='bulletin'),
     path('edit/<slug:slug>/', views.EditBulletin.as_view(), name='edit'),
-    path('post_delete/<slug>', views.DeleteBulletin.as_view(), name="post_delete"),
-    path('confirm-delete/<slug>/', views.delete_bulletin, name='confirm_delete'),
+    path('post_delete/<slug>', views.ConfirmDeleteBulletin.as_view(),
+         name="post_delete"),
+    path('delete/<slug:slug>/', views.BulletinListAlt.as_view(), 
+         name='home_alt'),
+    path('confirm-delete/<slug>/', views.DeleteBulletin.as_view(),
+         name='confirm_delete'),
 ]
