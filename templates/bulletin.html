@@ -8,8 +8,13 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h2>{{ bulletin.title }}</h2>
-                <a class="bulletin-link" href="{{ bulletin.link }}" target="_blank">{{ bulletin.link }}</a>
+                <h2 class="d-inline">{{ bulletin.title }}</h2>
+                <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}" class="btn btn-lg float-end edit-bulletin-button">Edit</a>
+                <form class="float-end" method="post" action="{% url 'post_delete' bulletin.slug %}?query={{ request.get_full_path|urlencode }}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-lg float-end delete-bulletin-button me-2">Delete</button>
+                </form>
+                <a class="bulletin-link d-block my-2" href="{{ bulletin.link }}" target="_blank">{{ bulletin.link }}</a>
             </div>
             <div class="card-body">
                 <p class="float-none">{{ bulletin.content }}</p>

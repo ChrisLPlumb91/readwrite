@@ -16,8 +16,8 @@
                         <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2" target="_blank">{{ bulletin.link }}</a>
                     </div>
                     <p><i class="far fa-thumbs-up mx-1 float-end"></i>{{ bulletin.number_of_likes }}</p>
-                    <a href="{% url 'edit' bulletin.slug %}" class="btn btn-lg float-end edit-bulletin-button me-5">Edit</a>
-                    <form class="float-end" method="post" action="{% url 'post_delete' bulletin.slug %}">
+                    <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}" class="btn btn-lg float-end edit-bulletin-button me-5">Edit</a>
+                    <form class="float-end" method="post" action="{% url 'post_delete' bulletin.slug %}?query={{ request.get_full_path|urlencode }}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-lg float-end delete-bulletin-button me-2">Delete</button>
                     </form>   
@@ -45,7 +45,7 @@
                         <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2" target="_blank">{{ bulletin.link }}</a>
                     </div>
                     <p><i class="far fa-thumbs-up mx-1 float-end"></i>{{ bulletin.number_of_likes }}</p>
-                    <a href="{% url 'edit' bulletin.slug %}" class="btn btn-lg float-end edit-bulletin-button me-5">Edit</a>
+                    <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}" class="btn btn-lg float-end edit-bulletin-button me-5">Edit</a>
                     <form class="float-end" method="post" action="{% url 'post_delete' bulletin.slug %}" class="d-inline">
                         {% csrf_token %}
                         <button type="submit" class="btn float-end delete-bulletin-button me-2">Delete</button>

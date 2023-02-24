@@ -87,7 +87,7 @@ class AddBulletin(View):
             post.slug = slugify(post.title)
             post.author = request.user
             post.save()
-            return redirect('bulletin', slug=post.slug)
+            return redirect('home')
         else:
             bulletin_form = BulletinForm()
             return redirect('home')
@@ -106,6 +106,7 @@ class EditBulletin(View):
             {
                 'bulletin_form': bulletin_form,
                 'bulletin': bulletin,
+                'query': request.GET.get('query'),
             },
         )
 
@@ -128,7 +129,11 @@ class EditBulletin(View):
 
 class ConfirmDeleteBulletin(View):
     def post(self, request, slug, *args, **kwargs):
-        return HttpResponseRedirect(reverse('home_alt', args=[slug]))
+        print(f'request.GET.get: {request.GET.get("query")}')
+        if '/post/' not in request.GET.get('query'):
+            return HttpResponseRedirect(reverse('home_alt', args=[slug]))
+        else:
+            return HttpResponseRedirect(reverse('post_alt', args=[slug]))
 
 
 class BulletinListAlt(View):
@@ -152,6 +157,29 @@ class BulletinListAlt(View):
                 'commented': True,
                 'liked': liked,
                 'page_obj': page_obj,
+            },
+        )
+
+
+class BulletinDetailAlt(View):
+    def get(self, request, slug, *args, **kwargs):
+        queryset = Bulletin.objects.filter(status=1)
+        bulletin = get_object_or_404(queryset, slug=slug)
+        comments = bulletin.comments_on_post.order_by('likes')
+        liked = False
+
+        if bulletin.likes.filter(id=self.request.user.id).exists():
+            liked = True
+
+        return render(
+            request,
+            'bulletin_alt.html',
+            {
+                'bulletin': bulletin,
+                'comments': comments,
+                'commented': False,
+                'liked': liked,
+                'comment_form': CommentForm()
             },
         )
 
