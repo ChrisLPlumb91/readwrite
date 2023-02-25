@@ -17,21 +17,23 @@
                         target="_blank">{{ bulletin.link }}</a>
                 </div>
                 <div class="button-container d-inline-block float-end px-1 py-1">
-                    <form method="POST" action="{% url 'bulletin_like' bulletin.slug %}"
+                    <form method="POST"
+                        action="{% url 'bulletin_like' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
                         class="d-inline like-button-form">
                         {% csrf_token %}
                         {% if user.is_authenticated %}
-                            {% if request.user not in bulletin.likes.all %}
-                            <button type="submit" name="bulletin_id" value="{{ bulletin.slug }}"
-                                class="btn float-end">{{ bulletin.number_of_likes }}<i
-                                    class="far fa-thumbs-up not-liked-by-user ms-1"></i></button>
-                            {% else %}
-                            <button type="submit" name="bulletin_id" value="{{ bulletin.slug }}"
-                                class="btn float-end">{{ bulletin.number_of_likes }}<i
-                                    class="fas fa-thumbs-up liked-by-user ms-2"></i></button>
-                            {% endif %}
+                        {% if request.user not in bulletin.likes.all %}
+                        <button type="submit" name="bulletin_id" value="{{ bulletin.slug }}"
+                            class="btn float-end">{{ bulletin.number_of_likes }}<i
+                                class="far fa-thumbs-up not-liked-by-user ms-1"></i></button>
                         {% else %}
-                        <button class="btn text-secondary float-end">{{ bulletin.number_of_likes }}<i class="far fa-thumbs-up ms-2"></i></button>
+                        <button type="submit" name="bulletin_id" value="{{ bulletin.slug }}"
+                            class="btn float-end">{{ bulletin.number_of_likes }}<i
+                                class="fas fa-thumbs-up liked-by-user ms-2"></i></button>
+                        {% endif %}
+                        {% else %}
+                        <button class="btn text-secondary float-end">{{ bulletin.number_of_likes }}<i
+                                class="far fa-thumbs-up ms-2"></i></button>
                         {% endif %}
                     </form>
                     <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"

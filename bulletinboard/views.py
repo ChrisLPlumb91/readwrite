@@ -129,11 +129,12 @@ class EditBulletin(View):
 
 class ConfirmDeleteBulletin(View):
     def post(self, request, slug, *args, **kwargs):
-        print(f'request.GET.get: {request.GET.get("query")}')
+        comment_id = 0
         if '/post/' not in request.GET.get('query'):
             return HttpResponseRedirect(reverse('home_alt', args=[slug]))
         else:
-            return HttpResponseRedirect(reverse('post_alt', args=[slug]))
+            return HttpResponseRedirect(reverse('post_alt',
+                                        args=[slug, comment_id]))
 
 
 class BulletinListAlt(View):
@@ -142,6 +143,7 @@ class BulletinListAlt(View):
         paginator = Paginator(queryset, 10)
         bulletin = get_object_or_404(queryset, slug=slug)
         comments = bulletin.comments_on_post.order_by('likes')
+
         liked = False
 
         page_number = request.GET.get('page')
@@ -165,7 +167,14 @@ class BulletinDetailAlt(View):
     def get(self, request, slug, *args, **kwargs):
         queryset = Bulletin.objects.filter(status=1)
         bulletin = get_object_or_404(queryset, slug=slug)
+
         comments = bulletin.comments_on_post.order_by('likes')
+
+        if kwargs['comment_id'] > 0:
+            comment = get_object_or_404(comments, id=kwargs['comment_id'])
+        else:
+            comment = kwargs['comment_id']
+        
         liked = False
 
         if bulletin.likes.filter(id=self.request.user.id).exists():
@@ -177,6 +186,7 @@ class BulletinDetailAlt(View):
             {
                 'bulletin': bulletin,
                 'comments': comments,
+                'comment': comment,
                 'commented': False,
                 'liked': liked,
                 'comment_form': CommentForm()
@@ -203,4 +213,98 @@ class BulletinLike(View):
         else:
             bulletin.likes.add(request.user)
 
-        return HttpResponseRedirect(reverse('home'))
+        if '/post/' not in request.GET.get('query'):
+            return HttpResponseRedirect(reverse('home'))
+        else:
+            return HttpResponseRedirect(reverse('bulletin', args=[slug]))
+
+
+class EditComment(View):
+    def get(self, request, slug, *args, **kwargs):
+        bulletin_queryset = Bulletin.objects.filter(status=1)
+        bulletin = get_object_or_404(bulletin_queryset, slug=slug)
+
+        comments = bulletin.comments_on_post.order_by('likes')
+        query = request.GET.get('query')
+        comment = get_object_or_404(comments, id=query)
+
+        liked = False
+
+        comment_form = CommentForm(instance=comment)
+
+        if bulletin.likes.filter(id=self.request.user.id).exists():
+            liked = True
+
+        return render(
+            request,
+            'bulletin.html',
+            {
+                'bulletin': bulletin,
+                'comments': comments,
+                'commented': False,
+                'liked': liked,
+                'comment_form': comment_form,
+            },
+        )
+
+    def post(self, request, slug, *args, **kwargs):
+        queryset = Bulletin.objects.filter(status=1)
+        bulletin = get_object_or_404(queryset, slug=slug)
+
+        query = request.GET.get('query')
+        split_query_1 = query.split('=')
+        split_query_2 = split_query_1[1].split('/')
+        comment_id = split_query_2[0]
+
+        comments = bulletin.comments_on_post.order_by('likes')
+        comment = get_object_or_404(comments, id=comment_id)
+
+        comment_form = CommentForm(data=request.POST, instance=comment)
+
+        if comment_form.is_valid():
+            post = comment_form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return HttpResponseRedirect(reverse('bulletin', args=[slug]))
+        else:
+            bulletin_form = BulletinForm()
+            return HttpResponseRedirect(reverse('bulletin', args=[slug]))
+
+
+class ConfirmDeleteComment(View):
+    def post(self, request, slug, *args, **kwargs):
+        comment_id = request.GET.get('query')
+        return HttpResponseRedirect(reverse('post_alt', 
+                                    args=[slug, comment_id]))
+
+
+class DeleteComment(View):
+    def post(self, request, slug, *args, **kwargs):
+        queryset = Bulletin.objects.filter(status=1)
+        bulletin = get_object_or_404(queryset, slug=slug)
+
+        comment_id = request.GET.get('query')
+        comments = bulletin.comments_on_post.order_by('likes')
+        comment = get_object_or_404(comments, id=comment_id)
+
+        comment.delete()
+
+        return HttpResponseRedirect(reverse('bulletin', args=[slug]))
+
+
+class CommentLike(View):
+    def post(self, request, slug, *args, **kwargs):
+        bulletin_queryset = Bulletin.objects.filter(status=1)
+        bulletin = get_object_or_404(bulletin_queryset, slug=slug)
+
+        comments = bulletin.comments_on_post.order_by('likes')
+        query = request.GET.get('query')
+        comment = get_object_or_404(comments, id=query)
+
+        if comment.likes.filter(id=self.request.user.id).exists():
+            comment.likes.remove(request.user)
+        else:
+            comment.likes.add(request.user)
+
+        return HttpResponseRedirect(reverse('bulletin', args=[slug]))
+

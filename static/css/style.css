@@ -52,14 +52,6 @@ body {
     text-decoration: none;
 }
 
-.red-header > a:hover {
-    text-shadow: 0 2px #175fe6;
-}
-
-.blue-header > a:hover {
-    text-shadow: 0 2px #e6174b;
-}
-
 .link-container {
     width: 60%;
     border: 2px solid #a9bae6b9;
@@ -81,7 +73,6 @@ body {
     border-radius: 10px;
     box-shadow: 0 3px #575d69b9;
     background-color: #eaecee;
-    /* background-color: #555a5a; */
     color: #fff;
 }
 
@@ -161,12 +152,12 @@ body {
 
 .blue-header {
     background-color: #175fe6;
-    text-shadow: 0 0 10px #e6174b;
+    text-shadow: 0 2px #e6174b;
 }
 
 .red-header {
     background-color: #e6174b;
-    text-shadow: 0 0 10px #175fe6;
+    text-shadow: 0 2px #175fe6;
 }
 
 .card-body a {
