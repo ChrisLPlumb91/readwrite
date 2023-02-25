@@ -188,7 +188,19 @@ class DeleteBulletin(View):
     def post(self, request, slug, *args, **kwargs):
         queryset = Bulletin.objects.filter(status=1)
         bulletin = get_object_or_404(queryset, slug=slug)
-        print(bulletin.slug)
         bulletin.delete()
 
         return redirect('home')
+
+
+class BulletinLike(View):
+    def post(self, request, slug, *args, **kwargs):
+        queryset = Bulletin.objects.filter(status=1)
+        bulletin = get_object_or_404(queryset, slug=slug)
+
+        if bulletin.likes.filter(id=self.request.user.id).exists():
+            bulletin.likes.remove(request.user)
+        else:
+            bulletin.likes.add(request.user)
+
+        return HttpResponseRedirect(reverse('home'))

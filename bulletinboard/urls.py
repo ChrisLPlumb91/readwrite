@@ -15,4 +15,5 @@ urlpatterns = [
          name='post_alt'),
     path('confirm-delete/<slug>/', views.DeleteBulletin.as_view(),
          name='confirm_delete'),
+    path('like/<slug:slug>', views.BulletinLike.as_view(), name='bulletin_like'),
 ]

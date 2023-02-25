@@ -26,7 +26,7 @@ body {
     text-shadow: 0 1px #175fe6;
 }
 
-.button-container {
+.new-bulletin-button-container {
     width: 22.6vw;
 }
 
@@ -75,8 +75,18 @@ body {
     text-overflow: ellipsis;
 }
 
+.button-container {
+    width: 25%;
+    border: 2px solid #a9bae6b9;
+    border-radius: 10px;
+    box-shadow: 0 3px #575d69b9;
+    background-color: #eaecee;
+    /* background-color: #555a5a; */
+    color: #fff;
+}
+
 .edit-bulletin-button {
-    background-color:#9218b1;
+    background-color:#175fe6;
     color: #ffffff;
     border: 2px solid #292d35b9;
     font-weight: bold;
@@ -84,12 +94,13 @@ body {
 }
 
 .edit-bulletin-button:hover {
-    background-color:#b678df;
+    background-color:#47abee;
+    color: #000;
     border: 2px solid #292d35b9;
 }
 
 .delete-bulletin-button {
-    background-color:#b11846;
+    background-color: #e6174b;
     color: #ffffff;
     border: 2px solid #292d35b9;
     font-weight: bold;
@@ -98,7 +109,8 @@ body {
 }
 
 .delete-bulletin-button:hover {
-    background-color:#df7892;
+    background-color:#eb5379;
+    color:#000;
     border: 2px solid #292d35b9;
 }
 
@@ -149,10 +161,12 @@ body {
 
 .blue-header {
     background-color: #175fe6;
+    text-shadow: 0 0 10px #e6174b;
 }
 
 .red-header {
     background-color: #e6174b;
+    text-shadow: 0 0 10px #175fe6;
 }
 
 .card-body a {
@@ -167,3 +181,19 @@ footer .col-12 {
     line-height: 100px;
 }
 
+.like-button-form > button {
+    font-size: 1.5rem;
+}
+
+.like-button-form > button:hover {
+    color: #000;
+}
+
+.not-liked-by-user {
+    color: #5d5e5e;
+}
+
+.liked-by-user {
+    color: #fdfdfd;
+    text-shadow: 0 0 25px #14bd54;
+}

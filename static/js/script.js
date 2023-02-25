@@ -1,7 +1,7 @@
 $(document).scroll(function() {
     var y = $(document).scrollTop();    
     var rulesCard = $('.rules');
-    var newBulletinButton = $('.button-container');
+    var newBulletinButton = $('.new-bulletin-button-container');
     var coldiv = $('div>.col-3');
     
     if(y > 195 && y < 848)  {

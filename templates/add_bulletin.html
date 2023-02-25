@@ -7,7 +7,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-8 offset-2 my-4">
-            <form method="post" action="{% url 'add' %}">
+            <form method="POST" action="{% url 'add' %}">
                 {{ bulletin_form | crispy }}
                 {% csrf_token %}
                 <button type="submit" class="btn btn-signup btn-primary btn-lg">Submit</button>
