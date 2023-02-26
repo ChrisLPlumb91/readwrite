@@ -30,6 +30,21 @@ body {
     width: 22.6vw;
 }
 
+.greyed-out-button {
+    background-color:#767e79;
+    color: #ffffff;
+    border: 2px solid #292d35b9;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.greyed-out-button:hover {
+    background-color:#767e79;
+    color: #ffffff;
+    border: 2px solid #292d35b9;
+    cursor: default;
+}
+
 .new-bulletin-button {
     background-color:#18b15d;
     color: #ffffff;
@@ -68,7 +83,7 @@ body {
 }
 
 .button-container {
-    width: 25%;
+    /* width: 25%; */
     border: 2px solid #a9bae6b9;
     border-radius: 10px;
     box-shadow: 0 3px #575d69b9;
@@ -103,6 +118,15 @@ body {
     background-color:#eb5379;
     color:#000;
     border: 2px solid #292d35b9;
+}
+
+.like-button {
+    font-size: 1.5rem;
+    cursor: default;
+}
+
+.like-button:hover {
+    cursor: default;
 }
 
 .rules {
@@ -158,6 +182,10 @@ body {
 .red-header {
     background-color: #e6174b;
     text-shadow: 0 2px #175fe6;
+}
+
+.green-header {
+    box-shadow: 0 -10px #17e674ad inset;
 }
 
 .card-body a {

@@ -74,7 +74,11 @@
             <div class="col-3">
 
                 <div class="text-center new-bulletin-button-container">
+                    {% if user.is_authenticated %}
                     <a href="{% url 'add' %}" class="btn btn-lg new-bulletin-button my-4">New Bulletin</a>
+                    {% else %}
+                    <button class="btn btn-lg greyed-out-button my-4">New Bulletin</button>
+                    {% endif %}
                 </div>
                 
                 <div class="card rules">

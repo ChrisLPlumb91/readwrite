@@ -19,10 +19,6 @@ class BulletinDetail(View):
         queryset = Bulletin.objects.filter(status=1)
         bulletin = get_object_or_404(queryset, slug=slug)
         comments = bulletin.comments_on_post.order_by('likes')
-        liked = False
-
-        if bulletin.likes.filter(id=self.request.user.id).exists():
-            liked = True
 
         return render(
             request,
@@ -30,8 +26,6 @@ class BulletinDetail(View):
             {
                 'bulletin': bulletin,
                 'comments': comments,
-                'commented': False,
-                'liked': liked,
                 'comment_form': CommentForm()
             },
         )
@@ -40,10 +34,6 @@ class BulletinDetail(View):
         queryset = Bulletin.objects.filter(status=1)
         bulletin = get_object_or_404(queryset, slug=slug)
         comments = bulletin.comments_on_post.order_by('created_on')
-        liked = False
-
-        if bulletin.likes.filter(id=self.request.user.id).exists():
-            liked = True
 
         comment_form = CommentForm(data=request.POST)
 
@@ -61,8 +51,6 @@ class BulletinDetail(View):
             {
                 'bulletin': bulletin,
                 'comments': comments,
-                'commented': True,
-                'liked': liked,
                 'comment_form': CommentForm()
             },
         )
@@ -144,8 +132,6 @@ class BulletinListAlt(View):
         bulletin = get_object_or_404(queryset, slug=slug)
         comments = bulletin.comments_on_post.order_by('likes')
 
-        liked = False
-
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
@@ -156,8 +142,6 @@ class BulletinListAlt(View):
                 'bulletin_list': queryset,
                 'specific_bulletin': bulletin,
                 'comments': comments,
-                'commented': True,
-                'liked': liked,
                 'page_obj': page_obj,
             },
         )
@@ -174,11 +158,6 @@ class BulletinDetailAlt(View):
             comment = get_object_or_404(comments, id=kwargs['comment_id'])
         else:
             comment = kwargs['comment_id']
-        
-        liked = False
-
-        if bulletin.likes.filter(id=self.request.user.id).exists():
-            liked = True
 
         return render(
             request,
@@ -187,8 +166,6 @@ class BulletinDetailAlt(View):
                 'bulletin': bulletin,
                 'comments': comments,
                 'comment': comment,
-                'commented': False,
-                'liked': liked,
                 'comment_form': CommentForm()
             },
         )
@@ -226,14 +203,10 @@ class EditComment(View):
 
         comments = bulletin.comments_on_post.order_by('likes')
         query = request.GET.get('query')
+        print(query)
         comment = get_object_or_404(comments, id=query)
 
-        liked = False
-
         comment_form = CommentForm(instance=comment)
-
-        if bulletin.likes.filter(id=self.request.user.id).exists():
-            liked = True
 
         return render(
             request,
@@ -241,8 +214,6 @@ class EditComment(View):
             {
                 'bulletin': bulletin,
                 'comments': comments,
-                'commented': False,
-                'liked': liked,
                 'comment_form': comment_form,
             },
         )
@@ -253,8 +224,8 @@ class EditComment(View):
 
         query = request.GET.get('query')
         split_query_1 = query.split('=')
-        split_query_2 = split_query_1[1].split('/')
-        comment_id = split_query_2[0]
+        comment_id = split_query_1[1]
+        print(comment_id)
 
         comments = bulletin.comments_on_post.order_by('likes')
         comment = get_object_or_404(comments, id=comment_id)
@@ -301,7 +272,7 @@ class CommentLike(View):
         query = request.GET.get('query')
         comment = get_object_or_404(comments, id=query)
 
-        if comment.likes.filter(id=self.request.user.id).exists():
+        if comment.likes.filter(id=request.user.id).exists():
             comment.likes.remove(request.user)
         else:
             comment.likes.add(request.user)

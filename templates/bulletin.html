@@ -7,22 +7,31 @@
 <div class="row mb-5">
     <div class="col-12">
         <div class="card">
-            <div class="card-header">
+            {% if bulletin.author == request.user and user.is_authenticated %}
+            <div class="card-header green-header">
                 <h2 class="d-inline">{{ bulletin.title }}</h2>
-                <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}" class="btn btn-lg float-end edit-bulletin-button">Edit</a>
+                {% if bulletin.author == request.user and user.is_authenticated %}
                 <form class="float-end" method="POST" action="{% url 'post_delete' bulletin.slug %}?query={{ request.get_full_path|urlencode }}">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-lg float-end delete-bulletin-button me-2">Delete</button>
+                    <button type="submit" class="btn btn-lg float-end delete-bulletin-button">Delete</button>
                 </form>
+                <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}" class="btn btn-lg float-end edit-bulletin-button me-2">Edit</a>
+                {% endif %}
                 <a class="bulletin-link d-block my-2" href="{{ bulletin.link }}" target="_blank">{{ bulletin.link }}</a>
             </div>
+            {% else %}
+            <div class="card-header">
+                <h2 class="d-inline">{{ bulletin.title }}</h2>
+                <a class="bulletin-link d-block my-2" href="{{ bulletin.link }}" target="_blank">{{ bulletin.link }}</a>
+            </div>
+            {% endif %}
             <div class="card-body">
                 <p class="float-none">{{ bulletin.content }}</p>
+                {% if user.is_authenticated %}
                 <form method="POST"
                     action="{% url 'bulletin_like' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
                     class="d-inline like-button-form">
-                    {% csrf_token %}
-                    {% if user.is_authenticated %}
+                    {% csrf_token %}        
                     {% if request.user not in bulletin.likes.all %}
                     <button type="submit" name="bulletin_id" value="{{ bulletin.slug }}"
                         class="btn float-end">{{ bulletin.number_of_likes }}<i
@@ -32,10 +41,10 @@
                         class="btn float-end">{{ bulletin.number_of_likes }}<i
                             class="fas fa-thumbs-up liked-by-user ms-2"></i></button>
                     {% endif %}
-                    {% else %}
-                    <button class="btn text-secondary float-end">{{ bulletin.number_of_likes }}<i
-                            class="far fa-thumbs-up ms-2"></i></button>
-                    {% endif %}
+                {% else %}
+                <button class="btn text-secondary float-end like-button">{{ bulletin.number_of_likes }}<i
+                    class="far fa-thumbs-up ms-2"></i></button>
+                {% endif %}
                 </form>
             </div>
         </div>
@@ -70,39 +79,50 @@
 <div class="row my-5">
     <div class="col-12">
         <div class="card">
-            <div class="card-header">
+
+            {% if comment.author == request.user and user.is_authenticated %}
+            <div class="card-header green-header">
                 <h2 class="d-inline">{{ comment.author }}</h2>
-                <form class="float-end" method="POST" action="{% url 'comment_edit' bulletin.slug %}?query={{ comment.id }}"> 
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-lg float-end edit-bulletin-button">Edit</button>
-                </form>
                 <form class="float-end" method="POST" action="{% url 'delete_request' bulletin.slug %}?query={{ comment.id }}"> 
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-lg float-end delete-bulletin-button me-2">Delete</button>
+                    <button type="submit" class="btn btn-lg float-end delete-bulletin-button">Delete</button>
                 </form>
+                <a href="{% url 'comment_edit' bulletin.slug %}?query={{ comment.id }}" class="float-end btn btn-lg edit-bulletin-button me-2">Edit</a>
             </div>
+            {% else %}
+            <div class="card-header">
+                <h2 class="d-inline">{{ comment.author }}</h2>
+            </div>
+            {% endif %}
+
             <div class="card-body">
+                
                 <p class="float-start">{{ comment.comment }}</p>
+
+                {% if user.is_authenticated %}
                 <form method="POST"
                     action="{% url 'comment_like' bulletin.slug %}?query={{ comment.id }}"
-                    class="d-inline like-button-form">
+                    class="d-inline like-button-form"> <!-- error happening here -->
                     {% csrf_token %}
-                    {% if user.is_authenticated %}
-                        {% if request.user not in comment.likes.all %}
-                        <button type="submit" name="comment_id" value="{{ comment.id }}"
-                            class="btn float-end">{{ comment.number_of_likes }}<i
-                                class="far fa-thumbs-up not-liked-by-user ms-1"></i></button>
-                        {% else %}
-                        <button type="submit" name="comment_id" value="{{ comment.id }}"
-                            class="btn float-end">{{ comment.number_of_likes }}<i
-                                class="fas fa-thumbs-up liked-by-user ms-2"></i></button>
-                        {% endif %}
+
+                    {% if request.user not in comment.likes.all %}
+                    <button type="submit" name="comment_id" value="{{ comment.id }}"
+                        class="btn float-end">{{ comment.number_of_likes }}<i
+                        class="far fa-thumbs-up not-liked-by-user ms-1"></i></button>
                     {% else %}
-                    <button class="btn text-secondary float-end">{{ comment.number_of_likes }}<i
-                            class="far fa-thumbs-up ms-2"></i></button>
+                    <button type="submit" name="comment_id" value="{{ comment.id }}"
+                        class="btn float-end">{{ comment.number_of_likes }}<i
+                        class="fas fa-thumbs-up liked-by-user ms-2"></i></button>
                     {% endif %}
+
                 </form>
+                {% else %}
+                <button class="btn text-secondary float-end like-button">{{ comment.number_of_likes }}<i
+                    class="far fa-thumbs-up ms-2"></i></button>
+                {% endif %}  
+
             </div>
+
         </div>
     </div>
 </div>
