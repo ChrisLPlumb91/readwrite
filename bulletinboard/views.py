@@ -1,3 +1,4 @@
+from django.db.models import F, Max
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.views import generic, View
 from django.core.paginator import Paginator
@@ -17,14 +18,14 @@ class BulletinList(generic.ListView):
 class BulletinDetail(View):
     def get(self, request, slug, *args, **kwargs):
         queryset = Bulletin.objects.filter(status=1)
-        bulletin = get_object_or_404(queryset, slug=slug)
-        comments = bulletin.comments_on_post.order_by('likes')
+        specific_bulletin = get_object_or_404(queryset, slug=slug)
+        comments = Comment.objects.filter(bulletin=specific_bulletin).annotate(likes_temp=Max('likes')).order_by(F('likes_temp').desc(nulls_last=True))
 
         return render(
             request,
             'bulletin.html',
             {
-                'bulletin': bulletin,
+                'bulletin': specific_bulletin,
                 'comments': comments,
                 'comment_form': CommentForm()
             },
@@ -32,14 +33,13 @@ class BulletinDetail(View):
 
     def post(self, request, slug, *args, **kwargs):
         queryset = Bulletin.objects.filter(status=1)
-        bulletin = get_object_or_404(queryset, slug=slug)
-        comments = bulletin.comments_on_post.order_by('created_on')
-
+        specific_bulletin = get_object_or_404(queryset, slug=slug)
+        comments = Comment.objects.filter(bulletin=specific_bulletin).annotate(likes_temp=Max('likes')).order_by(F('likes_temp').desc(nulls_last=True))
         comment_form = CommentForm(data=request.POST)
 
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
-            comment.bulletin = bulletin
+            comment.bulletin = specific_bulletin
             comment.author = request.user
             comment.save()
         else:
@@ -49,7 +49,7 @@ class BulletinDetail(View):
             request,
             'bulletin.html',
             {
-                'bulletin': bulletin,
+                'bulletin': specific_bulletin,
                 'comments': comments,
                 'comment_form': CommentForm()
             },
@@ -185,10 +185,15 @@ class BulletinLike(View):
         queryset = Bulletin.objects.filter(status=1)
         bulletin = get_object_or_404(queryset, slug=slug)
 
-        if bulletin.likes.filter(id=self.request.user.id).exists():
+        print(f'Bulletin liked/unliked: {bulletin}')
+        print(f'Bulletins before like button clicked: {queryset}')
+
+        if bulletin.likes.filter(id=request.user.id).exists():
             bulletin.likes.remove(request.user)
         else:
             bulletin.likes.add(request.user)
+
+        print(f'Bulletins after like button clicked: {queryset}')
 
         if '/post/' not in request.GET.get('query'):
             return HttpResponseRedirect(reverse('home'))
@@ -266,9 +271,9 @@ class DeleteComment(View):
 class CommentLike(View):
     def post(self, request, slug, *args, **kwargs):
         bulletin_queryset = Bulletin.objects.filter(status=1)
-        bulletin = get_object_or_404(bulletin_queryset, slug=slug)
+        specific_bulletin = get_object_or_404(bulletin_queryset, slug=slug)
 
-        comments = bulletin.comments_on_post.order_by('likes')
+        comments = Comment.objects.filter(bulletin=specific_bulletin)
         query = request.GET.get('query')
         comment = get_object_or_404(comments, id=query)
 

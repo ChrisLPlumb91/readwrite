@@ -33,7 +33,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse position-relative" id="navbarSupportedContent">
 
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 ml-auto py-5">
 
@@ -52,10 +52,10 @@
                         <a class="nav-link" href="{% url 'account_login' %}">Login</a>
                     </li>
                     {% endif %}
-                    
                 </ul>
 
             </div>
+            
 
         </div>
 
@@ -71,7 +71,13 @@
             {% endblock content %}
             </div>
 
-            <div class="col-3">
+            <div class="col-3" id="side-panel">
+
+                {% if user.is_authenticated %}
+                <div class="text-center logged-in-as">
+                    <p class="text-center mb-0 d-inline-block">Logged in as: <strong>{{ request.user }}</strong></p>
+                </div>
+                {% endif %}
 
                 <div class="text-center new-bulletin-button-container">
                     {% if user.is_authenticated %}
@@ -89,6 +95,7 @@
                         <ol class="mx-5">
                             <li>No self-promotion.</li>
                             <li>No bigotry.</li>
+                            <li>No bullying.</li>
                             <li>No paywalled articles.</li>
                             <li>No spam.</li>
                             <li>No explicit content.</li>

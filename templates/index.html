@@ -6,7 +6,7 @@
 {% if forloop.counter == 1 %}
 <div class="row mb-3">
     <div class="col-12">
-        <div class="card">
+        <div class="card" id="bulletin-card-{{ forloop.counter }}">
             <div class="card-header blue-header">
                 <a href="{% url 'bulletin' bulletin.slug %}"><strong>{{ bulletin.title }}</strong></a>
                 <p><em>Posted by <strong>{{ bulletin.author }} </strong>on {{ bulletin.created_on }}</em></p>

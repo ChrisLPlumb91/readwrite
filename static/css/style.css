@@ -26,6 +26,12 @@ body {
     text-shadow: 0 1px #175fe6;
 }
 
+.logged-in-as {
+    font-size: 20px;
+    background-color: #1ddb7393;
+    border-radius: 10px;
+}
+
 .new-bulletin-button-container {
     width: 22.6vw;
 }
@@ -56,6 +62,11 @@ body {
 .new-bulletin-button:hover {
     background-color:#17e674;
     border: 2px solid #292d35b9;
+}
+
+ol > li {
+    margin-bottom: 0.50rem;
+    margin-top: 0.50rem;
 }
 
 .card {
@@ -130,28 +141,42 @@ body {
 }
 
 .rules {
-    height: 85vh;
+    height: 560px;
     width: 22.6vw;
+}
+
+.logged-in-as {
+    width: 22.6vw;
+}
+
+.logged-in-as-fixed {
+    position: fixed;
+    top: 15px;
 }
 
 .button-fixed {
     position: fixed;
-    top: 10px;
+    top: 45px;
 }
 
 .rules-fixed {
     position: fixed;
-    top: 127px;
+    top: 162px;
+}
+
+.logged-in-as-fixed-bottom {
+    position: absolute;
+    bottom: 837px;
 }
 
 .button-fixed-bottom {
     position: absolute;
-    bottom: 820px;
+    bottom: 723px;
 }
 
 .rules-fixed-bottom {
     position: absolute;
-    bottom: 15px;
+    bottom: 162px;
 }
 
 .card-header {
