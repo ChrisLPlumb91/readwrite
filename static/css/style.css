@@ -151,32 +151,52 @@ ol > li {
 
 .logged-in-as-fixed {
     position: fixed;
-    top: 15px;
+    top: 17px;
 }
 
 .button-fixed {
     position: fixed;
-    top: 45px;
+    top: 47px;
 }
 
 .rules-fixed {
     position: fixed;
-    top: 162px;
+    top: 163px;
+}
+
+.button-fixed-alt {
+    position: fixed;
+    top: 18px;
+}
+
+.rules-fixed-alt {
+    position: fixed;
+    top: 126px;
 }
 
 .logged-in-as-fixed-bottom {
     position: absolute;
-    bottom: 837px;
+    bottom: 853px;
 }
 
 .button-fixed-bottom {
     position: absolute;
-    bottom: 723px;
+    bottom: 737px;
 }
 
 .rules-fixed-bottom {
     position: absolute;
-    bottom: 162px;
+    bottom: 178px;
+}
+
+.button-fixed-bottom-alt {
+    position: absolute;
+    bottom: 738px;
+}
+
+.rules-fixed-bottom-alt {
+    position: absolute;
+    bottom: 178px;
 }
 
 .card-header {

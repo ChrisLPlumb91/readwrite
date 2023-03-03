@@ -4,7 +4,7 @@
 
 {% load crispy_forms_tags %}
 
-<div class="row mb-5">
+<div class="row mb-5" id="bulletin-container">
     <div class="col-12">
         <div class="card">
             {% if bulletin.author == request.user and user.is_authenticated %}
@@ -52,7 +52,7 @@
 </div>
 
 {% if user.is_authenticated %}
-<div class="row mt-5">
+<div class="row mt-5" id="comment-form-container">
     <div class="col-12">
         {% if 'edit_comment/' not in request.get_full_path %}
         <form method="POST">
@@ -76,8 +76,8 @@
 {% endif %}
 
 {% for comment in comments %}
-<div class="row my-5">
-    <div class="col-12">
+<div class="row my-5" id="comments-container-{{ forloop.counter }}">
+    <div class="col-12 ">
         <div class="card">
 
             {% if comment.author == request.user and user.is_authenticated %} <!-- If you are the user who made this comment, AND you are logged in, the header will have a green line -->
