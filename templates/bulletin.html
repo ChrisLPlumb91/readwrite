@@ -4,7 +4,7 @@
 
 {% load crispy_forms_tags %}
 
-<div class="row mb-5" id="bulletin-container">
+<div class="row" id="bulletin-container">
     <div class="col-12">
         <div class="card">
             {% if bulletin.author == request.user and user.is_authenticated %}
@@ -13,9 +13,9 @@
                 {% if bulletin.author == request.user and user.is_authenticated %}
                 <form class="float-end" method="POST" action="{% url 'post_delete' bulletin.slug %}?query={{ request.get_full_path|urlencode }}">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-lg float-end delete-bulletin-button">Delete</button>
+                    <button type="submit" class="btn btn-lg float-end delete-bulletin-button"><i class="fas fa-trash-alt"></i></button>
                 </form>
-                <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}" class="btn btn-lg float-end edit-bulletin-button me-2">Edit</a>
+                <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}" class="btn btn-lg float-end edit-bulletin-button me-2"><i class="fas fa-pencil-alt"></i></a>
                 {% endif %}
                 <a class="bulletin-link d-block my-2" href="{{ bulletin.link }}" target="_blank">{{ bulletin.link }}</a>
             </div>
@@ -52,7 +52,7 @@
 </div>
 
 {% if user.is_authenticated %}
-<div class="row mt-5" id="comment-form-container">
+<div class="row" id="comment-form-container">
     <div class="col-12">
         {% if 'edit_comment/' not in request.get_full_path %}
         <form method="POST">
@@ -85,9 +85,9 @@
                 <h2 class="d-inline">{{ comment.author }}</h2>
                 <form class="float-end" method="POST" action="{% url 'delete_request' bulletin.slug %}?query={{ comment.id }}"> 
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-lg float-end delete-bulletin-button">Delete</button>
+                    <button type="submit" class="btn btn-lg float-end delete-bulletin-button"><i class="fas fa-trash-alt"></i></button>
                 </form>
-                <a href="{% url 'comment_edit' bulletin.slug %}?query={{ comment.id }}" class="float-end btn btn-lg edit-bulletin-button me-2">Edit</a>
+                <a href="{% url 'comment_edit' bulletin.slug %}?query={{ comment.id }}" class="float-end btn btn-lg edit-bulletin-button me-2"><i class="fas fa-pencil-alt"></i></a>
             </div>
             {% else %}
             <div class="card-header">

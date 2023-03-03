@@ -36,13 +36,14 @@
                     </form>
 
                     <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
-                        class="btn btn-lg float-start edit-bulletin-button me-2">Edit</a>
+                        class="btn btn-lg float-start edit-bulletin-button me-2"><i class="fas fa-pencil-alt"></i></a>
 
                     <form class="float-start" method="POST"
                         action="{% url 'post_delete' bulletin.slug %}?query={{ request.get_full_path|urlencode }}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-lg delete-bulletin-button">Delete</button>
+                        <button type="submit" class="btn btn-lg delete-bulletin-button"><i class="fas fa-trash-alt"></i></button>
                     </form>
+
                 </div>
 
             </div>
@@ -52,9 +53,10 @@
                 <div class="link-container d-inline-block px-2 py-2">
                     <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
                         target="_blank">{{ bulletin.link }}</a>
-                </div>
+                </div>            
 
                 <div class="button-container d-inline float-end px-1 py-1">
+                    
                     <form method="POST"
                         action="{% url 'bulletin_like' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
                         class="d-inline like-button-form">
@@ -69,6 +71,9 @@
                                 class="fas fa-thumbs-up liked-by-user ms-2"></i></button>
                         {% endif %}
                     </form>
+
+                    <span class="btn pe-1 ms-2 float-start comment-number">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon"></i></span>
+
                 </div>
 
             </div>
@@ -81,6 +86,7 @@
                 </div>
                 <div class="button-container d-inline float-end px-1 py-1">
                     <button class="btn text-secondary float-end like-button">{{ bulletin.number_of_likes }}<i class="far fa-thumbs-up ms-2"></i></button>
+                    <span class="btn pe-1 float-start text-secondary comment-number comment-number-alt">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon-alt"></i></span>
                 </div>
             </div>
             {% endif %}
@@ -127,13 +133,15 @@
                     </form>
 
                     <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
-                        class="btn btn-lg float-start edit-bulletin-button me-2">Edit</a>
+                        class="btn btn-lg float-start edit-bulletin-button me-2"><i class="fas fa-pencil-alt"></i></a>
 
                     <form class="float-start" method="POST"
                         action="{% url 'post_delete' bulletin.slug %}?query={{ request.get_full_path|urlencode }}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-lg delete-bulletin-button">Delete</button>
+                        <button type="submit" class="btn btn-lg delete-bulletin-button"><i class="fas fa-trash-alt"></i></button>
                     </form>
+
+                    <span class="btn pe-1 float-start comment-number">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon"></i></span>
                 </div>
 
             </div>
@@ -172,6 +180,7 @@
                 </div>
                 <div class="button-container d-inline float-end px-1 py-1">
                     <button class="btn text-secondary float-end like-button">{{ bulletin.number_of_likes }}<i class="far fa-thumbs-up ms-2"></i></button>
+                    <span class="btn pe-1 float-start text-secondary comment-number comment-number-alt">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon-alt"></i></span>
                 </div>
             </div>
             {% endif %}
@@ -218,13 +227,15 @@
                     </form>
 
                     <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
-                        class="btn btn-lg float-start edit-bulletin-button me-2">Edit</a>
+                        class="btn btn-lg float-start edit-bulletin-button me-2"><i class="fas fa-pencil-alt"></i></a>
 
                     <form class="float-start" method="POST"
                         action="{% url 'post_delete' bulletin.slug %}?query={{ request.get_full_path|urlencode }}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-lg delete-bulletin-button">Delete</button>
+                        <button type="submit" class="btn btn-lg delete-bulletin-button"><i class="fas fa-trash-alt"></i></button>
                     </form>
+
+                    <span class="btn pe-1 ms-2 float-start comment-number">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon"></i></span>
                 </div>
 
             </div>
@@ -263,6 +274,7 @@
                 </div>
                 <div class="button-container d-inline float-end px-1 py-1">
                     <button class="btn text-secondary float-end like-button">{{ bulletin.number_of_likes }}<i class="far fa-thumbs-up ms-2"></i></button>
+                    <span class="btn pe-1 float-start text-secondary comment-number comment-number-alt">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon-alt"></i></span>
                 </div>
             </div>
             {% endif %}

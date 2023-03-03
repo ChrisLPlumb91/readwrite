@@ -44,4 +44,3 @@ class Comment(models.Model):
 
     def number_of_likes(self):
         return self.likes.count()
-

@@ -94,7 +94,6 @@ ol > li {
 }
 
 .button-container {
-    /* width: 25%; */
     border: 2px solid #a9bae6b9;
     border-radius: 10px;
     box-shadow: 0 3px #575d69b9;
@@ -131,13 +130,35 @@ ol > li {
     border: 2px solid #292d35b9;
 }
 
+.comment-number {
+    color: #000;
+    font-size: 1.5rem;
+}
+
+.comment-icon {
+    color: #69eba3;
+    text-shadow: 0 2px #000;
+    font-size: 1.5rem;
+}
+
+.comment-number-alt:hover {
+    cursor: default;
+}
+
+.comment-number-alt:target {
+    border-color: #a9bae6b9;
+}
+
 .like-button {
     font-size: 1.5rem;
-    cursor: default;
 }
 
 .like-button:hover {
     cursor: default;
+}
+
+.like-button:target {
+    border-color: #a9bae6b9;
 }
 
 .rules {
@@ -260,4 +281,8 @@ footer .col-12 {
 .liked-by-user {
     color: #fdfdfd;
     text-shadow: 0 0 25px #14bd54;
+}
+
+#bulletin-container {
+    margin-bottom: 5rem;
 }
