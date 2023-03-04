@@ -108,6 +108,7 @@ class EditBulletin(View):
             post = bulletin_form.save(commit=False)
             post.slug = slugify(post.title)
             post.author = request.user
+            post.edited = True
             post.save()
             return redirect('bulletin', slug=post.slug)
         else:
@@ -230,20 +231,23 @@ class EditComment(View):
         query = request.GET.get('query')
         split_query_1 = query.split('=')
         comment_id = split_query_1[1]
-        print(comment_id)
 
         comments = bulletin.comments_on_post.order_by('likes')
         comment = get_object_or_404(comments, id=comment_id)
 
         comment_form = CommentForm(data=request.POST, instance=comment)
 
-        if comment_form.is_valid():
+        if comment.comment == comment_form.data['comment']:
+            comment_form = CommentForm()
+            return HttpResponseRedirect(reverse('bulletin', args=[slug]))
+        elif comment_form.is_valid():
             post = comment_form.save(commit=False)
             post.author = request.user
+            post.edited = True
             post.save()
             return HttpResponseRedirect(reverse('bulletin', args=[slug]))
         else:
-            bulletin_form = BulletinForm()
+            comment_form = CommentForm()
             return HttpResponseRedirect(reverse('bulletin', args=[slug]))
 
 

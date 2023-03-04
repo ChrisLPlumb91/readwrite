@@ -15,6 +15,7 @@ class Bulletin(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     status = models.IntegerField(choices=STATUS, default=0)
     likes = models.ManyToManyField(User, related_name='bulletin_likes')
+    edited = models.BooleanField(default=False)
     updated_on = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -35,6 +36,8 @@ class Comment(models.Model):
     comment = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(User, related_name='comment_likes')
+    edited = models.BooleanField(default=False)
+    updated_on = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['-created_on']

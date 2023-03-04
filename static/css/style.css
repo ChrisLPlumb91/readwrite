@@ -235,9 +235,27 @@ ol > li {
 }
 
 .card-header > p {
-    display: inline-block;
     float: right;
     font-size: 1rem;
+}
+
+hr {
+    margin-bottom: 0 !important;
+    clear: both;
+}
+
+.comment-text {
+    margin-bottom: 2rem;
+}
+
+.post-info {
+    font-size: 1rem;
+    color: #5d5e5e;
+    margin: 0 !important;
+}
+
+.edit-text {
+    color: #175fe6;
 }
 
 .blue-header {
