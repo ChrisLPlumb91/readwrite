@@ -45,7 +45,6 @@ $(document).scroll(function() {
             document.removeClass('me-2');
         }
     } else {
-        console.log('not logged in');
         if((yAlt - sidePanelAlt) > navBarHeight && yAlt < lastChildPositionBottom) {
             console.log('fixing side panel');
             body.removeClass('position-relative');
@@ -69,3 +68,34 @@ $(document).scroll(function() {
         }
     }
 });
+
+if (window.location.href.includes('/accounts/')) {
+    var footer = $('footer');
+    var textField = $('input[type="text"]');
+    var passwordField = $('input[type="password"]');
+    var emailField = $('input[type="email"]');
+
+    var rememberMe = $('label:contains("Remember Me:")');
+    var parentP = $(rememberMe).parent();
+
+    footer.addClass('position-fixed');
+    footer.addClass('bottom-0');
+    textField.addClass('float-end');
+    passwordField.addClass('float-end');
+    emailField.addClass('float-end');
+
+    parentP.addClass('d-block');
+    parentP.addClass('text-center');
+    parentP.addClass('pt-1');
+
+} else {
+    footer.removeClass('position-fixed');
+    footer.removeClass('bottom-0');
+    textField.removeClass('float-end');
+    passwordField.addClass('float-end');
+    emailField.addClass('float-end');
+
+    parentP.removeClass('d-block');
+    parentP.removeClass('text-center');
+    parentP.removeClass('pt-1');
+}
