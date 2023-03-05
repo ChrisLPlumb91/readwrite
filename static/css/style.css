@@ -305,6 +305,35 @@ footer .col-12 {
     margin-bottom: 5rem;
 }
 
-/* .account-pages-container-size {
-    vertical-align: middle;
-} */
+.next-button {
+    background-color: #175fe6;
+    color: #eaecee;
+    border: 2px solid #47abee;
+    box-sizing: border-box;
+}
+
+.prev-button {
+    background-color: #e6174b;
+    color: #eaecee;
+    border: 2px solid #eb5379;
+    box-sizing: border-box;
+}
+
+.next-button:hover {
+    background-color: #47abee;
+    color: #000;
+    border: 2px solid #175fe6;
+    box-sizing: border-box;
+}
+
+.prev-button:hover {
+    background-color: #eb5379;
+    color: #000;
+    border: 2px solid #e6174b;
+    box-sizing: border-box;
+}
+
+.message-container {
+    top: 40px;
+    z-index: 1;
+}

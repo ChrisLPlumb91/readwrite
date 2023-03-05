@@ -20,7 +20,21 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-lg bg-light" id="navbar">
+    <div class="container-fluid position-absolute message-container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                {% for message in messages %}
+                <div class="alert {{ message.tags }} alert-dismissible fade show" id="msg" role="alert">
+                    {{ message | safe }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg bg-light id="navbar">
+
         <div class="container-fluid">
 
             <a class="navbar-brand px-4" href="{% url 'home' %}">
@@ -132,6 +146,14 @@
     <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
     <script src="https://kit.fontawesome.com/b83175b9a4.js" crossorigin="anonymous"></script>
     <script src="{% static 'js/script.js' %}"></script>
+
+    <script>
+        setTimeout(function () {
+            let messages = document.getElementById('msg');
+            let alert = new bootstrap.Alert(messages);
+            alert.close();
+        }, 2000);
+    </script>
 
     {% block modal %}
     {% endblock modal %}
