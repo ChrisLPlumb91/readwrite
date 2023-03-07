@@ -12,7 +12,7 @@
                 <p><em>Posted by <strong>{{ bulletin.author }} </strong>on {{ bulletin.created_on }}</em></p>
             </div>
             {% if user.is_authenticated and bulletin.author == request.user %}
-            <div class="card-body green-header">
+            <div class="card-body green-header bulletin-card-body">
 
                 <div class="link-container d-inline-block px-2 py-2">
                     <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
@@ -48,7 +48,7 @@
 
             </div>
             {% elif user.is_authenticated and bulletin.author != request.user %}
-            <div class="card-body">
+            <div class="card-body bulletin-card-body">
 
                 <div class="link-container d-inline-block px-2 py-2">
                     <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
@@ -79,7 +79,7 @@
             </div>
 
             {% else %}
-            <div class="card-body">
+            <div class="card-body bulletin-card-body">
                 <div class="link-container d-inline-block px-2 py-2">
                     <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
                         target="_blank">{{ bulletin.link }}</a>
@@ -109,7 +109,7 @@
             </div>
             {% endif %}
             {% if user.is_authenticated and bulletin.author == request.user %}
-            <div class="card-body green-header">
+            <div class="card-body bulletin-card-body green-header">
 
                 <div class="link-container d-inline-block px-2 py-2">
                     <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
@@ -146,7 +146,7 @@
 
             </div>
             {% elif user.is_authenticated and bulletin.author != request.user %}
-            <div class="card-body">
+            <div class="card-body bulletin-card-body">
 
                 <div class="link-container d-inline-block px-2 py-2">
                     <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
@@ -173,7 +173,7 @@
             </div>
 
             {% else %}
-            <div class="card-body">
+            <div class="card-body bulletin-card-body">
                 <div class="link-container d-inline-block px-2 py-2">
                     <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
                         target="_blank">{{ bulletin.link }}</a>
@@ -240,7 +240,7 @@
 
             </div>
             {% elif user.is_authenticated and bulletin.author != request.user %}
-            <div class="card-body">
+            <div class="card-body bulletin-card-body">
 
                 <div class="link-container d-inline-block px-2 py-2">
                     <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
@@ -267,7 +267,7 @@
             </div>
 
             {% else %}
-            <div class="card-body">
+            <div class="card-body bulletin-card-body">
                 <div class="link-container d-inline-block px-2 py-2">
                     <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
                         target="_blank">{{ bulletin.link }}</a>

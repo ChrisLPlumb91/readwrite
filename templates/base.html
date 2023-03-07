@@ -33,7 +33,7 @@
         </div>
     </div>
 
-    <nav class="navbar navbar-expand-lg bg-light id="navbar">
+    <nav class="navbar navbar-expand-lg bg-light" id="navbar">
 
         <div class="container-fluid">
 
@@ -47,7 +47,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse position-relative" id="navbarSupportedContent">
+            <div class="navbar-collapse collapse position-relative" id="navbarSupportedContent">
 
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 ml-auto py-5">
 
@@ -75,17 +75,29 @@
 
     </nav>
 
-    <!-- Stuff unique to a page -->
+    {% if user.is_authenticated %}
+    <div class="text-center logged-in-as d-sm-inline-block d-md-none">
+        <p class="text-center mb-0 d-inline-block">Logged in as: <strong>{{ request.user }}</strong></p>
+    </div>
+    {% endif %}
+
+    <div class="text-center new-bulletin-button-container-top d-sm-block d-md-none">
+        {% if user.is_authenticated %}
+        <a href="{% url 'add' %}" class="btn btn-lg new-bulletin-button my-4">New Bulletin</a>
+        {% else %}
+        <button class="btn btn-lg greyed-out-button mt-4 mb-3">New Bulletin</button>
+        {% endif %}
+    </div>
 
     <div class="container-fluid my-5 px-5" id="bulletin_list_container">
         <div class="row" id="content-container">
             
-            <div class="col-9" id="content-container-base">
+            <div class="col-md-9 col-xs-12" id="content-container-base">
             {% block content %}
             {% endblock content %}
             </div>
 
-            <div class="col-3" id="side-panel">
+            <div class="col-3 d-md-block d-none" id="side-panel">
 
                 {% if user.is_authenticated %}
                 <div class="text-center logged-in-as">
@@ -105,7 +117,7 @@
                     <div class="card-header">
                         <h2 class="text-center">RULES</h2>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body card-body-rules">
                         <ol class="mx-5">
                             <li>No self-promotion.</li>
                             <li>No bigotry.</li>
@@ -137,9 +149,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
         integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
         integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous">
-    </script>
+    </script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
     </script>
