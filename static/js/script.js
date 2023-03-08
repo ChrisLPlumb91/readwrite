@@ -1,8 +1,9 @@
 $(window).resize(function() {
     if ($(window).innerWidth() <= 767) {
         var cardHeaderTitles = $('.card-header>a');
-        console.log(cardHeaderTitles);
         cardHeaderTitles.addClass('title-ellipsis');
+    } else {
+        cardHeaderTitles.removeClass('title-ellipsis');
     }
 });
 

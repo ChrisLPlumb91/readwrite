@@ -76,8 +76,10 @@
     </nav>
 
     {% if user.is_authenticated %}
-    <div class="text-center logged-in-as d-sm-inline-block d-md-none">
-        <p class="text-center mb-0 d-inline-block">Logged in as: <strong>{{ request.user }}</strong></p>
+    <div class="text-center logged-in-as-top-container d-block d-md-none">
+        <div class="text-center logged-in-as d-inline-block d-md-none">
+            <p class="mb-0">Logged in as: <strong>{{ request.user }}</strong></p>
+        </div>
     </div>
     {% endif %}
 

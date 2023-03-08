@@ -353,10 +353,42 @@ footer .col-12 {
     }
 }
 
+@media screen and (max-width: 1100px) {
+    .link-container-your-post {
+        display: block !important;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    
+    .button-container-with-options {
+        float: none !important;
+        display: inline-block !important;
+        width: 80%;
+    }
+
+    .comment-number-your-post {
+        float: right !important;
+    }
+
+    .green-header {
+        text-align: center !important;
+    }
+
+    .button-container-with-options > form {
+        display: inline;
+    }
+
+}
+
 @media screen and (max-width: 1000px) {
     .rules-fixed-alt {
         position: fixed;
         top: 106px;
+    }
+
+    .rules-fixed {
+        position: fixed;
+        top: 144px;
     }
 
     .bulletin-card-body {
@@ -369,16 +401,16 @@ footer .col-12 {
         margin-bottom: 20px;
     }
 
-    .button-container {
+    .button-container-without-options {
         float: none !important;
         width: 30%;
     }
 
-    .button-container > button, .button-container > span {
+    .button-container-without-options button, .button-container-without-options > span {
         float: none !important;
     }
 
-    .greyed-out-button {
+    .new-bulletin-button, .greyed-out-button {
         font-size: 1.2rem !important;
     }
 }
@@ -403,21 +435,68 @@ footer .col-12 {
     }
 }
 
+@media screen and (max-width: 895px) {
+    .logged-in-as {
+        font-size: 1rem;
+    }
+}
+
 @media screen and (max-width: 768px) {
+    .logged-in-as-top-container {
+        width: 100%;
+        margin-top: 1rem !important;
+    }
+    
+    .logged-in-as {
+        width: 50%; 
+    }
+    
     #bulletin_list_container {
         margin-top: 1rem !important;
     }
 
     .new-bulletin-button-container-top {
         width: 100%;
-    }
+    }   
 }
 
 @media screen and (max-width: 749px) {
     .card-body-rules {
         padding: 20px 0 0 0 !important;
     }
-    
+}
+
+@media screen and (max-width: 530px) {
+    .button-container-with-options button, .button-container-with-options span, .button-container-with-options a, .button-container-with-options > form {
+        font-size: 1rem !important;
+    }
+
+    .button-container-with-options span, .button-container-with-options {
+        margin: 0 !important;
+    }
+
+    .button-container-with-options span {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+
+    .like-button-your-post {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .comment-number-your-post > i {
+        font-size: 1rem !important;
+    }
+
+    .edit-bulletin-button {
+        padding: 3px 6px !important;
+        margin-right: 5px !important;
+    }
+
+    .delete-bulletin-button {
+        padding: 3px 7px !important;
+    }
 }
 
 @media screen and (max-width: 475px) {
@@ -430,8 +509,13 @@ footer .col-12 {
     }
 }
 
+@media screen and (max-width: 380px) {
+
+
+}
+
 @media screen and (max-width: 301px) {
-    .button-container > button, .button-container > span {
+    .button-container-without-options button, .button-container-without-options > span {
         font-size: 1rem;
         padding: 0 !important;
     }

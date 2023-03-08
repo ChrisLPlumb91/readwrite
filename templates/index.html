@@ -7,30 +7,30 @@
 <div class="row mb-3">
     <div class="col-12">
         <div class="card" id="bulletin-card-{{ forloop.counter }}">
-            <div class="card-header blue-header">
+            <div class="card-header blue-header"> <!-- Topmost bulletin header - blue -->
                 <a href="{% url 'bulletin' bulletin.slug %}"><strong>{{ bulletin.title }}</strong></a>
                 <p><em>Posted by <strong>{{ bulletin.author }} </strong>on {{ bulletin.created_on }}</em></p>
             </div>
-            {% if user.is_authenticated and bulletin.author == request.user %}
+            {% if user.is_authenticated and bulletin.author == request.user %} <!-- Topmost bulletin card body if logged in and bulletin was posted by you - green strip, like button, edit and delete buttons -->
             <div class="card-body green-header bulletin-card-body">
 
-                <div class="link-container d-inline-block px-2 py-2">
+                <div class="link-container d-inline-block px-2 py-2 link-container-your-post">
                     <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
                         target="_blank">{{ bulletin.link }}</a>
                 </div>
 
-                <div class="button-container d-inline float-end px-1 py-1">
+                <div class="button-container d-inline float-end px-1 py-1 button-container-with-options">
                     <form method="POST"
                         action="{% url 'bulletin_like' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
-                        class="d-inline like-button-form">
+                        class="d-inline like-button-form like-button-form-your-post">
                         {% csrf_token %}
                         {% if request.user not in bulletin.likes.all %}
                         <button type="submit" name="bulletin_id" value="{{ bulletin.slug }}"
-                            class="btn float-end">{{ bulletin.number_of_likes }}<i
+                            class="btn float-end like-button-your-post">{{ bulletin.number_of_likes }}<i
                                 class="far fa-thumbs-up not-liked-by-user ms-1"></i></button>
                         {% else %}
                         <button type="submit" name="bulletin_id" value="{{ bulletin.slug }}"
-                            class="btn float-end">{{ bulletin.number_of_likes }}<i
+                            class="btn float-end like-button-your-post">{{ bulletin.number_of_likes }}<i
                                 class="fas fa-thumbs-up liked-by-user ms-2"></i></button>
                         {% endif %}
                     </form>
@@ -38,16 +38,18 @@
                     <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
                         class="btn btn-lg float-start edit-bulletin-button me-2"><i class="fas fa-pencil-alt"></i></a>
 
-                    <form class="float-start" method="POST"
+                    <form class="float-start delete-button-form" method="POST"
                         action="{% url 'post_delete' bulletin.slug %}?query={{ request.get_full_path|urlencode }}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-lg delete-bulletin-button"><i class="fas fa-trash-alt"></i></button>
                     </form>
 
+                    <span class="btn pe-1 ms-2 float-start comment-number comment-number-your-post">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon"></i></span>
+
                 </div>
 
             </div>
-            {% elif user.is_authenticated and bulletin.author != request.user %}
+            {% elif user.is_authenticated and bulletin.author != request.user %} <!-- Topmost bulletin card body if logged in but bulletin was not posted by you - no green strip, but functioning like button -->
             <div class="card-body bulletin-card-body">
 
                 <div class="link-container d-inline-block px-2 py-2">
@@ -55,7 +57,7 @@
                         target="_blank">{{ bulletin.link }}</a>
                 </div>            
 
-                <div class="button-container d-inline float-end px-1 py-1">
+                <div class="button-container d-inline float-end px-1 py-1 button-container-without-options">
                     
                     <form method="POST"
                         action="{% url 'bulletin_like' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
@@ -79,12 +81,12 @@
             </div>
 
             {% else %}
-            <div class="card-body bulletin-card-body">
+            <div class="card-body bulletin-card-body"> <!-- Topmost bulletin card body if not logged in - non-functioning buttons -->
                 <div class="link-container d-inline-block px-2 py-2">
                     <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
                         target="_blank">{{ bulletin.link }}</a>
                 </div>
-                <div class="button-container d-inline float-end px-1 py-1">
+                <div class="button-container d-inline float-end px-1 py-1 button-container-without-options">
                     <button class="btn text-secondary float-end like-button">{{ bulletin.number_of_likes }}<i class="far fa-thumbs-up ms-2"></i></button>
                     <span class="btn pe-1 float-start text-secondary comment-number comment-number-alt">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon-alt"></i></span>
                 </div>
@@ -93,7 +95,7 @@
         </div>
     </div>
 </div>
-{% elif forloop.counter == bulletin_list|length %}
+{% elif forloop.counter == bulletin_list|length %} <!-- The last bulletin -->
 <div class="row mt-3 mb-5">
     <div class="col-12">
         <div class="card">
@@ -108,26 +110,26 @@
                 <p><em>Posted by <strong>{{ bulletin.author }} </strong>on {{ bulletin.created_on }}</em></p>
             </div>
             {% endif %}
-            {% if user.is_authenticated and bulletin.author == request.user %}
+            {% if user.is_authenticated and bulletin.author == request.user %} <!-- If logged in and last bulletin was posted by you - green strip, like button, edit and delete buttons -->
             <div class="card-body bulletin-card-body green-header">
 
-                <div class="link-container d-inline-block px-2 py-2">
+                <div class="link-container d-inline-block px-2 py-2 link-container-your-post">
                     <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
                         target="_blank">{{ bulletin.link }}</a>
                 </div>
 
-                <div class="button-container d-inline float-end px-1 py-1">
+                <div class="button-container d-inline float-end px-1 py-1 button-container-with-options">
                     <form method="POST"
                         action="{% url 'bulletin_like' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
-                        class="d-inline like-button-form">
+                        class="d-inline like-button-form like-button-form-your-post">
                         {% csrf_token %}
                         {% if request.user not in bulletin.likes.all %}
                         <button type="submit" name="bulletin_id" value="{{ bulletin.slug }}"
-                            class="btn float-end">{{ bulletin.number_of_likes }}<i
+                            class="btn float-end like-button-your-post">{{ bulletin.number_of_likes }}<i
                                 class="far fa-thumbs-up not-liked-by-user ms-1"></i></button>
                         {% else %}
                         <button type="submit" name="bulletin_id" value="{{ bulletin.slug }}"
-                            class="btn float-end">{{ bulletin.number_of_likes }}<i
+                            class="btn float-end like-button-your-post">{{ bulletin.number_of_likes }}<i
                                 class="fas fa-thumbs-up liked-by-user ms-2"></i></button>
                         {% endif %}
                     </form>
@@ -135,17 +137,17 @@
                     <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
                         class="btn btn-lg float-start edit-bulletin-button me-2"><i class="fas fa-pencil-alt"></i></a>
 
-                    <form class="float-start" method="POST"
+                    <form class="float-start delete-button-form" method="POST"
                         action="{% url 'post_delete' bulletin.slug %}?query={{ request.get_full_path|urlencode }}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-lg delete-bulletin-button"><i class="fas fa-trash-alt"></i></button>
                     </form>
 
-                    <span class="btn pe-1 float-start comment-number">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon"></i></span>
+                    <span class="btn pe-1 float-start comment-number comment-number-your-post">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon"></i></span>
                 </div>
 
             </div>
-            {% elif user.is_authenticated and bulletin.author != request.user %}
+            {% elif user.is_authenticated and bulletin.author != request.user %} <!-- If logged in but last bulletin was not posted by you - no green strip, but functioning like button -->
             <div class="card-body bulletin-card-body">
 
                 <div class="link-container d-inline-block px-2 py-2">
@@ -153,7 +155,7 @@
                         target="_blank">{{ bulletin.link }}</a>
                 </div>
 
-                <div class="button-container d-inline float-end px-1 py-1">
+                <div class="button-container d-inline float-end px-1 py-1 button-container-without-options">
                     <form method="POST"
                         action="{% url 'bulletin_like' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
                         class="d-inline like-button-form">
@@ -172,13 +174,13 @@
 
             </div>
 
-            {% else %}
+            {% else %} <!-- Last bulletin; not logged in -->
             <div class="card-body bulletin-card-body">
                 <div class="link-container d-inline-block px-2 py-2">
                     <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
                         target="_blank">{{ bulletin.link }}</a>
                 </div>
-                <div class="button-container d-inline float-end px-1 py-1">
+                <div class="button-container d-inline float-end px-1 py-1 button-container-without-options">
                     <button class="btn text-secondary float-end like-button">{{ bulletin.number_of_likes }}<i class="far fa-thumbs-up ms-2"></i></button>
                     <span class="btn pe-1 float-start text-secondary comment-number comment-number-alt">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon-alt"></i></span>
                 </div>
@@ -187,7 +189,7 @@
         </div>
     </div>
 </div>
-{% else %}
+{% else %} <!-- All the other bulletins -->
 <div class="row my-3">
     <div class="col-12">
         <div class="card">
@@ -202,26 +204,26 @@
                 <p><em>Posted by <strong>{{ bulletin.author }} </strong>on {{ bulletin.created_on }}</em></p>
             </div>
             {% endif %}
-            {% if user.is_authenticated and bulletin.author == request.user %}
+            {% if user.is_authenticated and bulletin.author == request.user %} <!-- If logged in and the current iteration's bulletin was posted by you - green strip, like button, edit ad delete buttons -->
             <div class="card-body green-header">
 
-                <div class="link-container d-inline-block px-2 py-2">
+                <div class="link-container d-inline-block px-2 py-2 link-container-your-post">
                     <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
                         target="_blank">{{ bulletin.link }}</a>
                 </div>
 
-                <div class="button-container d-inline float-end px-1 py-1">
+                <div class="button-container d-inline float-end px-1 py-1 button-container-with-options">
                     <form method="POST"
                         action="{% url 'bulletin_like' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
-                        class="d-inline like-button-form">
+                        class="d-inline like-button-form like-button-form-your-post">
                         {% csrf_token %}
                         {% if request.user not in bulletin.likes.all %}
                         <button type="submit" name="bulletin_id" value="{{ bulletin.slug }}"
-                            class="btn float-end">{{ bulletin.number_of_likes }}<i
+                            class="btn float-end like-button-your-post">{{ bulletin.number_of_likes }}<i
                                 class="far fa-thumbs-up not-liked-by-user ms-1"></i></button>
                         {% else %}
                         <button type="submit" name="bulletin_id" value="{{ bulletin.slug }}"
-                            class="btn float-end">{{ bulletin.number_of_likes }}<i
+                            class="btn float-end like-button-your-post">{{ bulletin.number_of_likes }}<i
                                 class="fas fa-thumbs-up liked-by-user ms-2"></i></button>
                         {% endif %}
                     </form>
@@ -229,17 +231,17 @@
                     <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
                         class="btn btn-lg float-start edit-bulletin-button me-2"><i class="fas fa-pencil-alt"></i></a>
 
-                    <form class="float-start" method="POST"
+                    <form class="float-start delete-button-form" method="POST"
                         action="{% url 'post_delete' bulletin.slug %}?query={{ request.get_full_path|urlencode }}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-lg delete-bulletin-button"><i class="fas fa-trash-alt"></i></button>
                     </form>
 
-                    <span class="btn pe-1 ms-2 float-start comment-number">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon"></i></span>
+                    <span class="btn pe-1 ms-2 float-start comment-number comment-number-your-post">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon"></i></span>
                 </div>
 
             </div>
-            {% elif user.is_authenticated and bulletin.author != request.user %}
+            {% elif user.is_authenticated and bulletin.author != request.user %} <!-- Logged in but the current iteration's bulletin was not posted by you - no green strip, but functioning like button -->
             <div class="card-body bulletin-card-body">
 
                 <div class="link-container d-inline-block px-2 py-2">
@@ -247,7 +249,7 @@
                         target="_blank">{{ bulletin.link }}</a>
                 </div>
 
-                <div class="button-container d-inline float-end px-1 py-1">
+                <div class="button-container d-inline float-end px-1 py-1 button-container-without-options">
                     <form method="POST"
                         action="{% url 'bulletin_like' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
                         class="d-inline like-button-form">
@@ -266,13 +268,13 @@
 
             </div>
 
-            {% else %}
+            {% else %} <!-- Current iteration's bulletin - not logged in -->
             <div class="card-body bulletin-card-body">
                 <div class="link-container d-inline-block px-2 py-2">
                     <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
                         target="_blank">{{ bulletin.link }}</a>
                 </div>
-                <div class="button-container d-inline float-end px-1 py-1">
+                <div class="button-container d-inline float-end px-1 py-1 button-container-without-options">
                     <button class="btn text-secondary float-end like-button">{{ bulletin.number_of_likes }}<i class="far fa-thumbs-up ms-2"></i></button>
                     <span class="btn pe-1 float-start text-secondary comment-number comment-number-alt">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon-alt"></i></span>
                 </div>
