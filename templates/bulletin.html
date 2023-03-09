@@ -8,13 +8,13 @@
     <div class="col-12">
         <div class="card">
             {% if bulletin.author == request.user and user.is_authenticated %}
-            <div class="card-header green-header bulletin-header">
-                <h2 class="d-inline">{{ bulletin.title }}</h2>
+            <div class="card-header green-header bulletin-header green-header-bulletin">
+                
                 <form class="float-end" method="POST" action="{% url 'post_delete' bulletin.slug %}?query={{ request.get_full_path|urlencode }}">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-lg float-end delete-bulletin-button"><i class="fas fa-trash-alt"></i></button>
                 </form>
-                <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}" class="btn btn-lg float-end edit-bulletin-button me-2"><i class="fas fa-pencil-alt"></i></a>
+                <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}" class="btn btn-lg float-end edit-bulletin-button edit-bulletin-button-your-post me-2"><i class="fas fa-pencil-alt"></i></a>
                 <form method="POST"
                     action="{% url 'bulletin_like' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
                     class="d-inline like-button-form float-end">
@@ -29,14 +29,14 @@
                             class="fas fa-thumbs-up liked-by-user ms-2"></i></button>
                     {% endif %}
                 </form>
-                <a class="bulletin-link d-block my-2" href="{{ bulletin.link }}" target="_blank">{{ bulletin.link }}</a>
+                <h2 class="title-ellipsis">{{ bulletin.title }}</h2>
+                <a class="bulletin-link d-block my-2 link-ellipsis" href="{{ bulletin.link }}" target="_blank">{{ bulletin.link }}</a>
             </div>
             {% elif user.is_authenticated %}
-            <div class="card-header bulletin-header">
-                <h2 class="d-inline">{{ bulletin.title }}</h2>
+            <div class="card-header bulletin-header">  
                 <form method="POST"
                     action="{% url 'bulletin_like' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
-                    class="d-inline like-button-form float-end">
+                    class="d-inline like-button-form-not-your-post float-end">
                     {% csrf_token %}        
                     {% if request.user not in bulletin.likes.all %}
                     <button type="submit" name="bulletin_id" value="{{ bulletin.slug }}"
@@ -48,25 +48,26 @@
                             class="fas fa-thumbs-up liked-by-user ms-2"></i></button>
                     {% endif %}
                 </form>
-                <a class="bulletin-link d-block my-2" href="{{ bulletin.link }}" target="_blank">{{ bulletin.link }}</a>
+                <h2 class="title-ellipsis">{{ bulletin.title }}</h2>
+                <a class="bulletin-link d-block my-2 link-ellipsis" href="{{ bulletin.link }}" target="_blank">{{ bulletin.link }}</a>
             </div>
             {% else %}
-            <div class="card-header bulletin-header">
-                <h2 class="d-inline">{{ bulletin.title }}</h2>
+            <div class="card-header bulletin-header like-button-form-not-your-post">    
                 <button class="btn text-secondary float-end like-button px-0">{{ bulletin.number_of_likes }}<i
                     class="far fa-thumbs-up ms-2"></i></button>
-                <a class="bulletin-link d-block my-2" href="{{ bulletin.link }}" target="_blank">{{ bulletin.link }}</a>
+                <h2 class="title-ellipsis">{{ bulletin.title }}</h2>
+                <a class="bulletin-link d-block my-2 link-ellipsis" href="{{ bulletin.link }}" target="_blank">{{ bulletin.link }}</a>
             </div>
             {% endif %}
             <div class="card-body">
-                <p class="float-none">{{ bulletin.content }}</p>
+                <p class="float-none text-content">{{ bulletin.content }}</p>
                 <hr class="mt-5">
                 {% if bulletin.edited %}
                 <p class="float-end post-info ps-1 edit-text"><em>Edited on {{ bulletin.updated_on }}</em></p>
-                <p class="float-end post-info px-1"><strong>|</strong></p>
-                <p class="float-end post-info pe-1"><em>Posted by <strong>{{ bulletin.author }}</strong> on {{ bulletin.created_on }}</em></p>
+                <p class="float-end post-info px-1 divider"><strong>|</strong></p>
+                <p class="float-end post-info pe-1 created-text"><em>Posted by <strong>{{ bulletin.author }}</strong> on {{ bulletin.created_on }}</em></p>
                 {% else %}
-                <p class="float-end post-info"><em>Posted by <strong>{{ bulletin.author }}</strong> on {{ bulletin.created_on }}</em></p>
+                <p class="float-end post-info created-text"><em>Posted by <strong>{{ bulletin.author }}</strong> on {{ bulletin.created_on }}</em></p>
                 {% endif %}  
             </div>
         </div>
@@ -97,20 +98,28 @@
 </div>
 {% endif %}
 
+
+
+
+
+
 {% for comment in comments %}
 <div class="row my-5" id="comments-container-{{ forloop.counter }}">
     <div class="col-12 ">
         <div class="card">
 
             {% if comment.author == request.user and user.is_authenticated %} <!-- If you are the user who made this comment, AND you are logged in, the header will have a green line -->
-            <div class="card-header green-header">
-                <h2 class="d-inline">{{ comment.author }}</h2>
+            <div class="card-header green-header green-header-comment">
+                <h2 class="d-inline commenter">{{ comment.author }}</h2>
                 
                 <form class="float-end" method="POST" action="{% url 'delete_request' bulletin.slug %}?query={{ comment.id }}"> 
                     {% csrf_token %}
                     <button type="submit" class="btn btn-lg float-end delete-bulletin-button"><i class="fas fa-trash-alt"></i></button>
                 </form>
-                <a href="{% url 'comment_edit' bulletin.slug %}?query={{ comment.id }}" class="float-end btn btn-lg edit-bulletin-button me-2"><i class="fas fa-pencil-alt"></i></a>
+                <a href="{% url 'comment_edit' bulletin.slug %}?query={{ comment.id }}" class="float-end btn btn-lg edit-comment-button me-2"><i class="fas fa-pencil-alt"></i></a>
+            </div>
+            <div class="card-body">
+                <p class="float-start comment-text">{{ comment.comment }}</p>
                 <form method="POST"
                     action="{% url 'comment_like' bulletin.slug %}?query={{ comment.id }}"
                     class="d-inline like-button-form" id="comment-like-form-{{ comment.id }}">
@@ -122,43 +131,60 @@
                     <button type="submit" name="comment_id" class="btn float-end" id="comment-liked-{{ comment.id }}">{{ comment.number_of_likes }}<i class="fas fa-thumbs-up liked-by-user ms-2"></i></button>
                     {% endif %}
                 </form>
-            </div>
-            {% elif user.is_authenticated %}
-            <div class="card-header">
-                <h2 class="d-inline">{{ comment.author }}</h2>
-                <form method="POST"
-                        action="{% url 'comment_like' bulletin.slug %}?query={{ comment.id }}"
-                        class="d-inline like-button-form" id="comment-like-form-{{ comment.id }}">
-
-                        {% csrf_token %}
-                        {% if request.user not in comment.likes.all %}
-                        <button type="submit" name="comment_id" class="btn float-end px-0" id="comment-not-liked-{{ comment.id }}">{{ comment.number_of_likes }}<i class="far fa-thumbs-up not-liked-by-user ms-1"></i></button>
-                        {% else %}
-                        <button type="submit" name="comment_id" class="btn float-end px-0" id="comment-liked-{{ comment.id }}">{{ comment.number_of_likes }}<i class="fas fa-thumbs-up liked-by-user ms-2"></i></button>
-                        {% endif %}
-
-                </form>
-            </div>
-            {% else %}
-            <div class="card-header">
-                <h2 class="d-inline">{{ comment.author }}</h2>
-                <button type="button" class="btn text-secondary float-end like-button px-0">{{ comment.number_of_likes }}<i
-                    class="far fa-thumbs-up ms-2"></i></button>
-            </div>
-            {% endif %}
-
-            <div class="card-body">
-                <p class="float-start comment-text">{{ comment.comment }}</p>
                 <hr>
                 {% if comment.edited %}
                 <p class="float-end post-info ps-1 edit-text"><em>Edited on {{ comment.updated_on }}</em></p>
-                <p class="float-end post-info px-1"><strong>|</strong></p>
-                <p class="float-end post-info pe-1"><em>Posted on {{ comment.created_on }}</em></p>
+                <p class="float-end post-info px-1 divider"><strong>|</strong></p>
+                <p class="float-end post-info pe-1 created-text"><em>Posted on {{ comment.created_on }}</em></p>
                 {% else %}
-                <p class="float-end post-info"><em>Posted on {{ comment.created_on }}</em></p>
+                <p class="float-end post-info created-text"><em>Posted on {{ comment.created_on }}</em></p>
+                {% endif %}  
+            </div>
+            {% elif user.is_authenticated %}
+            <div class="card-header">
+                <h2 class="d-inline commenter">{{ comment.author }}</h2>
+            </div>
+            <div class="card-body">
+                <p class="float-start comment-text">{{ comment.comment }}</p>
+                <form method="POST"
+                    action="{% url 'comment_like' bulletin.slug %}?query={{ comment.id }}"
+                    class="d-inline like-button-form" id="comment-like-form-{{ comment.id }}">
+
+                    {% csrf_token %}
+                    {% if request.user not in comment.likes.all %}
+                    <button type="submit" name="comment_id" class="btn float-end" id="comment-not-liked-{{ comment.id }}">{{ comment.number_of_likes }}<i class="far fa-thumbs-up not-liked-by-user ms-1"></i></button>
+                    {% else %}
+                    <button type="submit" name="comment_id" class="btn float-end" id="comment-liked-{{ comment.id }}">{{ comment.number_of_likes }}<i class="fas fa-thumbs-up liked-by-user ms-2"></i></button>
+                    {% endif %}
+                </form>
+                <hr>
+                {% if comment.edited %}
+                <p class="float-end post-info ps-1 edit-text"><em>Edited on {{ comment.updated_on }}</em></p>
+                <p class="float-end post-info px-1 divider"><strong>|</strong></p>
+                <p class="float-end post-info pe-1 created-text"><em>Posted on {{ comment.created_on }}</em></p>
+                {% else %}
+                <p class="float-end post-info created-text"><em>Posted on {{ comment.created_on }}</em></p>
                 {% endif %}  
             </div>
 
+            {% else %}
+            <div class="card-header">
+                <h2 class="d-inline commenter">{{ comment.author }}</h2>
+            </div>
+            <div class="card-body">
+                <p class="float-start comment-text">{{ comment.comment }}</p>
+                <button type="button" class="btn text-secondary float-end like-button px-0">{{ comment.number_of_likes }}<i
+                    class="far fa-thumbs-up ms-2"></i></button>
+                <hr>
+                {% if comment.edited %}
+                <p class="float-end post-info ps-1 edit-text"><em>Edited on {{ comment.updated_on }}</em></p>
+                <p class="float-end post-info px-1 divider"><strong>|</strong></p>
+                <p class="float-end post-info pe-1 created-text"><em>Posted on {{ comment.created_on }}</em></p>
+                {% else %}
+                <p class="float-end post-info created-text"><em>Posted on {{ comment.created_on }}</em></p>
+                {% endif %}  
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>

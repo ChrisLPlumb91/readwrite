@@ -6,8 +6,8 @@ STATUS = ((0, 'Awaiting approval'), (1, 'Approved'))
 
 
 class Bulletin(models.Model):
-    title = models.CharField(max_length=80, unique=True)
-    slug = models.SlugField(max_length=80, unique=True)
+    title = models.CharField(max_length=40, unique=True)
+    slug = models.SlugField(max_length=40, unique=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, 
                                related_name='bulletins')
     content = models.TextField()

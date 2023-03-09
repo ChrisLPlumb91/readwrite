@@ -61,7 +61,7 @@
                     
                     <form method="POST"
                         action="{% url 'bulletin_like' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
-                        class="d-inline like-button-form">
+                        class="d-inline like-button-form like-button-form-not-your-post">
                         {% csrf_token %}
                         {% if request.user not in bulletin.likes.all %}
                         <button type="submit" name="bulletin_id" value="{{ bulletin.slug }}"
@@ -86,7 +86,7 @@
                     <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
                         target="_blank">{{ bulletin.link }}</a>
                 </div>
-                <div class="button-container d-inline float-end px-1 py-1 button-container-without-options">
+                <div class="button-container d-inline float-end px-1 py-1 button-container-without-options like-button-form-not-your-post">
                     <button class="btn text-secondary float-end like-button">{{ bulletin.number_of_likes }}<i class="far fa-thumbs-up ms-2"></i></button>
                     <span class="btn pe-1 float-start text-secondary comment-number comment-number-alt">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon-alt"></i></span>
                 </div>
@@ -158,7 +158,7 @@
                 <div class="button-container d-inline float-end px-1 py-1 button-container-without-options">
                     <form method="POST"
                         action="{% url 'bulletin_like' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
-                        class="d-inline like-button-form">
+                        class="d-inline like-button-form like-button-form-not-your-post">
                         {% csrf_token %}
                         {% if request.user not in bulletin.likes.all %}
                         <button type="submit" name="bulletin_id" value="{{ bulletin.slug }}"
@@ -180,7 +180,7 @@
                     <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
                         target="_blank">{{ bulletin.link }}</a>
                 </div>
-                <div class="button-container d-inline float-end px-1 py-1 button-container-without-options">
+                <div class="button-container d-inline float-end px-1 py-1 button-container-without-options like-button-form-not-your-post">
                     <button class="btn text-secondary float-end like-button">{{ bulletin.number_of_likes }}<i class="far fa-thumbs-up ms-2"></i></button>
                     <span class="btn pe-1 float-start text-secondary comment-number comment-number-alt">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon-alt"></i></span>
                 </div>
@@ -252,7 +252,7 @@
                 <div class="button-container d-inline float-end px-1 py-1 button-container-without-options">
                     <form method="POST"
                         action="{% url 'bulletin_like' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
-                        class="d-inline like-button-form">
+                        class="d-inline like-button-form like-button-form-not-your-post">
                         {% csrf_token %}
                         {% if request.user not in bulletin.likes.all %}
                         <button type="submit" name="bulletin_id" value="{{ bulletin.slug }}"
@@ -274,7 +274,7 @@
                     <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
                         target="_blank">{{ bulletin.link }}</a>
                 </div>
-                <div class="button-container d-inline float-end px-1 py-1 button-container-without-options">
+                <div class="button-container d-inline float-end px-1 py-1 button-container-without-options like-button-form-not-your-post">
                     <button class="btn text-secondary float-end like-button">{{ bulletin.number_of_likes }}<i class="far fa-thumbs-up ms-2"></i></button>
                     <span class="btn pe-1 float-start text-secondary comment-number comment-number-alt">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon-alt"></i></span>
                 </div>

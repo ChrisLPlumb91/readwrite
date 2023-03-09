@@ -1,6 +1,7 @@
 $(window).resize(function() {
+    var cardHeaderTitles = $('.card-header>a');
+
     if ($(window).innerWidth() <= 767) {
-        var cardHeaderTitles = $('.card-header>a');
         cardHeaderTitles.addClass('title-ellipsis');
     } else {
         cardHeaderTitles.removeClass('title-ellipsis');

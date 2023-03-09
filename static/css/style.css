@@ -101,6 +101,13 @@ ol > li {
     text-overflow: ellipsis;
 }
 
+.link-ellipsis-alt {
+    width: 70%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .button-container {
     border: 2px solid #a9bae6b9;
     border-radius: 10px;
@@ -118,6 +125,20 @@ ol > li {
 }
 
 .edit-bulletin-button:hover {
+    background-color:#47abee;
+    color: #000;
+    border: 2px solid #292d35b9;
+}
+
+.edit-comment-button {
+    background-color:#175fe6;
+    color: #ffffff;
+    border: 2px solid #292d35b9;
+    font-weight: bold;
+    font-size: 20px !important;
+}
+
+.edit-comment-button:hover {
     background-color:#47abee;
     color: #000;
     border: 2px solid #292d35b9;
@@ -253,7 +274,9 @@ hr {
 }
 
 .comment-text {
-    margin-bottom: 2rem;
+    margin-bottom: 0 !important;
+    display: block !important;
+    width: 100%;
 }
 
 .post-info {
@@ -346,6 +369,17 @@ footer .col-12 {
     z-index: 1;
 }
 
+@media screen and (max-width: 1320px) {
+    .card-header > a {
+        width: 100%;
+    }
+    
+    .card-header > p {
+        float: none;
+        margin-bottom: 0 !important;
+    }
+}
+
 @media screen and (max-width: 1288px) {
     .card-body > ol {
         margin-right: 0 !important;
@@ -374,8 +408,29 @@ footer .col-12 {
         text-align: center !important;
     }
 
+    .green-header-bulletin, .green-header-comment {
+        text-align: left !important;
+    }
+
     .button-container-with-options > form {
         display: inline;
+    }
+
+    .divider {
+        display: none;
+    }
+
+    .edit-text {
+        float: left !important;
+        padding-left: 0 !important;
+        display: block !important;
+        width: 100%;
+    }
+
+    .created-text {
+        float: left !important;
+        padding-right: 0 !important;
+
     }
 
 }
@@ -413,6 +468,10 @@ footer .col-12 {
     .new-bulletin-button, .greyed-out-button {
         font-size: 1.2rem !important;
     }
+
+    .like-button-form-not-your-post > button {
+        padding-left: 24px !important;
+    }
 }
 
 @media screen and (max-width: 991px) {
@@ -426,12 +485,25 @@ footer .col-12 {
     ol {
         font-size: 1.2rem;
     }
-}
 
-@media screen and (max-width: 970px) {
-    .card-header > p {
-        float: none;
-        margin-bottom: 0 !important;
+    .bulletin-link {
+        font-size: 1.2rem;
+    }
+
+    .card-body > .text-content {
+        font-size: 1.2rem;
+    }
+
+    .comment-text {
+        font-size: 1.2rem;
+    }
+
+    .edit-text {
+        font-size: 0.8rem;
+    }
+
+    .created-text {
+        font-size: 0.8rem;
     }
 }
 
@@ -457,7 +529,11 @@ footer .col-12 {
 
     .new-bulletin-button-container-top {
         width: 100%;
-    }   
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
 }
 
 @media screen and (max-width: 749px) {
@@ -480,6 +556,10 @@ footer .col-12 {
         padding-right: 0.5rem !important;
     }
 
+    .like-button-form > button {
+        font-size: 1rem !important;
+    }
+
     .like-button-your-post {
         padding-left: 0 !important;
         padding-right: 0 !important;
@@ -489,7 +569,7 @@ footer .col-12 {
         font-size: 1rem !important;
     }
 
-    .edit-bulletin-button {
+    .edit-bulletin-button, .edit-comment-button {
         padding: 3px 6px !important;
         margin-right: 5px !important;
     }
@@ -507,20 +587,62 @@ footer .col-12 {
     .container-fluid > .navbar-toggler {
         padding: 0 !important;
     }
+
+    h2 {
+        float: none !important;
+        width: 100%;
+        -webkit-line-clamp: 3 !important;
+    }
+
+    .commenter {
+        display: block !important;
+        margin-bottom: 0 !important;
+    }
 }
 
 @media screen and (max-width: 380px) {
+    .button-container-with-options {
+        width: 110px;
+    }
 
+    .like-button-your-post {
+        padding: 6px 8px !important;
+    }
 
+    .like-button-your-post > i {
+        margin-left: 0.6rem !important;
+    }
+
+    .comment-number-your-post {
+        padding-bottom: 0 !important;
+    }
+
+    .comment-number-your-post > .comment-icon {
+        margin-left: 0.5rem !important;
+    }
+
+    .edit-bulletin-button {
+        margin-right: 0 !important;
+    }
+
+    .edit-bulletin-button-your-post {
+        margin-right: 5px !important;
+    }
 }
 
-@media screen and (max-width: 301px) {
+@media screen and (max-width: 321px) {
     .button-container-without-options button, .button-container-without-options > span {
         font-size: 1rem;
         padding: 0 !important;
+        margin: 0 !important;
+        padding-left: 12px !important;
     }
 
     .like-button > i {
         margin: 0 0 0 5px !important;
+    }
+
+    .comment-number > i {
+        font-size: 1rem !important;
     }
 }
