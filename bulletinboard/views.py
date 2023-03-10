@@ -84,7 +84,7 @@ class AddBulletin(View):
 class EditBulletin(View):
     def get(self, request, slug, *args, **kwargs):
         queryset = Bulletin.objects.filter(status=1)
-        bulletin = get_object_or_404(queryset, slug=slug)
+        bulletin = get_object_or_404(queryset, slug=slug, author=request.user)
 
         bulletin_form = BulletinForm(instance=bulletin)
 
@@ -100,7 +100,8 @@ class EditBulletin(View):
 
     def post(self, request, slug, *args, **kwargs):
         queryset = Bulletin.objects.filter(status=1)
-        bulletin = get_object_or_404(queryset, slug=slug)
+        bulletin = get_object_or_404(queryset, slug=slug,
+                                     author=request.user)
 
         bulletin_form = BulletinForm(data=request.POST, instance=bulletin)
 
@@ -130,7 +131,8 @@ class BulletinListAlt(View):
     def get(self, request, slug, *args, **kwargs):
         queryset = Bulletin.objects.filter(status=1)
         paginator = Paginator(queryset, 10)
-        bulletin = get_object_or_404(queryset, slug=slug)
+        bulletin = get_object_or_404(queryset, slug=slug,
+                                     author=request.user)
         comments = bulletin.comments_on_post.order_by('likes')
 
         page_number = request.GET.get('page')
@@ -156,7 +158,8 @@ class BulletinDetailAlt(View):
         comments = bulletin.comments_on_post.order_by('likes')
 
         if kwargs['comment_id'] > 0:
-            comment = get_object_or_404(comments, id=kwargs['comment_id'])
+            comment = get_object_or_404(comments, id=kwargs['comment_id'],
+                                        author=request.user)
         else:
             comment = kwargs['comment_id']
 
@@ -175,7 +178,8 @@ class BulletinDetailAlt(View):
 class DeleteBulletin(View):
     def post(self, request, slug, *args, **kwargs):
         queryset = Bulletin.objects.filter(status=1)
-        bulletin = get_object_or_404(queryset, slug=slug)
+        bulletin = get_object_or_404(queryset, slug=slug,
+                                     author=request.user)
         bulletin.delete()
 
         return redirect('home')
@@ -209,8 +213,7 @@ class EditComment(View):
 
         comments = bulletin.comments_on_post.order_by('likes')
         query = request.GET.get('query')
-        print(query)
-        comment = get_object_or_404(comments, id=query)
+        comment = get_object_or_404(comments, id=query, author=request.user)
 
         comment_form = CommentForm(instance=comment)
 
@@ -226,14 +229,16 @@ class EditComment(View):
 
     def post(self, request, slug, *args, **kwargs):
         queryset = Bulletin.objects.filter(status=1)
-        bulletin = get_object_or_404(queryset, slug=slug)
+        bulletin = get_object_or_404(queryset, slug=slug,
+                                     author=request.user)
 
         query = request.GET.get('query')
         split_query_1 = query.split('=')
         comment_id = split_query_1[1]
 
         comments = bulletin.comments_on_post.order_by('likes')
-        comment = get_object_or_404(comments, id=comment_id)
+        comment = get_object_or_404(comments, id=comment_id,
+                                    author=request.user)
 
         comment_form = CommentForm(data=request.POST, instance=comment)
 
@@ -261,11 +266,13 @@ class ConfirmDeleteComment(View):
 class DeleteComment(View):
     def post(self, request, slug, *args, **kwargs):
         queryset = Bulletin.objects.filter(status=1)
-        bulletin = get_object_or_404(queryset, slug=slug)
+        bulletin = get_object_or_404(queryset, slug=slug,
+                                     author=request.user)
 
         comment_id = request.GET.get('query')
         comments = bulletin.comments_on_post.order_by('likes')
-        comment = get_object_or_404(comments, id=comment_id)
+        comment = get_object_or_404(comments, id=comment_id,
+                                    author=request.user)
 
         comment.delete()
 
@@ -288,3 +295,10 @@ class CommentLike(View):
 
         return HttpResponseRedirect(reverse('bulletin', args=[slug]))
 
+
+def handler404(request, exception):
+    return render(request, '404.html', status=404)
+
+
+def handler500(request):
+    return render(request, '500.html', status=500)

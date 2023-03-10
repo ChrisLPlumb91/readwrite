@@ -104,16 +104,22 @@ if (window.location.href.includes('/accounts/')) {
     parentP.addClass('d-block');
     parentP.addClass('text-center');
     parentP.addClass('pt-1');
-
-} else {
-    footer.removeClass('position-fixed');
-    footer.removeClass('bottom-0');
-    textField.removeClass('float-end');
-    passwordField.addClass('float-end');
-    emailField.addClass('float-end');
-
-    parentP.removeClass('d-block');
-    parentP.removeClass('text-center');
-    parentP.removeClass('pt-1');
 }
+
+$(document).ready(function() {
+    var footer = $('footer');
+    var navbarHeader = $('navbar');
+
+    var contentHeight = $(footer).outerHeight(true) - $(navbarHeader).outerHeight(true);
+    console.log(contentHeight);
+    if($('#404-container').length || $('#500-container').length) {
+        console.log('On 404 or 500 page');
+        footer.addClass('position-fixed');
+        footer.addClass('bottom-0');
+    } else {
+        footer.removeClass('position-fixed');
+        footer.removeClass('bottom-0');
+    }
+})
+
 

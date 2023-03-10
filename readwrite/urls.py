@@ -15,6 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import urls
+# from django.conf.urls import handler404, handler500
+from bulletinboard import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -22,3 +25,6 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('', include('bulletinboard.urls'), name='bulletin_urls'),
 ]
+
+urls.handler404 = 'bulletinboard.views.handler404'
+urls.handler500 = 'bulletinboard.views.handler500'
