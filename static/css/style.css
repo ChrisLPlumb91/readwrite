@@ -294,9 +294,19 @@ hr {
     text-shadow: 0 2px #e6174b;
 }
 
+.blue-header > .edit-text, .blue-header > .divider {
+    color: #e6174b;
+    text-shadow: 0 1px #f0f0f0;
+}
+
 .red-header {
     background-color: #e6174b;
     text-shadow: 0 2px #175fe6;
+}
+
+.red-header > .edit-text, .red-header > .divider {
+    color:#175fe6;
+    text-shadow: 0 1px #f0f0f0;  
 }
 
 .green-header {
@@ -370,13 +380,21 @@ footer .col-12 {
 }
 
 @media screen and (max-width: 1320px) {
-    .card-header > a {
+    /* .card-header > a {
         width: 100%;
-    }
+    } */
     
     .card-header > p {
-        float: none;
+        float: none !important;
         margin-bottom: 0 !important;
+    }
+
+    .edit-text {
+        padding-left: 0 !important;
+    }
+
+    .divider {
+        display: none;
     }
 }
 
@@ -414,10 +432,6 @@ footer .col-12 {
 
     .button-container-with-options > form {
         display: inline;
-    }
-
-    .divider {
-        display: none;
     }
 
     .edit-text {
@@ -505,6 +519,10 @@ footer .col-12 {
     .created-text {
         font-size: 0.8rem;
     }
+
+    .card-header > p {
+        font-size: 0.8rem !important;
+    }
 }
 
 @media screen and (max-width: 895px) {
@@ -556,7 +574,7 @@ footer .col-12 {
         padding-right: 0.5rem !important;
     }
 
-    .like-button-form > button {
+    .like-button-form-your-post > button {
         font-size: 1rem !important;
     }
 
@@ -591,12 +609,37 @@ footer .col-12 {
     h2 {
         float: none !important;
         width: 100%;
+        text-align: center;
         -webkit-line-clamp: 3 !important;
     }
 
     .commenter {
         display: block !important;
         margin-bottom: 0 !important;
+    }
+
+    .green-header > form {
+        float: left !important;
+    }
+
+    .like-button-form > button {
+        padding-left: 0 !important;
+        font-size: 1rem !important;
+    }
+
+    .not-your-bulletin-header {
+        text-align: center !important;
+    }
+
+    .like-button-form-not-your-post {
+        float: none !important;
+        text-align: center !important;
+    }
+
+    .like-button-form-not-your-post > button {
+        float: none !important;
+        padding-left: 12px !important;
+        font-size: 1.5rem !important;
     }
 }
 
@@ -642,7 +685,11 @@ footer .col-12 {
         margin: 0 0 0 5px !important;
     }
 
-    .comment-number > i {
+    .comment-number > i, .like-button-form-not-your-post > button {
         font-size: 1rem !important;
+    }
+
+    .card-header > .edit-text {
+        margin-bottom: 10px !important;
     }
 }

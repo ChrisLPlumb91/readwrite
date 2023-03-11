@@ -10,8 +10,8 @@
             <form method="POST">
                 {{ bulletin_form | crispy }}
                 {% csrf_token %}
-                <button type="submit" action="{% url 'edit' bulletin.slug %}" class="btn btn-signup btn-primary btn-lg">Submit</button>
-                {% if '/post/' not in query %}
+                <button type="submit" action="{% url 'edit' bulletin.slug %}?query={{ original_url_query }}" class="btn btn-signup btn-primary btn-lg">Submit</button>
+                {% if '/post/' not in original_url_query %}
                 <a href="{% url 'home' %}" class="btn btn-secondary btn-lg">Cancel</a>
                 {% else %}
                 <a href="{% url 'bulletin' bulletin.slug %}" class="btn btn-secondary btn-lg">Cancel</a>

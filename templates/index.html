@@ -9,7 +9,13 @@
         <div class="card" id="bulletin-card-{{ forloop.counter }}">
             <div class="card-header blue-header"> <!-- Topmost bulletin header - blue -->
                 <a href="{% url 'bulletin' bulletin.slug %}"><strong>{{ bulletin.title }}</strong></a>
+                {% if bulletin.edited %}
+                <p class="float-end post-info ps-1 edit-text"><em>Edited on {{ bulletin.updated_on }}</em></p>
+                <p class="float-end post-info px-1 divider"><strong>|</strong></p>
+                <p class="pe-1"><em>Posted by <strong>{{ bulletin.author }} </strong>on {{ bulletin.created_on }} </em></p>
+                {% else %}
                 <p><em>Posted by <strong>{{ bulletin.author }} </strong>on {{ bulletin.created_on }}</em></p>
+                {% endif %}
             </div>
             {% if user.is_authenticated and bulletin.author == request.user %} <!-- Topmost bulletin card body if logged in and bulletin was posted by you - green strip, like button, edit and delete buttons -->
             <div class="card-body green-header bulletin-card-body">
@@ -38,11 +44,7 @@
                     <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
                         class="btn btn-lg float-start edit-bulletin-button me-2"><i class="fas fa-pencil-alt"></i></a>
 
-                    <form class="float-start delete-button-form" method="POST"
-                        action="{% url 'post_delete' bulletin.slug %}?query={{ request.get_full_path|urlencode }}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-lg delete-bulletin-button"><i class="fas fa-trash-alt"></i></button>
-                    </form>
+                    <button type="button" class="btn btn-lg float-start delete-bulletin-button modal-button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" value="{% url 'confirm_delete' bulletin.slug %}" data-type="Bulletin"><i class="fas fa-trash-alt"></i></button>
 
                     <span class="btn pe-1 ms-2 float-start comment-number comment-number-your-post">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon"></i></span>
 
@@ -74,7 +76,7 @@
                         {% endif %}
                     </form>
 
-                    <span class="btn pe-1 ms-2 float-start comment-number">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon"></i></span>
+                    <span class="btn pe-1 ms-2 float-start comment-number comment-number-not-your-post">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon"></i></span>
 
                 </div>
 
@@ -102,12 +104,24 @@
             {% if forloop.counter|divisibleby:2 %}
             <div class="card-header red-header">
                 <a href="{% url 'bulletin' bulletin.slug %}"><strong>{{ bulletin.title }}</strong></a>
+                {% if bulletin.edited %}
+                <p class="float-end post-info ps-1 edit-text"><em>Edited on {{ bulletin.updated_on }}</em></p>
+                <p class="float-end post-info px-1 divider"><strong>|</strong></p>
+                <p class="pe-1"><em>Posted by <strong>{{ bulletin.author }} </strong>on {{ bulletin.created_on }} </em></p>
+                {% else %}
                 <p><em>Posted by <strong>{{ bulletin.author }} </strong>on {{ bulletin.created_on }}</em></p>
+                {% endif %}
             </div>
             {% else %}
             <div class="card-header blue-header">
                 <a href="{% url 'bulletin' bulletin.slug %}"><strong>{{ bulletin.title }}</strong></a>
+                {% if bulletin.edited %}
+                <p class="float-end post-info ps-1 edit-text"><em>Edited on {{ bulletin.updated_on }}</em></p>
+                <p class="float-end post-info px-1 divider"><strong>|</strong></p>
+                <p class="pe-1"><em>Posted by <strong>{{ bulletin.author }} </strong>on {{ bulletin.created_on }}</em></p>
+                {% else %}
                 <p><em>Posted by <strong>{{ bulletin.author }} </strong>on {{ bulletin.created_on }}</em></p>
+                {% endif %}
             </div>
             {% endif %}
             {% if user.is_authenticated and bulletin.author == request.user %} <!-- If logged in and last bulletin was posted by you - green strip, like button, edit and delete buttons -->
@@ -137,11 +151,7 @@
                     <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
                         class="btn btn-lg float-start edit-bulletin-button me-2"><i class="fas fa-pencil-alt"></i></a>
 
-                    <form class="float-start delete-button-form" method="POST"
-                        action="{% url 'post_delete' bulletin.slug %}?query={{ request.get_full_path|urlencode }}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-lg delete-bulletin-button"><i class="fas fa-trash-alt"></i></button>
-                    </form>
+                    <button type="button" class="btn btn-lg float-start delete-bulletin-button modal-button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" value="{% url 'confirm_delete' bulletin.slug %}" data-type="Bulletin"><i class="fas fa-trash-alt"></i></button>
 
                     <span class="btn pe-1 float-start comment-number comment-number-your-post">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon"></i></span>
                 </div>
@@ -170,6 +180,8 @@
                                 class="fas fa-thumbs-up liked-by-user ms-2"></i></button>
                         {% endif %}
                     </form>
+
+                    <span class="btn pe-1 ms-2 float-start comment-number comment-number-not-your-post">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon"></i></span>
                 </div>
 
             </div>
@@ -196,12 +208,24 @@
             {% if forloop.counter|divisibleby:2 %}
             <div class="card-header red-header">
                 <a href="{% url 'bulletin' bulletin.slug %}"><strong>{{ bulletin.title }}</strong></a>
+                {% if bulletin.edited %}
+                <p class="float-end post-info ps-1 edit-text"><em>Edited on {{ bulletin.updated_on }}</em></p>
+                <p class="float-end post-info px-1 divider"><strong>|</strong></p>
+                <p class="pe-1"><em>Posted by <strong>{{ bulletin.author }} </strong>on {{ bulletin.created_on }}</em></p>
+                {% else %}
                 <p><em>Posted by <strong>{{ bulletin.author }} </strong>on {{ bulletin.created_on }}</em></p>
+                {% endif %}
             </div>
             {% else %}
             <div class="card-header blue-header">
                 <a href="{% url 'bulletin' bulletin.slug %}"><strong>{{ bulletin.title }}</strong></a>
+                {% if bulletin.edited %}
+                <p class="float-end post-info ps-1 edit-text"><em>Edited on {{ bulletin.updated_on }}</em></p>
+                <p class="float-end post-info px-1 divider"><strong>|</strong></p>
+                <p class="pe-1"><em>Posted by <strong>{{ bulletin.author }} </strong>on {{ bulletin.created_on }}</em></p>
+                {% else %}
                 <p><em>Posted by <strong>{{ bulletin.author }} </strong>on {{ bulletin.created_on }}</em></p>
+                {% endif %}
             </div>
             {% endif %}
             {% if user.is_authenticated and bulletin.author == request.user %} <!-- If logged in and the current iteration's bulletin was posted by you - green strip, like button, edit ad delete buttons -->
@@ -231,11 +255,7 @@
                     <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
                         class="btn btn-lg float-start edit-bulletin-button me-2"><i class="fas fa-pencil-alt"></i></a>
 
-                    <form class="float-start delete-button-form" method="POST"
-                        action="{% url 'post_delete' bulletin.slug %}?query={{ request.get_full_path|urlencode }}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-lg delete-bulletin-button"><i class="fas fa-trash-alt"></i></button>
-                    </form>
+                    <button type="button" class="btn btn-lg float-start delete-bulletin-button modal-button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" value="{% url 'confirm_delete' bulletin.slug %}" data-type="Bulletin"><i class="fas fa-trash-alt"></i></button>
 
                     <span class="btn pe-1 ms-2 float-start comment-number comment-number-your-post">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon"></i></span>
                 </div>
@@ -264,6 +284,9 @@
                                 class="fas fa-thumbs-up liked-by-user ms-2"></i></button>
                         {% endif %}
                     </form>
+
+                    <span class="btn pe-1 ms-2 float-start comment-number comment-number-not-your-post">{{ bulletin.comments_on_post.all|length }}<i class="fas fa-comments ms-1 comment-icon"></i></span>
+
                 </div>
 
             </div>
@@ -297,4 +320,27 @@
         </ul>
     </nav>
 {% endif %}
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p></p>   
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <form method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Yes, delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

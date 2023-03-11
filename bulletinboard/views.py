@@ -94,14 +94,13 @@ class EditBulletin(View):
             {
                 'bulletin_form': bulletin_form,
                 'bulletin': bulletin,
-                'query': request.GET.get('query'),
+                'original_url_query': request.GET.get('query'),
             },
         )
 
     def post(self, request, slug, *args, **kwargs):
         queryset = Bulletin.objects.filter(status=1)
-        bulletin = get_object_or_404(queryset, slug=slug,
-                                     author=request.user)
+        bulletin = get_object_or_404(queryset, slug=slug)
 
         bulletin_form = BulletinForm(data=request.POST, instance=bulletin)
 
@@ -111,68 +110,15 @@ class EditBulletin(View):
             post.author = request.user
             post.edited = True
             post.save()
-            return redirect('bulletin', slug=post.slug)
+
+            if '/post/' not in request.GET.get('query'):
+                return HttpResponseRedirect(reverse('home'))
+            else:
+                return HttpResponseRedirect(reverse('bulletin',
+                                            args=[slug]))
         else:
             bulletin_form = BulletinForm()
             return redirect('home')
-
-
-class ConfirmDeleteBulletin(View):
-    def post(self, request, slug, *args, **kwargs):
-        comment_id = 0
-        if '/post/' not in request.GET.get('query'):
-            return HttpResponseRedirect(reverse('home_alt', args=[slug]))
-        else:
-            return HttpResponseRedirect(reverse('post_alt',
-                                        args=[slug, comment_id]))
-
-
-class BulletinListAlt(View):
-    def get(self, request, slug, *args, **kwargs):
-        queryset = Bulletin.objects.filter(status=1)
-        paginator = Paginator(queryset, 10)
-        bulletin = get_object_or_404(queryset, slug=slug,
-                                     author=request.user)
-        comments = bulletin.comments_on_post.order_by('likes')
-
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-
-        return render(
-            request,
-            'index_alt.html',
-            {
-                'bulletin_list': queryset,
-                'specific_bulletin': bulletin,
-                'comments': comments,
-                'page_obj': page_obj,
-            },
-        )
-
-
-class BulletinDetailAlt(View):
-    def get(self, request, slug, *args, **kwargs):
-        queryset = Bulletin.objects.filter(status=1)
-        bulletin = get_object_or_404(queryset, slug=slug)
-
-        comments = bulletin.comments_on_post.order_by('likes')
-
-        if kwargs['comment_id'] > 0:
-            comment = get_object_or_404(comments, id=kwargs['comment_id'],
-                                        author=request.user)
-        else:
-            comment = kwargs['comment_id']
-
-        return render(
-            request,
-            'bulletin_alt.html',
-            {
-                'bulletin': bulletin,
-                'comments': comments,
-                'comment': comment,
-                'comment_form': CommentForm()
-            },
-        )
 
 
 class DeleteBulletin(View):
@@ -204,9 +150,9 @@ class BulletinLike(View):
 class EditComment(View):
     def get(self, request, slug, *args, **kwargs):
         bulletin_queryset = Bulletin.objects.filter(status=1)
-        bulletin = get_object_or_404(bulletin_queryset, slug=slug)
+        specific_bulletin = get_object_or_404(bulletin_queryset, slug=slug)
 
-        comments = bulletin.comments_on_post.order_by('likes')
+        comments = Comment.objects.filter(bulletin=specific_bulletin).annotate(likes_temp=Max('likes')).order_by(F('likes_temp').desc(nulls_last=True))
         query = request.GET.get('query')
         comment = get_object_or_404(comments, id=query, author=request.user)
 
@@ -216,7 +162,7 @@ class EditComment(View):
             request,
             'bulletin.html',
             {
-                'bulletin': bulletin,
+                'bulletin': specific_bulletin,
                 'comments': comments,
                 'comment_form': comment_form,
             },
@@ -224,14 +170,13 @@ class EditComment(View):
 
     def post(self, request, slug, *args, **kwargs):
         queryset = Bulletin.objects.filter(status=1)
-        bulletin = get_object_or_404(queryset, slug=slug,
-                                     author=request.user)
+        specific_bulletin = get_object_or_404(queryset, slug=slug)
 
         query = request.GET.get('query')
         split_query_1 = query.split('=')
         comment_id = split_query_1[1]
 
-        comments = bulletin.comments_on_post.order_by('likes')
+        comments = Comment.objects.filter(bulletin=specific_bulletin).annotate(likes_temp=Max('likes')).order_by(F('likes_temp').desc(nulls_last=True))
         comment = get_object_or_404(comments, id=comment_id,
                                     author=request.user)
 
@@ -249,13 +194,6 @@ class EditComment(View):
         else:
             comment_form = CommentForm()
             return HttpResponseRedirect(reverse('bulletin', args=[slug]))
-
-
-class ConfirmDeleteComment(View):
-    def post(self, request, slug, *args, **kwargs):
-        comment_id = request.GET.get('query')
-        return HttpResponseRedirect(reverse('post_alt', 
-                                    args=[slug, comment_id]))
 
 
 class DeleteComment(View):

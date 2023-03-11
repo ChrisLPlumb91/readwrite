@@ -9,15 +9,11 @@
         <div class="card">
             {% if bulletin.author == request.user and user.is_authenticated %}
             <div class="card-header green-header bulletin-header green-header-bulletin">
-                
-                <form class="float-end" method="POST" action="{% url 'post_delete' bulletin.slug %}?query={{ request.get_full_path|urlencode }}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-lg float-end delete-bulletin-button"><i class="fas fa-trash-alt"></i></button>
-                </form>
 
-                <button type="button" class="btn btn-lg float-end delete-bulletin-button modal-button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-type="Bulletin"></button><i class="fas fa-trash-alt"></i></button>
+                <button type="button" class="btn btn-lg float-end delete-bulletin-button modal-button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" value="{% url 'confirm_delete' bulletin.slug %}" data-type="Bulletin"><i class="fas fa-trash-alt"></i></button>
                 
                 <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}" class="btn btn-lg float-end edit-bulletin-button edit-bulletin-button-your-post me-2"><i class="fas fa-pencil-alt"></i></a>
+                
                 <form method="POST"
                     action="{% url 'bulletin_like' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
                     class="d-inline like-button-form float-end">
@@ -36,10 +32,10 @@
                 <a class="bulletin-link d-block my-2 link-ellipsis" href="{{ bulletin.link }}" target="_blank">{{ bulletin.link }}</a>
             </div>
             {% elif user.is_authenticated %}
-            <div class="card-header bulletin-header">  
+            <div class="card-header bulletin-header not-your-bulletin-header">  
                 <form method="POST"
                     action="{% url 'bulletin_like' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
-                    class="d-inline like-button-form-not-your-post float-end">
+                    class="d-inline like-button-form like-button-form-not-your-post float-end">
                     {% csrf_token %}        
                     {% if request.user not in bulletin.likes.all %}
                     <button type="submit" name="bulletin_id" value="{{ bulletin.slug }}"
@@ -68,7 +64,7 @@
                 {% if bulletin.edited %}
                 <p class="float-end post-info ps-1 edit-text"><em>Edited on {{ bulletin.updated_on }}</em></p>
                 <p class="float-end post-info px-1 divider"><strong>|</strong></p>
-                <p class="float-end post-info pe-1 created-text"><em>Posted by <strong>{{ bulletin.author }}</strong> on {{ bulletin.created_on }}</em></p>
+                <p class="float-end post-info pe-1 created-text"><em>Posted by <strong>{{ bulletin.author }}</strong> on {{ bulletin.created_on }} </em></p>
                 {% else %}
                 <p class="float-end post-info created-text"><em>Posted by <strong>{{ bulletin.author }}</strong> on {{ bulletin.created_on }}</em></p>
                 {% endif %}  
@@ -114,14 +110,8 @@
             {% if comment.author == request.user and user.is_authenticated %} <!-- If you are the user who made this comment, AND you are logged in, the header will have a green line -->
             <div class="card-header green-header green-header-comment">
                 <h2 class="d-inline commenter">{{ comment.author }}</h2>
-                
-                <form class="float-end" method="POST" action="{% url 'delete_request' bulletin.slug %}?query={{ comment.id }}"> 
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-lg float-end delete-bulletin-button"><i class="fas fa-trash-alt"></i></button>
-                </form>
 
-                <button type="button" class="btn btn-lg float-end delete-bulletin-button modal-button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" value="{% url 'comment_delete' bulletin.slug %}?query={{ comment.id }}" data-type="Comment"></button><i class="fas fa-trash-alt"></i></button>
-
+                <button type="button" class="btn btn-lg float-end delete-bulletin-button modal-button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" value="{% url 'comment_delete' bulletin.slug %}?query={{ comment.id }}" data-type="Comment"><i class="fas fa-trash-alt"></i></button>
 
                 <a href="{% url 'comment_edit' bulletin.slug %}?query={{ comment.id }}" class="float-end btn btn-lg edit-comment-button me-2"><i class="fas fa-pencil-alt"></i></a>
             </div>
