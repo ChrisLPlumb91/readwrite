@@ -14,6 +14,9 @@
                     {% csrf_token %}
                     <button type="submit" class="btn btn-lg float-end delete-bulletin-button"><i class="fas fa-trash-alt"></i></button>
                 </form>
+
+                <button type="button" class="btn btn-lg float-end delete-bulletin-button modal-button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-type="Bulletin"></button><i class="fas fa-trash-alt"></i></button>
+                
                 <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}" class="btn btn-lg float-end edit-bulletin-button edit-bulletin-button-your-post me-2"><i class="fas fa-pencil-alt"></i></a>
                 <form method="POST"
                     action="{% url 'bulletin_like' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
@@ -116,6 +119,10 @@
                     {% csrf_token %}
                     <button type="submit" class="btn btn-lg float-end delete-bulletin-button"><i class="fas fa-trash-alt"></i></button>
                 </form>
+
+                <button type="button" class="btn btn-lg float-end delete-bulletin-button modal-button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" value="{% url 'comment_delete' bulletin.slug %}?query={{ comment.id }}" data-type="Comment"></button><i class="fas fa-trash-alt"></i></button>
+
+
                 <a href="{% url 'comment_edit' bulletin.slug %}?query={{ comment.id }}" class="float-end btn btn-lg edit-comment-button me-2"><i class="fas fa-pencil-alt"></i></a>
             </div>
             <div class="card-body">
@@ -189,5 +196,27 @@
     </div>
 </div>
 {% endfor %}
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p></p>   
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <form method="POST" action="{% url 'confirm_delete' bulletin.slug %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Yes, delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

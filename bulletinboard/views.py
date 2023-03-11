@@ -182,7 +182,7 @@ class DeleteBulletin(View):
                                      author=request.user)
         bulletin.delete()
 
-        return redirect('home')
+        return HttpResponseRedirect(reverse('home'))
 
 
 class BulletinLike(View):
@@ -190,15 +190,10 @@ class BulletinLike(View):
         queryset = Bulletin.objects.filter(status=1)
         bulletin = get_object_or_404(queryset, slug=slug)
 
-        print(f'Bulletin liked/unliked: {bulletin}')
-        print(f'Bulletins before like button clicked: {queryset}')
-
         if bulletin.likes.filter(id=request.user.id).exists():
             bulletin.likes.remove(request.user)
         else:
             bulletin.likes.add(request.user)
-
-        print(f'Bulletins after like button clicked: {queryset}')
 
         if '/post/' not in request.GET.get('query'):
             return HttpResponseRedirect(reverse('home'))
@@ -266,11 +261,11 @@ class ConfirmDeleteComment(View):
 class DeleteComment(View):
     def post(self, request, slug, *args, **kwargs):
         queryset = Bulletin.objects.filter(status=1)
-        bulletin = get_object_or_404(queryset, slug=slug,
-                                     author=request.user)
+        print(slug)
+        specific_bulletin = get_object_or_404(queryset, slug=slug)
 
         comment_id = request.GET.get('query')
-        comments = bulletin.comments_on_post.order_by('likes')
+        comments = Comment.objects.filter(bulletin=specific_bulletin).annotate(likes_temp=Max('likes')).order_by(F('likes_temp').desc(nulls_last=True))
         comment = get_object_or_404(comments, id=comment_id,
                                     author=request.user)
 

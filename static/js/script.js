@@ -6,6 +6,28 @@ $(window).resize(function() {
     } else {
         cardHeaderTitles.removeClass('title-ellipsis');
     }
+
+    if($('#404-container').length) {
+        var footer = $('footer');
+        var navbarHeader = $('.navbar');
+        var contentContainer = $('#404-container');
+        var row = $('404-container>div');
+
+        var contentHeight = $(document).innerHeight() - $(footer).outerHeight(true) - $(navbarHeader).outerHeight(true);
+        
+        $(contentContainer).height(contentHeight);
+        $(row).height(contentHeight);
+    } else if($('#500-container').length) {
+        var footer = $('footer');
+        var navbarHeader = $('.navbar');
+        var contentContainer = $('#500-container');
+        var row = $('500-container>div');
+
+        var contentHeight = $(document).innerHeight() - $(footer).outerHeight(true) - $(navbarHeader).outerHeight(true);
+        
+        $(contentContainer).height(contentHeight);
+        $(row).height(contentHeight);
+    }
 });
 
 $(document).scroll(function() {
@@ -108,12 +130,26 @@ if (window.location.href.includes('/accounts/')) {
 
 $(document).ready(function() {
     var footer = $('footer');
-    var navbarHeader = $('navbar');
+    var navbarHeader = $('.navbar');
 
-    var contentHeight = $(footer).outerHeight(true) - $(navbarHeader).outerHeight(true);
-    console.log(contentHeight);
-    if($('#404-container').length || $('#500-container').length) {
-        console.log('On 404 or 500 page');
+    var contentHeight = $(document).innerHeight() - $(footer).outerHeight(true) - $(navbarHeader).outerHeight(true);  
+
+    if($('#404-container').length) {
+        var PageNotFoundContainer = $('#404-container');
+        var row = $('#404-container>div');
+
+        $(PageNotFoundContainer).height(contentHeight);
+        $(row).height(contentHeight);
+
+        footer.addClass('position-fixed');
+        footer.addClass('bottom-0');
+    } else if($('#500-container').length) {
+        var InternalServerErrorContainer = $('#500-container');
+        var row = $('#500-container>div');
+
+        $(InternalServerErrorContainer).height(contentHeight);
+        $(row).height(contentHeight);
+
         footer.addClass('position-fixed');
         footer.addClass('bottom-0');
     } else {
@@ -122,4 +158,18 @@ $(document).ready(function() {
     }
 })
 
+if($('.modal-button').length) {
+    $('.modal-button').on('click', function() {
+        var type = $(this).data('type');
+        var lowerCaseType = type.toLowerCase();
+        var form = $('.modal-footer>form');
+
+        $('.modal-header>h1').text(`Delete ${type}`);
+        $('.modal-body>p').text(`Are you sure you want to delete your ${lowerCaseType}?`);
+
+        if(type == 'Comment') {
+            $(form).attr('action', $(this).attr('value'));
+        }
+    });
+}
 
