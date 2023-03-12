@@ -199,7 +199,7 @@ $(document).ready(function() {
         accountFooter.addClass('position-fixed');
         accountFooter.addClass('bottom-0');
 
-        if(window.location.href.includes('/signup/')) {
+        if (window.location.href.includes('/signup/')) {
             var textField = $('input[type="text"]');
             var emailField = $('input[type="email"]');
             var passwordField1 = $('input[name="password1"]');
@@ -223,20 +223,19 @@ $(document).ready(function() {
             parentP.addClass('text-center');
             parentP.addClass('pt-1');
 
-        } else if (window.location.href.includes('/logout/')) {
+        } 
+    } else if (window.location.href.includes('/edit/')) {
+        var editPageFooter = $('footer');
+        editPageFooter.addClass('position-fixed');
+        editPageFooter.addClass('bottom-0');
 
-        }
-    }
-});
-
-$(document).ready(function() {
-    if (!window.location.href.includes('/accounts/')) {
+    } else if (!window.location.href.includes('/accounts/') && !window.location.href.includes('/edit/')) {
         var errorPageFooter = $('footer');
         var navbarHeader = $('.navbar');
 
         var contentHeight = $(document).innerHeight() - $(errorPageFooter).outerHeight(true) - $(navbarHeader).outerHeight(true);  
 
-        if($('#404-container').length) {
+        if ($('#404-container').length) {
             var PageNotFoundContainer = $('#404-container');
             var row = $('#404-container>div');
 
@@ -245,7 +244,7 @@ $(document).ready(function() {
 
             errorPageFooter.addClass('position-fixed');
             errorPageFooter.addClass('bottom-0');
-        } else if($('#500-container').length) {
+        } else if ($('#500-container').length) {
             var InternalServerErrorContainer = $('#500-container');
             var row = $('#500-container>div');
 
@@ -259,7 +258,8 @@ $(document).ready(function() {
             errorPageFooter.removeClass('bottom-0');
         }
     }
-})
+});
+
 
 if($('.modal-button').length) {
     $('.modal-button').on('click', function() {

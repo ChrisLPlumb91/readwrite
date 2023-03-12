@@ -6,7 +6,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-8 offset-2 my-4">
+        <div class="col-8 offset-2 my-4 edit-bulletin-form-container">
             <form method="POST">
                 {{ bulletin_form | crispy }}
                 {% csrf_token %}

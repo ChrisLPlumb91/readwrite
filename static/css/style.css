@@ -659,6 +659,14 @@ footer .col-12 {
         padding-left: 12px !important;
         font-size: 1.5rem !important;
     }
+
+    #div_id_title, #div_id_content, #div_id_link {
+        text-align: center !important; 
+    }
+
+    .edit-bulletin-form-container > form {
+        text-align: center !important;
+    }
 }
 
 @media screen and (max-width: 380px) {
@@ -698,6 +706,10 @@ footer .col-12 {
 @media screen and (max-width: 360px) {
     .info-container > p {
         font-size: 1.1rem !important;
+    }
+
+    .edit-bulletin-form-container a {
+        margin-top: 10px !important
     }
 }
 
