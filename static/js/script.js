@@ -28,6 +28,64 @@ $(window).resize(function() {
         $(contentContainer).height(contentHeight);
         $(row).height(contentHeight);
     }
+
+    if (window.location.href.includes('/accounts/')) {
+        var accountFormContainer = $('.account-form-container');
+        var infoContainer = $('.info-container');
+        if ($(window).innerWidth() <= 1650 && $(window).innerWidth() > 1110) {
+            accountFormContainer.removeClass('col-4');
+            accountFormContainer.removeClass('offset-4');
+            accountFormContainer.removeClass('col-8');
+            accountFormContainer.removeClass('offset-2');
+            accountFormContainer.addClass('col-6');
+            accountFormContainer.addClass('offset-3');
+        } else if ($(window).innerWidth() <= 1110 && $(window).innerWidth() > 830) {
+            accountFormContainer.removeClass('col-4');
+            accountFormContainer.removeClass('offset-4');
+            accountFormContainer.removeClass('col-6');
+            accountFormContainer.removeClass('offset-3');
+            accountFormContainer.removeClass('col-10');
+            accountFormContainer.removeClass('offset-1');
+            accountFormContainer.addClass('col-8');
+            accountFormContainer.addClass('offset-2');
+        } else if ($(window).innerWidth() <= 830) {
+            accountFormContainer.removeClass('col-4');
+            accountFormContainer.removeClass('offset-4');
+            accountFormContainer.removeClass('col-6');
+            accountFormContainer.removeClass('offset-3');
+            accountFormContainer.removeClass('col-8');
+            accountFormContainer.removeClass('offset-2');
+            accountFormContainer.addClass('col-10');
+            accountFormContainer.addClass('offset-1');
+        } else {
+            accountFormContainer.removeClass('col-6');
+            accountFormContainer.removeClass('offset-3');
+            accountFormContainer.addClass('col-4');
+            accountFormContainer.addClass('offset-4');
+        }
+
+        if ($(window).innerWidth() <= 600 && $(window).innerWidth() > 450) {
+            infoContainer.removeClass('col-6');
+            infoContainer.removeClass('offset-3');
+            infoContainer.removeClass('col-10');
+            infoContainer.removeClass('offset-1');
+            infoContainer.addClass('col-8');
+            infoContainer.addClass('offset-2');
+        } else if ($(window).innerWidth() <= 450) {
+            infoContainer.removeClass('col-8');
+            infoContainer.removeClass('offset-2');
+            infoContainer.addClass('col-10');
+            infoContainer.addClass('offset-1');
+        } else {
+            infoContainer.removeClass('col-8');
+            infoContainer.removeClass('offset-2');
+            infoContainer.removeClass('col-10');
+            infoContainer.removeClass('offset-1');
+            infoContainer.addClass('col-6');
+            infoContainer.addClass('offset-3');
+        }
+    }
+
 });
 
 $(document).scroll(function() {
@@ -135,54 +193,71 @@ $(document).scroll(function() {
     }
 });
         
-        
-if (window.location.href.includes('/accounts/')) {
-    var footer = $('footer');
-    var textField = $('input[type="text"]');
-    var passwordField = $('input[type="password"]');
-    var emailField = $('input[type="email"]');
+$(document).ready(function() {
+    if (window.location.href.includes('/accounts/')) {
+        var accountFooter = $('footer');
+        accountFooter.addClass('position-fixed');
+        accountFooter.addClass('bottom-0');
 
-    var rememberMe = $('label:contains("Remember Me:")');
-    var parentP = $(rememberMe).parent();
+        if(window.location.href.includes('/signup/')) {
+            var textField = $('input[type="text"]');
+            var emailField = $('input[type="email"]');
+            var passwordField1 = $('input[name="password1"]');
+            var passwordField2 = $('input[name="password2"]'); 
 
-    footer.addClass('position-fixed');
-    footer.addClass('bottom-0');
-    textField.addClass('float-end');
-    passwordField.addClass('float-end');
-    emailField.addClass('float-end');
+            textField.addClass('float-end');
+            emailField.addClass('float-end');
+            passwordField1.addClass('float-end');
+            passwordField2.addClass('float-end');
 
-    parentP.addClass('d-block');
-    parentP.addClass('text-center');
-    parentP.addClass('pt-1');
-}
+        } else if (window.location.href.includes('/login/')) {
+            var textField = $('input[type="text"]');
+            var passwordField = $('input[type="password"]');
+            var rememberMe = $('label:contains("Remember Me:")');
+            var parentP = $(rememberMe).parent();
+
+            textField.addClass('float-end');
+            passwordField.addClass('float-end');
+
+            parentP.addClass('d-block');
+            parentP.addClass('text-center');
+            parentP.addClass('pt-1');
+
+        } else if (window.location.href.includes('/logout/')) {
+
+        }
+    }
+});
 
 $(document).ready(function() {
-    var footer = $('footer');
-    var navbarHeader = $('.navbar');
+    if (!window.location.href.includes('/accounts/')) {
+        var errorPageFooter = $('footer');
+        var navbarHeader = $('.navbar');
 
-    var contentHeight = $(document).innerHeight() - $(footer).outerHeight(true) - $(navbarHeader).outerHeight(true);  
+        var contentHeight = $(document).innerHeight() - $(errorPageFooter).outerHeight(true) - $(navbarHeader).outerHeight(true);  
 
-    if($('#404-container').length) {
-        var PageNotFoundContainer = $('#404-container');
-        var row = $('#404-container>div');
+        if($('#404-container').length) {
+            var PageNotFoundContainer = $('#404-container');
+            var row = $('#404-container>div');
 
-        $(PageNotFoundContainer).height(contentHeight);
-        $(row).height(contentHeight);
+            $(PageNotFoundContainer).height(contentHeight);
+            $(row).height(contentHeight);
 
-        footer.addClass('position-fixed');
-        footer.addClass('bottom-0');
-    } else if($('#500-container').length) {
-        var InternalServerErrorContainer = $('#500-container');
-        var row = $('#500-container>div');
+            errorPageFooter.addClass('position-fixed');
+            errorPageFooter.addClass('bottom-0');
+        } else if($('#500-container').length) {
+            var InternalServerErrorContainer = $('#500-container');
+            var row = $('#500-container>div');
 
-        $(InternalServerErrorContainer).height(contentHeight);
-        $(row).height(contentHeight);
+            $(InternalServerErrorContainer).height(contentHeight);
+            $(row).height(contentHeight);
 
-        footer.addClass('position-fixed');
-        footer.addClass('bottom-0');
-    } else {
-        footer.removeClass('position-fixed');
-        footer.removeClass('bottom-0');
+            errorPagefooter.addClass('position-fixed');
+            footer.addClass('bottom-0');
+        } else {
+            errorPageFooter.removeClass('position-fixed');
+            errorPageFooter.removeClass('bottom-0');
+        }
     }
 })
 

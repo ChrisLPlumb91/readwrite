@@ -10,7 +10,7 @@
 <div class="container-fluid">
 
   <div class="row mt-5">
-    <div class="col-6 offset-3 text-center">
+    <div class="col-6 offset-3 text-center info-container">
       <h1 class="text-center">{% trans "Sign In" %}</h1>
 
       <p>{% blocktrans %}If you have not created an account yet, then please
@@ -19,7 +19,7 @@
   </div>
 
   <div class="row mt-5">
-    <div class="col-4 offset-4">
+    <div class="col-4 offset-4 account-form-container">
       <form class="login" method="POST" action="{% url 'account_login' %}">
         {% csrf_token %}
         {{ form.as_p }}

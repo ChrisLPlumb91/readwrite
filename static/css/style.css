@@ -379,6 +379,7 @@ footer .col-12 {
     z-index: 1;
 }
 
+
 @media screen and (max-width: 1320px) {
     /* .card-header > a {
         width: 100%;
@@ -560,6 +561,23 @@ footer .col-12 {
     }
 }
 
+@media screen and (max-width: 660px) {
+    .account-form-container {
+        text-align: center !important;
+    }
+
+    .account-form-container label {
+        float: none !important;
+        width: 80%;
+    }
+    
+    .account-form-container input {
+        float: none !important;
+        display: inline-block !important;
+        width: 80%;
+    }
+}
+
 @media screen and (max-width: 530px) {
     .button-container-with-options button, .button-container-with-options span, .button-container-with-options a, .button-container-with-options > form {
         font-size: 1rem !important;
@@ -670,6 +688,16 @@ footer .col-12 {
 
     .edit-bulletin-button-your-post {
         margin-right: 5px !important;
+    }
+
+    .account-form-container label {
+        font-size: 1rem !important;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .info-container > p {
+        font-size: 1.1rem !important;
     }
 }
 

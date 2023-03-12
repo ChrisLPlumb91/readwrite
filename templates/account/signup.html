@@ -6,8 +6,9 @@
 
 {% block content %}
 <div class="container-fluid form-container">
+
   <div class="row mt-5 text-center">
-    <div class="col-6 offset-3">
+    <div class="col-6 offset-3 info-container">
       <h1>{% trans "Sign Up" %}</h1>
 
       <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
@@ -16,7 +17,7 @@
   </div>
 
   <div class="row mt-5">
-    <div class="col-4 offset-4">
+    <div class="col-4 offset-4 account-form-container">
       <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
         {% csrf_token %}
         {{ form.as_p }}
