@@ -216,37 +216,37 @@ ol > li {
 
 .button-fixed-alt {
     position: fixed;
-    top: 18px;
+    top: 0;
 }
 
 .rules-fixed-alt {
     position: fixed;
-    top: 126px;
+    top: 107px;
 }
 
 .logged-in-as-fixed-bottom {
     position: absolute;
-    bottom: 853px;
+    bottom: 870px;
 }
 
 .button-fixed-bottom {
     position: absolute;
-    bottom: 737px;
+    bottom: 754px;
 }
 
 .rules-fixed-bottom {
     position: absolute;
-    bottom: 178px;
+    bottom: 195px;
 }
 
 .button-fixed-bottom-alt {
     position: absolute;
-    bottom: 738px;
+    bottom: 756px;
 }
 
 .rules-fixed-bottom-alt {
     position: absolute;
-    bottom: 178px;
+    bottom: 196px;
 }
 
 .card-header {

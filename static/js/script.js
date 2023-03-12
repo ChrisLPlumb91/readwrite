@@ -32,29 +32,58 @@ $(window).resize(function() {
 
 $(document).scroll(function() {
     var body = $('body');
-    var loggedInAs = $('.logged-in-as');
+    // The logged in message that appears at the top of the page when the width is small enough is actually the first element of two that has this class, so loggedInAs actually contains a HTMLCollection.
+    // The second element ([1]) is the one that is needed here.
+    var loggedInAs = $('#logged-in-side');
     var newBulletinButton = $('.new-bulletin-button-container');
     var rulesCard = $('.rules');
     
-    var sidePanel = $(loggedInAs).outerHeight(true) + $(newBulletinButton).outerHeight(true) + $(rulesCard).outerHeight(true);
+    // combined height of side-panel contents when logged in
+    var sidePanel = $(loggedInAs).outerHeight(true) + 18 + $(newBulletinButton).outerHeight(true) + $(rulesCard).outerHeight(true);
+    // combined height of side-panel contents when not logged in
     var sidePanelAlt = $(newBulletinButton).outerHeight(true) + $(rulesCard).outerHeight(true);
-    var childrenOfSidePanel = $('#side-panel').children();
+
+    // Distance from the top edge of the window when fully scrolled up to the top edge of the window when scrolled down any amount.
+    // Adding the height of side-panel when logged in (y), or when logged out (yAlt)
     var y = $(document).scrollTop() + sidePanel;
     var yAlt = $(document).scrollTop() + sidePanelAlt; 
-    var navBarHeight = $('#navbar').outerHeight(true) + 30; 
-    
-    var lastChild = $('#content-container-base').children().last();
-    var lastChildPosition = lastChild.position().top;
-    var lastChildHeightWithoutBottomMargin = lastChild.innerHeight() + parseInt(lastChild.css('margin-top'));
-    var lastChildPositionBottom = lastChildPosition + lastChildHeightWithoutBottomMargin;
 
+    // Height of the navbar plus 30px because of the 48px top margin on the container-fluid that contains everything (bulletins, side-panel, etc.)
+    var navBarHeight = $('#navbar').outerHeight(true) + 30;
+    var navBarHeightAlt = $('#navbar').outerHeight(true) + 48; 
+    
+    // content-container-base is the col-9 container that holds the bulletin list. This line gets the last child of that container, which is actually the modal used when deleting...
+    var lastChild = $('#content-container-base').children().last();
+    // Therefore, the prev() method is used to get the sibling just before the modal, which should be the last bulletin on the page.
+    var lastBulletin = lastChild.prev();
+
+    // This line gets the position in pixels of the last child of content-container-base. "top" is the position in the document of the topmost edge of content-container-base.
+    // The real top edge of this element is 16 pixels after position().top because of its 16px top margin, but I have deliberately not added 16 to position().top, and am including
+    // said margin.
+    var lastBulletinPosition = lastBulletin.position().top;
+    
+    // The inner height ignores margin / padding etc. so here, it is getting the true height of the last child of content-container-base. I am adding the top margin to that height.
+    var lastBulletinHeightWithoutBottomMargin = lastBulletin.innerHeight() + parseInt(lastBulletin.css('margin-top')); 
+    // Finally, this line gets the true bottom position (minus the bottom margin) of said last child by adding the height-with-top-margin gotten above to the top position of it.
+    // In other words, lastChildPositionBottom is the y-coordinate of the actual bottom edge of the last child (not including its bottom margin).
+    var lastBulletinPositionBottom = lastBulletinPosition + lastBulletinHeightWithoutBottomMargin;
+
+    // All the direct children of the body element - [0]: container-fluid (displays messages), [1]: navbar, [2]: logged-in-as-top-container (only if page width falls to a certain amount)
+    // Otherwise, child [2] is another container-fluid. 
+    // Note that logged-in-as-top-container is always the 3rd child of the body, it's just that until the page width falls to a certain amount, its display is none, rather than block.
+    // In other words, setting display to none doesn't remove the element from the DOM, it just makes it dimensionless and invisible.
     var childrenOfBody = $('body').children();
 
+    // All the direct children of side-panel - [0]: logged-in-as, [1]: new-bulletin-button-container, [2]: rules
+    var childrenOfSidePanel = $('#side-panel').children();
+
+    // This initial if checks to see if the display of the 3rd child of the body element is block. This will be the case when the window width decreases enough
+    // that the logged in text and new bulletin button appear at the top of the page, rather than the side. At this point, the display of child 3 changes from none to block.
     if ($(childrenOfBody[2]).css('display') == 'block') {
 
     } else {
-        if (childrenOfSidePanel[0].getAttribute('class').includes('text-center logged-in-as')) {
-            if((y - sidePanel) > navBarHeight && y < lastChildPositionBottom) {
+        if (childrenOfSidePanel[0].getAttribute('class').includes('text-center logged-in-as')) { // This if is checking to see if the logged in message is part of the side-panel, which it will be only if you are logged in.
+            if((y - sidePanel) > navBarHeight && y < lastBulletinPositionBottom) { // If scrollTop's height without the side-panel height is greater than the height of the nav bar, and is less than the y-coordinate position of the bottom of the last bulletin.
                 body.removeClass('position-relative');
                 loggedInAs.removeClass('logged-in-as-fixed-bottom');
                 newBulletinButton.removeClass('button-fixed-bottom');
@@ -65,7 +94,7 @@ $(document).scroll(function() {
                 rulesCard.addClass('rules-fixed');
                     
                 document.addClass('me-2');
-            } else if (y >= lastChildPositionBottom) {
+            } else if (y >= lastBulletinPositionBottom) { // if y (scrollTop + side-panel height) is greater than or equal to the bottom of the last bulletin's y-coordinate, the side-panel becomes fixed to the bottom.
                 loggedInAs.removeClass('logged-in-as-fixed');
                 newBulletinButton.removeClass('button-fixed');
                 rulesCard.removeClass('rules-fixed');
@@ -81,9 +110,8 @@ $(document).scroll(function() {
                     
                 document.removeClass('me-2');
             }
-        } else {
-            if((yAlt - sidePanelAlt) > navBarHeight && yAlt < lastChildPositionBottom) {
-                console.log('fixing side panel');
+        } else { // This else executes if the logged in message is not part of side-panel (meaning you aren't logged in).
+            if((yAlt - sidePanelAlt) > navBarHeightAlt && yAlt < lastBulletinPositionBottom) {
                 body.removeClass('position-relative');
                 rulesCard.removeClass('rules-fixed-bottom-alt');
                 newBulletinButton.removeClass('button-fixed-bottom-alt');
@@ -91,7 +119,7 @@ $(document).scroll(function() {
                 newBulletinButton.addClass('button-fixed-alt');
                 rulesCard.addClass('rules-fixed-alt');
                 document.addClass('me-2');
-            } else if(yAlt >= lastChildPositionBottom) {
+            } else if(yAlt >= lastBulletinPositionBottom) {
                 rulesCard.removeClass('rules-fixed-alt');
                 newBulletinButton.removeClass('button-fixed-alt');
             
@@ -173,7 +201,6 @@ if($('.modal-button').length) {
         }
 
         if (!window.location.href.includes('/post/') || !window.location.href.includes('/accounts/')) {
-            console.log('on home page');
             $(form).attr('action', $(this).attr('value'));
         }
     });

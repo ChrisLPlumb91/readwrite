@@ -75,10 +75,9 @@
 
     </nav>
 
-    <!-- the below displays when the window width falls below a certain amount -->
     {% if user.is_authenticated %}
     <div class="text-center logged-in-as-top-container d-block d-md-none">
-        <div class="text-center logged-in-as d-inline-block d-md-none" id="logged-in-top">
+        <div class="text-center logged-in-as d-inline-block d-md-none">
             <p class="mb-0">Logged in as: <strong>{{ request.user }}</strong></p>
         </div>
     </div>
@@ -91,7 +90,6 @@
         <button class="btn btn-lg greyed-out-button mt-4 mb-3">New Bulletin</button>
         {% endif %}
     </div>
-    <!-- end of top-displaying sidebar -->
 
     <div class="container-fluid my-5 px-5" id="bulletin_list_container">
         <div class="row" id="content-container">
@@ -104,7 +102,7 @@
             <div class="col-3 d-md-block d-none" id="side-panel">
 
                 {% if user.is_authenticated %}
-                <div class="text-center logged-in-as" id="logged-in-side">
+                <div class="text-center logged-in-as">
                     <p class="text-center mb-0 d-inline-block">Logged in as: <strong>{{ request.user }}</strong></p>
                 </div>
                 {% endif %}
