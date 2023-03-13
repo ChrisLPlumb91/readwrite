@@ -113,7 +113,12 @@ $(document).scroll(function() {
     // content-container-base is the col-9 container that holds the bulletin list. This line gets the last child of that container, which is actually the modal used when deleting...
     var lastChild = $('#content-container-base').children().last();
     // Therefore, the prev() method is used to get the sibling just before the modal, which should be the last bulletin on the page.
-    var lastBulletin = lastChild.prev();
+    var lastBulletin = lastChild.prev(); 
+    
+    if ($('#pagination-nav').length) {
+        lastBulletin = lastBulletin.prev();
+        console.log(lastBulletin);
+    }
 
     // This line gets the position in pixels of the last child of content-container-base. "top" is the position in the document of the topmost edge of content-container-base.
     // The real top edge of this element is 16 pixels after position().top because of its 16px top margin, but I have deliberately not added 16 to position().top, and am including
@@ -224,12 +229,12 @@ $(document).ready(function() {
             parentP.addClass('pt-1');
 
         } 
-    } else if (window.location.href.includes('/edit/')) {
+    } else if (window.location.href.includes('/edit/') || window.location.href.includes('/add')) {
         var editPageFooter = $('footer');
         editPageFooter.addClass('position-fixed');
         editPageFooter.addClass('bottom-0');
 
-    } else if (!window.location.href.includes('/accounts/') && !window.location.href.includes('/edit/')) {
+    } else if (!window.location.href.includes('/accounts/') && !window.location.href.includes('/edit/') && !window.location.href.includes('/add')) {
         var errorPageFooter = $('footer');
         var navbarHeader = $('.navbar');
 

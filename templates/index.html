@@ -309,7 +309,7 @@
 {% endif %}
 {% endfor %}
 {% if is_paginated %}
-    <nav aria-label="Page navigation">
+    <nav aria-label="Page navigation" id="pagination-nav">
         <ul class="pagination justify-content-center">
             {% if page_obj.has_previous %}
             <li><a href="?page={{ page_obj.previous_page_number }}" class="page-link btn btn-lg prev-button"><strong>&laquo; PREV </strong></a></li>
