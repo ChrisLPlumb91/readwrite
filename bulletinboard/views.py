@@ -115,7 +115,7 @@ class EditBulletin(View):
                 return HttpResponseRedirect(reverse('home'))
             else:
                 return HttpResponseRedirect(reverse('bulletin',
-                                            args=[slug]))
+                                            args=[post.slug]))
         else:
             bulletin_form = BulletinForm()
             return redirect('home')
