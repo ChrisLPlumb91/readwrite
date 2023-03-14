@@ -2,10 +2,11 @@ from django.db.models import F, Max
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.views import generic, View
 from django.core.paginator import Paginator
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from .models import Bulletin, Comment
 from .forms import BulletinForm, CommentForm
 from django.template.defaultfilters import slugify
+from django.contrib import messages
 
 
 class BulletinList(generic.ListView):
@@ -59,13 +60,16 @@ class BulletinDetail(View):
 class AddBulletin(View):
     def get(self, request):
 
-        return render(
-            request,
-            'add_bulletin.html',
-            {
-                'bulletin_form': BulletinForm()
-            },
-        )
+        if (request.user.is_authenticated):
+            return render(
+                request,
+                'add_bulletin.html',
+                {
+                    'bulletin_form': BulletinForm()
+                },
+            )
+        else:
+            raise Http404
 
     def post(self, request, *args, **kwargs):
         bulletin_form = BulletinForm(data=request.POST)
@@ -75,10 +79,16 @@ class AddBulletin(View):
             post.slug = slugify(post.title)
             post.author = request.user
             post.save()
+            messages.info(request, 'Your post will appear if it is approved by a moderator')
             return redirect('home')
         else:
-            bulletin_form = BulletinForm()
-            return redirect('home')
+            return render(
+                request,
+                'add_bulletin.html',
+                {
+                    'bulletin_form': bulletin_form
+                },
+            )
 
 
 class EditBulletin(View):
@@ -173,8 +183,8 @@ class EditComment(View):
         specific_bulletin = get_object_or_404(queryset, slug=slug)
 
         query = request.GET.get('query')
-        split_query_1 = query.split('=')
-        comment_id = split_query_1[1]
+        split_query = query.split('=')
+        comment_id = split_query[1]
 
         comments = Comment.objects.filter(bulletin=specific_bulletin).annotate(likes_temp=Max('likes')).order_by(F('likes_temp').desc(nulls_last=True))
         comment = get_object_or_404(comments, id=comment_id,
@@ -190,6 +200,7 @@ class EditComment(View):
             post.author = request.user
             post.edited = True
             post.save()
+            print(comment.comment)
             return HttpResponseRedirect(reverse('bulletin', args=[slug]))
         else:
             comment_form = CommentForm()

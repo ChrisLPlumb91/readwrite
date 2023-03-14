@@ -275,7 +275,6 @@ if($('.modal-button').length) {
         $('.modal-header>h1').text(`Delete ${type}`);
         $('.modal-body>p').text(`Are you sure you want to delete your ${lowerCaseType}?`);
         
-
         if(type == 'Comment') {
             $(form).attr('action', $(this).attr('value'));
         }

@@ -33,9 +33,15 @@ class TestViews(TestCase):
                                                 status=1,
                                                 edited=False)
 
+        self.comment = Comment.objects.create(bulletin=self.bulletin,
+                                              author=self.user_1,
+                                              comment='This is a test comment',
+                                              edited=False)
+
     def tearDown(self):
         self.client.logout()
         self.bulletin.delete()
+        self.comment.delete()
 
     def test_get_homepage(self):
         response = self.client.get('/')
@@ -61,7 +67,7 @@ class TestViews(TestCase):
                                         'bulletin',
                                         'link': 'https://www.youtube.com/',
                                     })
-        
+
         new_bulletin = Bulletin.objects.get(slug='another-new-bulletin')
 
         self.assertEqual(new_bulletin.author, self.user_1)
@@ -108,8 +114,8 @@ class TestViews(TestCase):
 
         updated_bulletin = Bulletin.objects.get(id=self.bulletin.id)
 
-        self.assertEqual(updated_bulletin.slug, 'edited-bulletin')
-        self.assertRedirects(response, response.url)
+        self.assertTrue(updated_bulletin.edited)
+        self.assertRedirects(response, f'/post/{updated_bulletin.slug}/')
 
     def test_delete_bulletin_page(self):
         another_bulletin = Bulletin.objects.create(title='Another New Bulletin',
@@ -131,8 +137,57 @@ class TestViews(TestCase):
 
     def test_post_comment_bulletin_page(self):
         url = reverse('bulletin', args=[self.bulletin.slug])
-        response = self.client.post(url, {'comment': 'This is a new comment.'})
+        response = self.client.post(url, {'comment': 'This is a test comment.'})
 
-        new_comment = Comment.objects.get(id=1)
+        new_comment = Comment.objects.get(id=2)
 
-        self.assertEqual(new_comment.comment, 'This is a new comment.')
+        self.assertEqual(new_comment.comment, 'This is a test comment.')
+
+    def test_get_edit_comment_bulletin_page(self):
+        url = reverse('comment_edit', args=[self.bulletin.slug])
+
+        query_string_1 = f'?query={self.comment.id}'
+        full_url_1 = url + query_string_1
+
+        response_1 = self.client.get(full_url_1)
+        self.assertEqual(response_1.status_code, 200)
+
+    def test_post_edit_comment_bulletin_page(self):
+        url = reverse('comment_edit', args=[self.bulletin.slug])
+
+        query_string_1 = f'?query={self.comment.id}'
+        full_url_1 = url + query_string_1
+
+        query_string_2 = f'?query={full_url_1}'
+        full_url_2 = url + query_string_2
+
+        self.assertEqual(full_url_2,
+                         '/edit_comment/new-bulletin?query=/' +
+                         'edit_comment/new-bulletin?query=1')
+
+        response_2 = self.client.post(full_url_2,
+                                      {'comment': 'This comment has ' +
+                                       'been changed'})
+
+        updated_comment = Comment.objects.get(id=1)
+
+        self.assertTrue(updated_comment.edited)
+        self.assertRedirects(response_2, '/post/new-bulletin/')
+
+    def test_delete_comment(self):
+        another_comment = Comment.objects.create(bulletin=self.bulletin,
+                                                 author=self.user_1,
+                                                 comment='This is another ' +
+                                                 'test comment',
+                                                 edited=False)
+
+        url = reverse('comment_delete', args=[self.bulletin.slug])
+        query_string = f'?query={another_comment.id}'
+        full_url = url + query_string
+
+        response = self.client.post(full_url)
+
+        existing_items = Comment.objects.filter(id=another_comment.id)
+
+        self.assertEqual(len(existing_items), 0)
+        self.assertRedirects(response, '/post/new-bulletin/')
