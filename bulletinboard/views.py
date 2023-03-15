@@ -59,8 +59,7 @@ class BulletinDetail(View):
 
 class AddBulletin(View):
     def get(self, request):
-
-        if (request.user.is_authenticated):
+        if request.user.is_authenticated:
             return render(
                 request,
                 'add_bulletin.html',
@@ -157,18 +156,21 @@ class DeleteBulletin(View):
 
 class BulletinLike(View):
     def post(self, request, slug, *args, **kwargs):
-        queryset = Bulletin.objects.filter(status=1)
-        bulletin = get_object_or_404(queryset, slug=slug)
+        if request.user.is_authenticated:
+            queryset = Bulletin.objects.filter(status=1)
+            bulletin = get_object_or_404(queryset, slug=slug)
 
-        if bulletin.likes.filter(id=request.user.id).exists():
-            bulletin.likes.remove(request.user)
-        else:
-            bulletin.likes.add(request.user)
+            if bulletin.likes.filter(id=request.user.id).exists():
+                bulletin.likes.remove(request.user)
+            else:
+                bulletin.likes.add(request.user)
 
-        if '/post/' not in request.GET.get('query'):
-            return HttpResponseRedirect(reverse('home'))
+            if '/post/' not in request.GET.get('query'):
+                return HttpResponseRedirect(reverse('home'))
+            else:
+                return HttpResponseRedirect(reverse('bulletin', args=[slug]))
         else:
-            return HttpResponseRedirect(reverse('bulletin', args=[slug]))
+            raise Http404
 
 
 class EditComment(View):
@@ -239,19 +241,22 @@ class DeleteComment(View):
 
 class CommentLike(View):
     def post(self, request, slug, *args, **kwargs):
-        bulletin_queryset = Bulletin.objects.filter(status=1)
-        specific_bulletin = get_object_or_404(bulletin_queryset, slug=slug)
+        if request.user.is_authenticated:
+            bulletin_queryset = Bulletin.objects.filter(status=1)
+            specific_bulletin = get_object_or_404(bulletin_queryset, slug=slug)
 
-        comments = Comment.objects.filter(bulletin=specific_bulletin)
-        query = request.GET.get('query')
-        comment = get_object_or_404(comments, id=query)
+            comments = Comment.objects.filter(bulletin=specific_bulletin)
+            query = request.GET.get('query')
+            comment = get_object_or_404(comments, id=query)
 
-        if comment.likes.filter(id=request.user.id).exists():
-            comment.likes.remove(request.user)
+            if comment.likes.filter(id=request.user.id).exists():
+                comment.likes.remove(request.user)
+            else:
+                comment.likes.add(request.user)
+
+            return HttpResponseRedirect(reverse('bulletin', args=[slug]))
         else:
-            comment.likes.add(request.user)
-
-        return HttpResponseRedirect(reverse('bulletin', args=[slug]))
+            raise Http404
 
 
 def handler404(request, exception):
