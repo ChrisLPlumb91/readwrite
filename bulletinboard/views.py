@@ -79,9 +79,11 @@ class AddBulletin(View):
             post.slug = slugify(post.title)
             post.author = request.user
             post.save()
-            messages.info(request, 'Your post will appear if it is approved by a moderator')
+            messages.info(request, 'Your post will appear below ' +
+                          'if and when it is approved by a moderator')
             return redirect('home')
         else:
+            messages.error(request, 'This title has already been used. Please choose another.')
             return render(
                 request,
                 'add_bulletin.html',
@@ -114,7 +116,14 @@ class EditBulletin(View):
 
         bulletin_form = BulletinForm(data=request.POST, instance=bulletin)
 
-        if bulletin_form.is_valid():
+        print(bulletin.title == bulletin_form.data['title'])
+
+        if bulletin.title == bulletin_form.data['title'] and bulletin.content == bulletin_form.data['content'] and bulletin.link == bulletin_form.data['link']:
+            messages.warning(request, "You didn't make any changes " +
+                             "to your bulletin...")
+            return HttpResponseRedirect(reverse('edit', args=[slug])
+                                        + f"?query={request.GET.get('query')}")
+        elif bulletin_form.is_valid():
             post = bulletin_form.save(commit=False)
             post.slug = slugify(post.title)
             post.author = request.user
@@ -122,13 +131,17 @@ class EditBulletin(View):
             post.save()
 
             if '/post/' not in request.GET.get('query'):
+                messages.success(request, 'You edited your bulletin.')
                 return HttpResponseRedirect(reverse('home'))
             else:
+                messages.success(request, 'You edited your bulletin.')
                 return HttpResponseRedirect(reverse('bulletin',
                                             args=[post.slug]))
         else:
-            bulletin_form = BulletinForm()
-            return redirect('home')
+            messages.error(request, 'This title has already been used. ' +
+                           'Please choose another.')
+            return HttpResponseRedirect(reverse('edit', args=[slug])
+                                        + f"?query={request.GET.get('query')}")
 
 
 class DeleteBulletin(View):
@@ -138,6 +151,7 @@ class DeleteBulletin(View):
                                      author=request.user)
         bulletin.delete()
 
+        messages.success(request, 'You deleted your bulletin.')
         return HttpResponseRedirect(reverse('home'))
 
 
@@ -193,17 +207,16 @@ class EditComment(View):
         comment_form = CommentForm(data=request.POST, instance=comment)
 
         if comment.comment == comment_form.data['comment']:
-            comment_form = CommentForm()
-            return HttpResponseRedirect(reverse('bulletin', args=[slug]))
+            messages.warning(request, "You didn't make any changes " +
+                             "to your comment...")
+            return HttpResponseRedirect(reverse('comment_edit', args=[slug])
+                                        + f'?query={comment_id}')
         elif comment_form.is_valid():
             post = comment_form.save(commit=False)
             post.author = request.user
             post.edited = True
             post.save()
-            print(comment.comment)
-            return HttpResponseRedirect(reverse('bulletin', args=[slug]))
-        else:
-            comment_form = CommentForm()
+            messages.success(request, 'You edited your comment.')
             return HttpResponseRedirect(reverse('bulletin', args=[slug]))
 
 
@@ -220,6 +233,7 @@ class DeleteComment(View):
 
         comment.delete()
 
+        messages.success(request, 'You deleted your comment.')
         return HttpResponseRedirect(reverse('bulletin', args=[slug]))
 
 
