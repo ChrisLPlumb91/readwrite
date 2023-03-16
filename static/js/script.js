@@ -1,3 +1,14 @@
+/** 
+ * This code listens for window resizing events. At a certain width, it truncates anchor elements within divs of the card-header class.
+ * These include bulletin titles on the main page, and bulletin links in individual bulletin pages.
+ * 
+ * If you are on either the custom 404 or 500 pages, code is executed to dynamically adjust the height of the central container (between
+ * the header and the footer) so that it never vanishes below / behind the footer. This is a copy of the code in the ready listener,
+ * but unlike that, this one runs every time the user resizes the window, rather than just once after the page has loaded.
+ * 
+ * This listener also checks to see if you are on any of the accounts pages, e.g. login, logout, or sign up. If so, it changes the bootstrap
+ * grid classes for the elements on these pages depending on the width of the window.
+*/
 $(window).resize(function() {
     var cardHeaderTitles = $('.card-header>a');
 
@@ -88,31 +99,39 @@ $(window).resize(function() {
 
 });
 
+/**  
+ * The below code listens for scroll events, and depending on where the user has scrolled to on the page, the section of the site on the far right side
+ * of most of the pages will behave differently. Once the user scrolls down to the top edge of this section, it becomes fixed to the top of the window,
+ * and follows the scrollbar. Once the bottom edge of this section lines up with the bottom edge of the last element in the central content container,
+ * it becomes absolutely positioned so that its bottom edge is in line with the bottom edge of that bottommost element, whether it is a bulletin on
+ * the main page, or a comment on a bulletin page.
+ * 
+ * This code takes into account that the last element in the central section will always in fact be the modal that appears when you try to delete
+ * a comment or bulletin, and that on the main page, the element before this will be the pagination container if there are more than 10 approved
+ * bulletins. In other words, the last bulletin or comment will actually either be the second last element on the page, or the third last.
+ * 
+ * To calculate when the bottom of the side section lines up with the bottom of the last comment or bulletin, the height of said section is added
+ * to the value for scrollTop, which is recalculated with every scroll event.
+ * 
+ * There are two branches of this code depending on whether or not the user is logged in. When they are not logged in, the message that says,
+ * "You are logged in as _____" is not displayed, and so the total height of the side section is different.
+*/
 $(document).scroll(function() {
     var body = $('body');
-    // The logged in message that appears at the top of the page when the width is small enough is actually the first element of two that has this class, so loggedInAs actually contains a HTMLCollection.
-    // The second element ([1]) is the one that is needed here.
     var loggedInAs = $('#logged-in-side');
     var newBulletinButton = $('.new-bulletin-button-container');
     var rulesCard = $('.rules');
     
-    // combined height of side-panel contents when logged in
     var sidePanel = $(loggedInAs).outerHeight(true) + 18 + $(newBulletinButton).outerHeight(true) + $(rulesCard).outerHeight(true);
-    // combined height of side-panel contents when not logged in
     var sidePanelAlt = $(newBulletinButton).outerHeight(true) + $(rulesCard).outerHeight(true);
 
-    // Distance from the top edge of the window when fully scrolled up to the top edge of the window when scrolled down any amount.
-    // Adding the height of side-panel when logged in (y), or when logged out (yAlt)
     var y = $(document).scrollTop() + sidePanel;
     var yAlt = $(document).scrollTop() + sidePanelAlt; 
 
-    // Height of the navbar plus 30px because of the 48px top margin on the container-fluid that contains everything (bulletins, side-panel, etc.)
     var navBarHeight = $('#navbar').outerHeight(true) + 30;
     var navBarHeightAlt = $('#navbar').outerHeight(true) + 48; 
     
-    // content-container-base is the col-9 container that holds the bulletin list. This line gets the last child of that container, which is actually the modal used when deleting...
     var lastChild = $('#content-container-base').children().last();
-    // Therefore, the prev() method is used to get the sibling just before the modal, which should be the last bulletin on the page.
     var lastBulletin = lastChild.prev(); 
     
     if ($('#pagination-nav').length) {
@@ -120,33 +139,20 @@ $(document).scroll(function() {
         console.log(lastBulletin);
     }
 
-    // This line gets the position in pixels of the last child of content-container-base. "top" is the position in the document of the topmost edge of content-container-base.
-    // The real top edge of this element is 16 pixels after position().top because of its 16px top margin, but I have deliberately not added 16 to position().top, and am including
-    // said margin.
     var lastBulletinPosition = lastBulletin.position().top;
     
-    // The inner height ignores margin / padding etc. so here, it is getting the true height of the last child of content-container-base. I am adding the top margin to that height.
     var lastBulletinHeightWithoutBottomMargin = lastBulletin.innerHeight() + parseInt(lastBulletin.css('margin-top')); 
-    // Finally, this line gets the true bottom position (minus the bottom margin) of said last child by adding the height-with-top-margin gotten above to the top position of it.
-    // In other words, lastChildPositionBottom is the y-coordinate of the actual bottom edge of the last child (not including its bottom margin).
     var lastBulletinPositionBottom = lastBulletinPosition + lastBulletinHeightWithoutBottomMargin;
 
-    // All the direct children of the body element - [0]: container-fluid (displays messages), [1]: navbar, [2]: logged-in-as-top-container (only if page width falls to a certain amount)
-    // Otherwise, child [2] is another container-fluid. 
-    // Note that logged-in-as-top-container is always the 3rd child of the body, it's just that until the page width falls to a certain amount, its display is none, rather than block.
-    // In other words, setting display to none doesn't remove the element from the DOM, it just makes it dimensionless and invisible.
     var childrenOfBody = $('body').children();
 
-    // All the direct children of side-panel - [0]: logged-in-as, [1]: new-bulletin-button-container, [2]: rules
     var childrenOfSidePanel = $('#side-panel').children();
 
-    // This initial if checks to see if the display of the 3rd child of the body element is block. This will be the case when the window width decreases enough
-    // that the logged in text and new bulletin button appear at the top of the page, rather than the side. At this point, the display of child 3 changes from none to block.
     if ($(childrenOfBody[2]).css('display') == 'block') {
 
     } else {
-        if (childrenOfSidePanel[0].getAttribute('class').includes('text-center logged-in-as')) { // This if is checking to see if the logged in message is part of the side-panel, which it will be only if you are logged in.
-            if((y - sidePanel) > navBarHeight && y < lastBulletinPositionBottom) { // If scrollTop's height without the side-panel height is greater than the height of the nav bar, and is less than the y-coordinate position of the bottom of the last bulletin.
+        if (childrenOfSidePanel[0].getAttribute('class').includes('text-center logged-in-as')) {
+            if((y - sidePanel) > navBarHeight && y < lastBulletinPositionBottom) {
                 body.removeClass('position-relative');
                 loggedInAs.removeClass('logged-in-as-fixed-bottom');
                 newBulletinButton.removeClass('button-fixed-bottom');
@@ -157,7 +163,7 @@ $(document).scroll(function() {
                 rulesCard.addClass('rules-fixed');
                     
                 document.addClass('me-2');
-            } else if (y >= lastBulletinPositionBottom) { // if y (scrollTop + side-panel height) is greater than or equal to the bottom of the last bulletin's y-coordinate, the side-panel becomes fixed to the bottom.
+            } else if (y >= lastBulletinPositionBottom) {
                 loggedInAs.removeClass('logged-in-as-fixed');
                 newBulletinButton.removeClass('button-fixed');
                 rulesCard.removeClass('rules-fixed');
@@ -173,7 +179,7 @@ $(document).scroll(function() {
                     
                 document.removeClass('me-2');
             }
-        } else { // This else executes if the logged in message is not part of side-panel (meaning you aren't logged in).
+        } else {
             if((yAlt - sidePanelAlt) > navBarHeightAlt && yAlt < lastBulletinPositionBottom) {
                 body.removeClass('position-relative');
                 rulesCard.removeClass('rules-fixed-bottom-alt');
@@ -197,7 +203,23 @@ $(document).scroll(function() {
         }
     }
 });
-        
+
+/**
+ * The below code executes when the page has loaded fully. It is necessary because of how the form elements of the account pages
+ * are injected into the HTML, and cannot be changed in their templates. Thus, this code adds classes to those elements once
+ * they have been rendered in the browser.
+ * 
+ * The resize event listener above is able to make changes to these pages via ids because the containers for the form are exposed
+ * in the templates.
+ * 
+ * If the user is not on an accounts page, exceptions are avoided by using an if-else construct. The edit and add bulletin pages,
+ * for instance, do not contain the same elements as the accounts pages, and so any attempts to get those elements would produce
+ * errors.
+ * 
+ * Several pages other than the accounts page have central content sections that are small in height, and which therefore cause
+ * the page footer to appear halfway up the screen. This code ensures that the footer is fixed to the bottom of the window for
+ * all of these pages.
+ */
 $(document).ready(function() {
     if (window.location.href.includes('/accounts/')) {
         var accountFooter = $('footer');
@@ -265,7 +287,32 @@ $(document).ready(function() {
     }
 });
 
-
+/**
+ * The below code attaches a click event listener to any delete buttons on either the main page or a bulletin page.
+ * When clicked, these buttons open a modal that serves as a dialog box asking the user to confirm deletion of 
+ * a comment or bulletin. 
+ * 
+ * The below code does not open the modal. It changes the text content of the modal depending on what the user
+ * is attempting to delete.
+ * 
+ * It also changes the action attribute of the modal confirmation button's form depending on what the user
+ * is attempting to delete, because the correct view needs to execute, whether it is for the deletion of a
+ * comment or a bulletin.
+ * 
+ * On a bulletin page, the default action of said form is "{% url 'confirm_delete' bulletin.slug %}", which directs 
+ * to the view which deletes bulletins. This works because the given bulletin is accessible globally throughout
+ * the bulletin page template. However, the comment deleting view requires a query string to be attached
+ * to the url pattern in order to execute properly. Because comment objects are only directly accessible from within
+ * the for loop that is iterating through a queryset of comments, the data is assigned to the value attribute
+ * of the delete button. This data is then assigned to the action attribute of the modal form.
+ * 
+ * On the main page, the modal is outside of the for loop that iterates through the Bulletin queryset, and so cannot
+ * access any bulletins, hence the reason for the second condition in the if statement that checks to see if you
+ * are on the main page.
+ * 
+ * Note that the modal-button class does not appear on any pages other than the main page and bulletin pages. This means
+ * that this code will not execute on any of the account pages, or on the edit or add bulletin pages.
+ */
 if($('.modal-button').length) {
     $('.modal-button').on('click', function() {
         var type = $(this).data('type');
@@ -275,11 +322,7 @@ if($('.modal-button').length) {
         $('.modal-header>h1').text(`Delete ${type}`);
         $('.modal-body>p').text(`Are you sure you want to delete your ${lowerCaseType}?`);
         
-        if(type == 'Comment') {
-            $(form).attr('action', $(this).attr('value'));
-        }
-
-        if (!window.location.href.includes('/post/') || !window.location.href.includes('/accounts/')) {
+        if(type == 'Comment' || !window.location.href.includes('/post/')) {
             $(form).attr('action', $(this).attr('value'));
         }
     });
