@@ -6,14 +6,25 @@
 
 <div class="row" id="bulletin-container">
     <div class="col-12">
+
         <div class="card">
+
+            <!-- bulletin header if the user posted the bulletin and is logged in -->
             {% if bulletin.author == request.user and user.is_authenticated %}
             <div class="card-header green-header bulletin-header green-header-bulletin">
 
-                <button type="button" class="btn btn-lg float-end delete-bulletin-button modal-button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" value="{% url 'confirm_delete' bulletin.slug %}" data-type="Bulletin"><i class="fas fa-trash-alt"></i></button>
+                <!-- bulletin delete button -->
+                <button type="button" class="btn btn-lg float-end delete-bulletin-button modal-button"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    value="{% url 'confirm_delete' bulletin.slug %}" data-type="Bulletin"><i
+                        class="fas fa-trash-alt"></i></button>
                 
-                <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}" class="btn btn-lg float-end edit-bulletin-button edit-bulletin-button-your-post me-2"><i class="fas fa-pencil-alt"></i></a>
+                <!-- bulletin edit button -->
+                <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
+                    class="btn btn-lg float-end edit-bulletin-button edit-bulletin-button-your-post me-2"><i
+                        class="fas fa-pencil-alt"></i></a>
                 
+                <!-- bulletin like button form -->
                 <form method="POST"
                     action="{% url 'bulletin_like' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
                     class="d-inline like-button-form float-end">
@@ -28,14 +39,25 @@
                             class="fas fa-thumbs-up liked-by-user ms-2"></i></button>
                     {% endif %}
                 </form>
+
+                <!-- bulletin title -->
                 <h2 class="title-ellipsis">{{ bulletin.title }}</h2>
-                <a class="bulletin-link d-block my-2 link-ellipsis" href="{{ bulletin.link }}" target="_blank">{{ bulletin.link }}</a>
+
+                <!-- link to news article -->
+                <a class="bulletin-link d-block my-2 link-ellipsis" href="{{ bulletin.link }}"
+                    target="_blank">{{ bulletin.link }}</a>
+
             </div>
+
+            <!-- bulletin header if the user did not post the bulletin and is logged in -->
             {% elif user.is_authenticated %}
-            <div class="card-header bulletin-header not-your-bulletin-header">  
+            <div class="card-header bulletin-header not-your-bulletin-header">
+
+                <!-- bulletin like button form -->
                 <form method="POST"
                     action="{% url 'bulletin_like' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
                     class="d-inline like-button-form like-button-form-not-your-post float-end">
+                    
                     {% csrf_token %}        
                     {% if request.user not in bulletin.likes.all %}
                     <button type="submit" name="bulletin_id" value="{{ bulletin.slug }}"
@@ -46,110 +68,186 @@
                         class="btn float-end">{{ bulletin.number_of_likes }}<i
                             class="fas fa-thumbs-up liked-by-user ms-2"></i></button>
                     {% endif %}
+
                 </form>
+
+                <!-- bulletin title -->
                 <h2 class="title-ellipsis">{{ bulletin.title }}</h2>
-                <a class="bulletin-link d-block my-2 link-ellipsis" href="{{ bulletin.link }}" target="_blank">{{ bulletin.link }}</a>
+
+                <!-- link to news article -->
+                <a class="bulletin-link d-block my-2 link-ellipsis" href="{{ bulletin.link }}"
+                    target="_blank">{{ bulletin.link }}</a>
+
             </div>
+
+            <!-- bulletin header if the user is not logged in -->
             {% else %}
-            <div class="card-header bulletin-header like-button-form-not-your-post">    
+            <div class="card-header bulletin-header like-button-form-not-your-post">   
+
+                <!-- non-functioning bulletin like button -->
                 <button class="btn text-secondary float-end like-button px-0">{{ bulletin.number_of_likes }}<i
                     class="far fa-thumbs-up ms-2"></i></button>
+
+                <!-- bulletin title -->
                 <h2 class="title-ellipsis">{{ bulletin.title }}</h2>
-                <a class="bulletin-link d-block my-2 link-ellipsis" href="{{ bulletin.link }}" target="_blank">{{ bulletin.link }}</a>
+
+                <!-- link to news article -->
+                <a class="bulletin-link d-block my-2 link-ellipsis" href="{{ bulletin.link }}"
+                    target="_blank">{{ bulletin.link }}</a>
+
             </div>
             {% endif %}
+
+            <!-- bulletin body -->
             <div class="card-body">
+
                 <p class="float-none text-content">{{ bulletin.content }}</p>
                 <hr class="mt-5">
                 {% if bulletin.edited %}
                 <p class="float-end post-info ps-1 edit-text"><em>Edited on {{ bulletin.updated_on }}</em></p>
                 <p class="float-end post-info px-1 divider"><strong>|</strong></p>
-                <p class="float-end post-info pe-1 created-text"><em>Posted by <strong>{{ bulletin.author }}</strong> on {{ bulletin.created_on }} </em></p>
+                <p class="float-end post-info pe-1 created-text"><em>Posted by <strong>{{ bulletin.author }}</strong> on
+                        {{ bulletin.created_on }} </em></p>
                 {% else %}
-                <p class="float-end post-info created-text"><em>Posted by <strong>{{ bulletin.author }}</strong> on {{ bulletin.created_on }}</em></p>
-                {% endif %}  
+                <p class="float-end post-info created-text"><em>Posted by <strong>{{ bulletin.author }}</strong> on
+                        {{ bulletin.created_on }}</em></p>
+                {% endif %}
+
             </div>
+
         </div>
+
     </div>
 </div>
 
+<!-- comment form -->
 {% if user.is_authenticated %}
 <div class="row" id="comment-form-container">
     <div class="col-12">
+
+        <!-- comment form if not editing a comment -->
         {% if 'edit_comment/' not in request.get_full_path %}
         <form method="POST">
+
             {{ comment_form | crispy }}
             {% csrf_token %}
             <div class="text-end">
                 <button type="submit" class="btn btn-signup btn-primary btn-lg">Submit</button>
             </div>
+
         </form>
+        <!-- comment form if editing a comment -->
         {% else %}
         <form method="POST" action="{% url 'comment_edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}">
+
             {{ comment_form | crispy }}
             {% csrf_token %}
             <div class="text-end">
                 <button type="submit" class="btn btn-signup btn-primary btn-lg">Submit</button>
             </div>
+
         </form>
         {% endif %}
+
     </div>
 </div>
 {% endif %}
 
+<!-- for loop iterating through Comment queryset -->
 {% for comment in comments %}
 <div class="row my-5" id="comments-container-{{ forloop.counter }}">
     <div class="col-12 ">
+
         <div class="card">
 
-            {% if comment.author == request.user and user.is_authenticated %} <!-- If you are the user who made this comment, AND you are logged in, the header will have a green line -->
+            <!-- The current comment if the user posted it and is logged in -->
+            {% if comment.author == request.user and user.is_authenticated %}
             <div class="card-header green-header green-header-comment">
+
+                <!-- username of user who posted current comment -->
                 <h2 class="d-inline commenter">{{ comment.author }}</h2>
 
-                <button type="button" class="btn btn-lg float-end delete-bulletin-button modal-button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" value="{% url 'comment_delete' bulletin.slug %}?query={{ comment.id }}" data-type="Comment"><i class="fas fa-trash-alt"></i></button>
+                <!-- comment delete button -->
+                <button type="button" class="btn btn-lg float-end delete-bulletin-button modal-button"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    value="{% url 'comment_delete' bulletin.slug %}?query={{ comment.id }}" data-type="Comment"><i
+                        class="fas fa-trash-alt"></i></button>
 
-                <a href="{% url 'comment_edit' bulletin.slug %}?query={{ comment.id }}" class="float-end btn btn-lg edit-comment-button me-2"><i class="fas fa-pencil-alt"></i></a>
+                <!-- comment edit button -->
+                <a href="{% url 'comment_edit' bulletin.slug %}?query={{ comment.id }}"
+                    class="float-end btn btn-lg edit-comment-button me-2"><i class="fas fa-pencil-alt"></i></a>
+
             </div>
+
             <div class="card-body">
+
+                <!-- comment text -->
                 <p class="float-start comment-text">{{ comment.comment }}</p>
+
+                <!-- comment like button form -->
                 <form method="POST"
                     action="{% url 'comment_like' bulletin.slug %}?query={{ comment.id }}"
                     class="d-inline like-button-form" id="comment-like-form-{{ comment.id }}">
 
                     {% csrf_token %}
                     {% if request.user not in comment.likes.all %}
-                    <button type="submit" name="comment_id" class="btn float-end" id="comment-not-liked-{{ comment.id }}">{{ comment.number_of_likes }}<i class="far fa-thumbs-up not-liked-by-user ms-1"></i></button>
+                    <button type="submit" name="comment_id" class="btn float-end"
+                        id="comment-not-liked-{{ comment.id }}">{{ comment.number_of_likes }}<i
+                            class="far fa-thumbs-up not-liked-by-user ms-1"></i></button>
                     {% else %}
-                    <button type="submit" name="comment_id" class="btn float-end" id="comment-liked-{{ comment.id }}">{{ comment.number_of_likes }}<i class="fas fa-thumbs-up liked-by-user ms-2"></i></button>
+                    <button type="submit" name="comment_id" class="btn float-end"
+                        id="comment-liked-{{ comment.id }}">{{ comment.number_of_likes }}<i
+                            class="fas fa-thumbs-up liked-by-user ms-2"></i></button>
                     {% endif %}
+
                 </form>
+
                 <hr>
+
+                <!-- comment edited text -->
                 {% if comment.edited %}
                 <p class="float-end post-info ps-1 edit-text"><em>Edited on {{ comment.updated_on }}</em></p>
                 <p class="float-end post-info px-1 divider"><strong>|</strong></p>
                 <p class="float-end post-info pe-1 created-text"><em>Posted on {{ comment.created_on }}</em></p>
                 {% else %}
                 <p class="float-end post-info created-text"><em>Posted on {{ comment.created_on }}</em></p>
-                {% endif %}  
+                {% endif %}
+
             </div>
+
+            <!-- The current comment if the user did not post it but is logged in -->
             {% elif user.is_authenticated %}
             <div class="card-header">
+                <!-- username of user who posted current comment -->
                 <h2 class="d-inline commenter">{{ comment.author }}</h2>
             </div>
+
             <div class="card-body">
+
+                <!-- comment text -->
                 <p class="float-start comment-text">{{ comment.comment }}</p>
+
+                <!-- comment like button form -->
                 <form method="POST"
                     action="{% url 'comment_like' bulletin.slug %}?query={{ comment.id }}"
                     class="d-inline like-button-form" id="comment-like-form-{{ comment.id }}">
 
                     {% csrf_token %}
                     {% if request.user not in comment.likes.all %}
-                    <button type="submit" name="comment_id" class="btn float-end" id="comment-not-liked-{{ comment.id }}">{{ comment.number_of_likes }}<i class="far fa-thumbs-up not-liked-by-user ms-1"></i></button>
+                    <button type="submit" name="comment_id" class="btn float-end"
+                        id="comment-not-liked-{{ comment.id }}">{{ comment.number_of_likes }}<i
+                            class="far fa-thumbs-up not-liked-by-user ms-1"></i></button>
                     {% else %}
-                    <button type="submit" name="comment_id" class="btn float-end" id="comment-liked-{{ comment.id }}">{{ comment.number_of_likes }}<i class="fas fa-thumbs-up liked-by-user ms-2"></i></button>
+                    <button type="submit" name="comment_id" class="btn float-end"
+                        id="comment-liked-{{ comment.id }}">{{ comment.number_of_likes }}<i
+                            class="fas fa-thumbs-up liked-by-user ms-2"></i></button>
                     {% endif %}
+
                 </form>
+
                 <hr>
+
+                <!-- comment edited text -->
                 {% if comment.edited %}
                 <p class="float-end post-info ps-1 edit-text"><em>Edited on {{ comment.updated_on }}</em></p>
                 <p class="float-end post-info px-1 divider"><strong>|</strong></p>
@@ -157,31 +255,46 @@
                 {% else %}
                 <p class="float-end post-info created-text"><em>Posted on {{ comment.created_on }}</em></p>
                 {% endif %}  
+
             </div>
 
             {% else %}
+            <!-- The current comment if the user is not logged in -->
             <div class="card-header">
+                <!-- username of user who posted current comment -->
                 <h2 class="d-inline commenter">{{ comment.author }}</h2>
             </div>
+
             <div class="card-body">
+
+                <!-- comment text -->
                 <p class="float-start comment-text">{{ comment.comment }}</p>
+
+                <!-- non-functioning comment like button -->
                 <button type="button" class="btn text-secondary float-end like-button px-0">{{ comment.number_of_likes }}<i
                     class="far fa-thumbs-up ms-2"></i></button>
+
                 <hr>
+
+                <!-- comment edited text -->
                 {% if comment.edited %}
                 <p class="float-end post-info ps-1 edit-text"><em>Edited on {{ comment.updated_on }}</em></p>
                 <p class="float-end post-info px-1 divider"><strong>|</strong></p>
                 <p class="float-end post-info pe-1 created-text"><em>Posted on {{ comment.created_on }}</em></p>
                 {% else %}
                 <p class="float-end post-info created-text"><em>Posted on {{ comment.created_on }}</em></p>
-                {% endif %}  
+                {% endif %}
+
             </div>
             {% endif %}
+
         </div>
+
     </div>
 </div>
 {% endfor %}
 
+<!-- confirm delete dialog box modal -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
