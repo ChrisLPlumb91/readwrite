@@ -1,3 +1,293 @@
+/**
+ * The below code executes when the page has loaded fully. It is necessary because of how the form elements of the account pages
+ * are injected into the HTML, and cannot be changed in their templates. Thus, this code adds classes to those elements once
+ * they have been rendered in the browser.
+ * 
+ * The resize event listener above is able to make changes to these pages via ids because the containers for the form are exposed
+ * in the templates.
+ * 
+ * If the user is not on an accounts page, exceptions are avoided by using an if-else construct. The edit and add bulletin pages,
+ * for instance, do not contain the same elements as the accounts pages, and so any attempts to get those elements would produce
+ * errors.
+ * 
+ * Several pages other than the accounts page have central content sections that are small in height, and which therefore cause
+ * the page footer to appear halfway up the screen. This code ensures that the footer is fixed to the bottom of the window for
+ * all of these pages.
+ * 
+ * Toward the bottom then is code that is identical to the code in the scroll event listener after this one. There are several elements
+ * which move as the user scrolls, but with only a scroll listener, reloading the page scrolled halfway down will cause these elements to
+ * jump to the top of the document until the user scrolls. Using a ready listener with the exact same code prevents this. For an explanation
+ * of this code, please see the comment above the scroll listener below.
+ * 
+ * Finally, the last few lines are used to temporarily display Django messages to the user.
+ */
+$(document).ready(function() {  
+    if (window.location.href.includes('/accounts/')) {
+        var accountFooter = $('footer');
+        accountFooter.addClass('position-fixed');
+        accountFooter.addClass('bottom-0');
+
+        if (window.location.href.includes('/signup/')) {
+            var textField = $('input[type="text"]');
+            var emailField = $('input[type="email"]');
+            var passwordField1 = $('input[name="password1"]');
+            var passwordField2 = $('input[name="password2"]'); 
+
+            textField.addClass('float-end');
+            emailField.addClass('float-end');
+            passwordField1.addClass('float-end');
+            passwordField2.addClass('float-end');
+
+        } else if (window.location.href.includes('/login/')) {
+            var textField = $('input[type="text"]');
+            var passwordField = $('input[type="password"]');
+            var rememberMe = $('label:contains("Remember Me:")');
+            var parentP = $(rememberMe).parent();
+
+            textField.addClass('float-end');
+            passwordField.addClass('float-end');
+
+            parentP.addClass('d-block');
+            parentP.addClass('text-center');
+            parentP.addClass('pt-1');
+
+        } 
+    } else if (window.location.href.includes('/edit/') || window.location.href.includes('/add')) {
+        var editPageFooter = $('footer');
+        editPageFooter.addClass('position-fixed');
+        editPageFooter.addClass('bottom-0');
+
+    } else if (!window.location.href.includes('/accounts/') && !window.location.href.includes('/edit/') && !window.location.href.includes('/add')) {
+        var errorPageFooter = $('footer');
+        var navbarHeader = $('.navbar');
+
+        var contentHeight = $(document).innerHeight() - $(errorPageFooter).outerHeight(true) - $(navbarHeader).outerHeight(true);  
+
+        if ($('#404-container').length) {
+            var PageNotFoundContainer = $('#404-container');
+            var row = $('#404-container>div');
+
+            $(PageNotFoundContainer).height(contentHeight);
+            $(row).height(contentHeight);
+
+            errorPageFooter.addClass('position-fixed');
+            errorPageFooter.addClass('bottom-0');
+        } else if ($('#500-container').length) {
+            var InternalServerErrorContainer = $('#500-container');
+            var row = $('#500-container>div');
+
+            $(InternalServerErrorContainer).height(contentHeight);
+            $(row).height(contentHeight);
+
+            errorPagefooter.addClass('position-fixed');
+            footer.addClass('bottom-0');
+        } else {
+            errorPageFooter.removeClass('position-fixed');
+            errorPageFooter.removeClass('bottom-0');
+        }
+
+        var body = $('body');
+        var loggedInAs = $('#logged-in-side');
+        var newBulletinButton = $('.new-bulletin-button-container');
+        var rulesCard = $('.rules');
+        
+        var sidePanel = $(loggedInAs).outerHeight(true) + 18 + $(newBulletinButton).outerHeight(true) + $(rulesCard).outerHeight(true);
+        var sidePanelAlt = $(newBulletinButton).outerHeight(true) + $(rulesCard).outerHeight(true);
+
+        var y = $(document).scrollTop() + sidePanel;
+        var yAlt = $(document).scrollTop() + sidePanelAlt; 
+
+        var navBarHeight = $('#navbar').outerHeight(true) + 30;
+        var navBarHeightAlt = $('#navbar').outerHeight(true) + 48; 
+        
+        var lastChild = $('#content-container-base').children().last();
+        var lastBulletin = lastChild.prev(); 
+        
+        if ($('#pagination-nav').length) {
+            lastBulletin = lastBulletin.prev();
+        }
+
+        var lastBulletinPosition = lastBulletin.position().top;
+        var lastBulletinPositionBottom = lastBulletinPosition + lastBulletin.innerHeight();
+
+        var childrenOfBody = $('body').children();
+        var childrenOfSidePanel = $('#side-panel').children();
+
+        if ($(childrenOfBody[2]).css('display') != 'block') {
+
+            if (childrenOfSidePanel[0].getAttribute('class').includes('text-center logged-in-as')) {
+
+                if(!lastBulletinPositionBottom < navBarHeightAlt + sidePanel) {
+
+                    if((y - sidePanel) > navBarHeight && y < lastBulletinPositionBottom) {
+                        body.removeClass('position-relative');
+                        loggedInAs.removeClass('logged-in-as-fixed-bottom');
+                        newBulletinButton.removeClass('button-fixed-bottom');
+                        rulesCard.removeClass('rules-fixed-bottom');
+                            
+                        loggedInAs.addClass('logged-in-as-fixed');
+                        newBulletinButton.addClass('button-fixed');
+                        rulesCard.addClass('rules-fixed');
+                            
+                    } else if (y >= lastBulletinPositionBottom) {
+                        loggedInAs.removeClass('logged-in-as-fixed');
+                        newBulletinButton.removeClass('button-fixed');
+                        rulesCard.removeClass('rules-fixed');
+                        
+                        body.addClass('position-relative');
+                        loggedInAs.addClass('logged-in-as-fixed-bottom');
+                        newBulletinButton.addClass('button-fixed-bottom');
+                        rulesCard.addClass('rules-fixed-bottom');
+
+                    } else {
+                        loggedInAs.removeClass('logged-in-as-fixed');
+                        newBulletinButton.removeClass('button-fixed');
+                        rulesCard.removeClass('rules-fixed');
+                    }
+                }        
+            } else {
+                if(!lastBulletinPositionBottom < navBarHeightAlt + sidePanelAlt) {
+
+                    if((yAlt - sidePanelAlt) > navBarHeightAlt && yAlt < lastBulletinPositionBottom) {
+                        body.removeClass('position-relative');
+                        rulesCard.removeClass('rules-fixed-bottom-alt');
+                        newBulletinButton.removeClass('button-fixed-bottom-alt');
+                    
+                        newBulletinButton.addClass('button-fixed-alt');
+                        rulesCard.addClass('rules-fixed-alt');
+
+                    } else if(yAlt >= lastBulletinPositionBottom) {
+                        rulesCard.removeClass('rules-fixed-alt');
+                        newBulletinButton.removeClass('button-fixed-alt');
+                    
+                        body.addClass('position-relative');
+                        newBulletinButton.addClass('button-fixed-bottom-alt');
+                        rulesCard.addClass('rules-fixed-bottom-alt');
+                        
+                    } else {
+                        rulesCard.removeClass('rules-fixed-alt');
+                        newBulletinButton.removeClass('button-fixed-alt');
+
+                    }
+                }
+            }
+        }   
+    }
+
+    setTimeout(function () {
+        let messages = document.getElementById('msg');
+        let alert = new bootstrap.Alert(messages);
+        alert.close();
+    }, 2000);
+});
+
+/**  
+ * The below code listens for scroll events, and depending on where the user has scrolled to on the page, the section of the site on the far right side
+ * of most of the pages will behave differently. Once the user scrolls down to the top edge of this section, it becomes fixed to the top of the window,
+ * and follows the scrollbar. Once the bottom edge of this section lines up with the bottom edge of the last element in the central content container,
+ * it becomes absolutely positioned so that its bottom edge is in line with the bottom edge of that bottommost element, whether it is a bulletin on
+ * the main page, or a comment on a bulletin page.
+ * 
+ * This code takes into account that the last element in the central section will always in fact be the modal that appears when you try to delete
+ * a comment or bulletin, and that on the main page, the element before this will be the pagination container if there are more than 10 approved
+ * bulletins. In other words, the last bulletin or comment will actually either be the second last element on the page, or the third last.
+ * 
+ * To calculate when the bottom of the side section lines up with the bottom of the last comment or bulletin, the height of said section is added
+ * to the value for scrollTop, which is recalculated with every scroll event. If there are only a few bulletins on the page, the second-to-innermost
+ * if prevents the classes from being set and pushing the side section to the top of the window.
+ * 
+ * There are two branches of this code depending on whether or not the user is logged in. When they are not logged in, the message that says,
+ * "You are logged in as _____" is not displayed, and so the total height of the side section is different.
+*/
+$(document).scroll(function() {
+    var body = $('body');
+    var loggedInAs = $('#logged-in-side');
+    var newBulletinButton = $('.new-bulletin-button-container');
+    var rulesCard = $('.rules');
+    
+    var sidePanel = $(loggedInAs).outerHeight(true) + 18 + $(newBulletinButton).outerHeight(true) + $(rulesCard).outerHeight(true);
+    var sidePanelAlt = $(newBulletinButton).outerHeight(true) + $(rulesCard).outerHeight(true);
+
+    var y = $(document).scrollTop() + sidePanel;
+    var yAlt = $(document).scrollTop() + sidePanelAlt; 
+
+    var navBarHeight = $('#navbar').outerHeight(true) + 30;
+    var navBarHeightAlt = $('#navbar').outerHeight(true) + 48; 
+    
+    var lastChild = $('#content-container-base').children().last();
+    var lastBulletin = lastChild.prev(); 
+    
+    if ($('#pagination-nav').length) {
+        lastBulletin = lastBulletin.prev();
+    }
+
+    var lastBulletinPosition = lastBulletin.position().top;
+    var lastBulletinPositionBottom = lastBulletinPosition + lastBulletin.innerHeight();
+
+    var childrenOfBody = $('body').children();
+    var childrenOfSidePanel = $('#side-panel').children();
+
+    if ($(childrenOfBody[2]).css('display') != 'block') {
+
+        if (childrenOfSidePanel[0].getAttribute('class').includes('text-center logged-in-as')) {
+
+            if(!lastBulletinPositionBottom < navBarHeightAlt + sidePanel) {
+
+                if((y - sidePanel) > navBarHeight && y < lastBulletinPositionBottom) {
+                    body.removeClass('position-relative');
+                    loggedInAs.removeClass('logged-in-as-fixed-bottom');
+                    newBulletinButton.removeClass('button-fixed-bottom');
+                    rulesCard.removeClass('rules-fixed-bottom');
+                        
+                    loggedInAs.addClass('logged-in-as-fixed');
+                    newBulletinButton.addClass('button-fixed');
+                    rulesCard.addClass('rules-fixed');
+                        
+                } else if (y >= lastBulletinPositionBottom) {
+                    loggedInAs.removeClass('logged-in-as-fixed');
+                    newBulletinButton.removeClass('button-fixed');
+                    rulesCard.removeClass('rules-fixed');
+                    
+                    body.addClass('position-relative');
+                    loggedInAs.addClass('logged-in-as-fixed-bottom');
+                    newBulletinButton.addClass('button-fixed-bottom');
+                    rulesCard.addClass('rules-fixed-bottom');
+
+                } else {
+                    loggedInAs.removeClass('logged-in-as-fixed');
+                    newBulletinButton.removeClass('button-fixed');
+                    rulesCard.removeClass('rules-fixed');
+                        
+                }
+            }        
+        } else {
+            if(!lastBulletinPositionBottom < navBarHeightAlt + sidePanelAlt) {
+
+                if((yAlt - sidePanelAlt) > navBarHeightAlt && yAlt < lastBulletinPositionBottom) {
+                    body.removeClass('position-relative');
+                    rulesCard.removeClass('rules-fixed-bottom-alt');
+                    newBulletinButton.removeClass('button-fixed-bottom-alt');
+                
+                    newBulletinButton.addClass('button-fixed-alt');
+                    rulesCard.addClass('rules-fixed-alt');
+
+                } else if(yAlt >= lastBulletinPositionBottom) {
+                    rulesCard.removeClass('rules-fixed-alt');
+                    newBulletinButton.removeClass('button-fixed-alt');
+                
+                    body.addClass('position-relative');
+                    newBulletinButton.addClass('button-fixed-bottom-alt');
+                    rulesCard.addClass('rules-fixed-bottom-alt');
+
+                } else {
+                    rulesCard.removeClass('rules-fixed-alt');
+                    newBulletinButton.removeClass('button-fixed-alt');
+                }
+            }
+        }
+    }
+});
+
 /** 
  * This code listens for window resizing events. At a certain width, it truncates anchor elements within divs of the card-header class.
  * These include bulletin titles on the main page, and bulletin links in individual bulletin pages.
@@ -97,194 +387,6 @@ $(window).resize(function() {
         }
     }
 
-});
-
-/**  
- * The below code listens for scroll events, and depending on where the user has scrolled to on the page, the section of the site on the far right side
- * of most of the pages will behave differently. Once the user scrolls down to the top edge of this section, it becomes fixed to the top of the window,
- * and follows the scrollbar. Once the bottom edge of this section lines up with the bottom edge of the last element in the central content container,
- * it becomes absolutely positioned so that its bottom edge is in line with the bottom edge of that bottommost element, whether it is a bulletin on
- * the main page, or a comment on a bulletin page.
- * 
- * This code takes into account that the last element in the central section will always in fact be the modal that appears when you try to delete
- * a comment or bulletin, and that on the main page, the element before this will be the pagination container if there are more than 10 approved
- * bulletins. In other words, the last bulletin or comment will actually either be the second last element on the page, or the third last.
- * 
- * To calculate when the bottom of the side section lines up with the bottom of the last comment or bulletin, the height of said section is added
- * to the value for scrollTop, which is recalculated with every scroll event.
- * 
- * There are two branches of this code depending on whether or not the user is logged in. When they are not logged in, the message that says,
- * "You are logged in as _____" is not displayed, and so the total height of the side section is different.
-*/
-$(document).scroll(function() {
-    var body = $('body');
-    var loggedInAs = $('#logged-in-side');
-    var newBulletinButton = $('.new-bulletin-button-container');
-    var rulesCard = $('.rules');
-    
-    var sidePanel = $(loggedInAs).outerHeight(true) + 18 + $(newBulletinButton).outerHeight(true) + $(rulesCard).outerHeight(true);
-    var sidePanelAlt = $(newBulletinButton).outerHeight(true) + $(rulesCard).outerHeight(true);
-
-    var y = $(document).scrollTop() + sidePanel;
-    var yAlt = $(document).scrollTop() + sidePanelAlt; 
-
-    var navBarHeight = $('#navbar').outerHeight(true) + 30;
-    var navBarHeightAlt = $('#navbar').outerHeight(true) + 48; 
-    
-    var lastChild = $('#content-container-base').children().last();
-    var lastBulletin = lastChild.prev(); 
-    
-    if ($('#pagination-nav').length) {
-        lastBulletin = lastBulletin.prev();
-        console.log(lastBulletin);
-    }
-
-    var lastBulletinPosition = lastBulletin.position().top;
-    
-    var lastBulletinHeightWithoutBottomMargin = lastBulletin.innerHeight() + parseInt(lastBulletin.css('margin-top')); 
-    var lastBulletinPositionBottom = lastBulletinPosition + lastBulletinHeightWithoutBottomMargin;
-
-    var childrenOfBody = $('body').children();
-
-    var childrenOfSidePanel = $('#side-panel').children();
-
-    if ($(childrenOfBody[2]).css('display') == 'block') {
-
-    } else {
-        if (childrenOfSidePanel[0].getAttribute('class').includes('text-center logged-in-as')) {
-            if((y - sidePanel) > navBarHeight && y < lastBulletinPositionBottom) {
-                body.removeClass('position-relative');
-                loggedInAs.removeClass('logged-in-as-fixed-bottom');
-                newBulletinButton.removeClass('button-fixed-bottom');
-                rulesCard.removeClass('rules-fixed-bottom');
-                    
-                loggedInAs.addClass('logged-in-as-fixed');
-                newBulletinButton.addClass('button-fixed');
-                rulesCard.addClass('rules-fixed');
-                    
-                document.addClass('me-2');
-            } else if (y >= lastBulletinPositionBottom) {
-                loggedInAs.removeClass('logged-in-as-fixed');
-                newBulletinButton.removeClass('button-fixed');
-                rulesCard.removeClass('rules-fixed');
-                
-                body.addClass('position-relative');
-                loggedInAs.addClass('logged-in-as-fixed-bottom');
-                newBulletinButton.addClass('button-fixed-bottom');
-                rulesCard.addClass('rules-fixed-bottom');
-            } else {
-                loggedInAs.removeClass('logged-in-as-fixed');
-                newBulletinButton.removeClass('button-fixed');
-                rulesCard.removeClass('rules-fixed');
-                    
-                document.removeClass('me-2');
-            }
-        } else {
-            if((yAlt - sidePanelAlt) > navBarHeightAlt && yAlt < lastBulletinPositionBottom) {
-                body.removeClass('position-relative');
-                rulesCard.removeClass('rules-fixed-bottom-alt');
-                newBulletinButton.removeClass('button-fixed-bottom-alt');
-            
-                newBulletinButton.addClass('button-fixed-alt');
-                rulesCard.addClass('rules-fixed-alt');
-                document.addClass('me-2');
-            } else if(yAlt >= lastBulletinPositionBottom) {
-                rulesCard.removeClass('rules-fixed-alt');
-                newBulletinButton.removeClass('button-fixed-alt');
-            
-                body.addClass('position-relative');
-                newBulletinButton.addClass('button-fixed-bottom-alt');
-                rulesCard.addClass('rules-fixed-bottom-alt');
-            } else {
-                rulesCard.removeClass('rules-fixed-alt');
-                newBulletinButton.removeClass('button-fixed-alt');
-                document.removeClass('me-2');
-            }
-        }
-    }
-});
-
-/**
- * The below code executes when the page has loaded fully. It is necessary because of how the form elements of the account pages
- * are injected into the HTML, and cannot be changed in their templates. Thus, this code adds classes to those elements once
- * they have been rendered in the browser.
- * 
- * The resize event listener above is able to make changes to these pages via ids because the containers for the form are exposed
- * in the templates.
- * 
- * If the user is not on an accounts page, exceptions are avoided by using an if-else construct. The edit and add bulletin pages,
- * for instance, do not contain the same elements as the accounts pages, and so any attempts to get those elements would produce
- * errors.
- * 
- * Several pages other than the accounts page have central content sections that are small in height, and which therefore cause
- * the page footer to appear halfway up the screen. This code ensures that the footer is fixed to the bottom of the window for
- * all of these pages.
- */
-$(document).ready(function() {
-    if (window.location.href.includes('/accounts/')) {
-        var accountFooter = $('footer');
-        accountFooter.addClass('position-fixed');
-        accountFooter.addClass('bottom-0');
-
-        if (window.location.href.includes('/signup/')) {
-            var textField = $('input[type="text"]');
-            var emailField = $('input[type="email"]');
-            var passwordField1 = $('input[name="password1"]');
-            var passwordField2 = $('input[name="password2"]'); 
-
-            textField.addClass('float-end');
-            emailField.addClass('float-end');
-            passwordField1.addClass('float-end');
-            passwordField2.addClass('float-end');
-
-        } else if (window.location.href.includes('/login/')) {
-            var textField = $('input[type="text"]');
-            var passwordField = $('input[type="password"]');
-            var rememberMe = $('label:contains("Remember Me:")');
-            var parentP = $(rememberMe).parent();
-
-            textField.addClass('float-end');
-            passwordField.addClass('float-end');
-
-            parentP.addClass('d-block');
-            parentP.addClass('text-center');
-            parentP.addClass('pt-1');
-
-        } 
-    } else if (window.location.href.includes('/edit/') || window.location.href.includes('/add')) {
-        var editPageFooter = $('footer');
-        editPageFooter.addClass('position-fixed');
-        editPageFooter.addClass('bottom-0');
-
-    } else if (!window.location.href.includes('/accounts/') && !window.location.href.includes('/edit/') && !window.location.href.includes('/add')) {
-        var errorPageFooter = $('footer');
-        var navbarHeader = $('.navbar');
-
-        var contentHeight = $(document).innerHeight() - $(errorPageFooter).outerHeight(true) - $(navbarHeader).outerHeight(true);  
-
-        if ($('#404-container').length) {
-            var PageNotFoundContainer = $('#404-container');
-            var row = $('#404-container>div');
-
-            $(PageNotFoundContainer).height(contentHeight);
-            $(row).height(contentHeight);
-
-            errorPageFooter.addClass('position-fixed');
-            errorPageFooter.addClass('bottom-0');
-        } else if ($('#500-container').length) {
-            var InternalServerErrorContainer = $('#500-container');
-            var row = $('#500-container>div');
-
-            $(InternalServerErrorContainer).height(contentHeight);
-            $(row).height(contentHeight);
-
-            errorPagefooter.addClass('position-fixed');
-            footer.addClass('bottom-0');
-        } else {
-            errorPageFooter.removeClass('position-fixed');
-            errorPageFooter.removeClass('bottom-0');
-        }
-    }
 });
 
 /**

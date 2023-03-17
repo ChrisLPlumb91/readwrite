@@ -252,27 +252,27 @@ ol > li {
 
 .logged-in-as-fixed-bottom {
     position: absolute;
-    bottom: 870px;
+    bottom: 928px;
 }
 
 .button-fixed-bottom {
     position: absolute;
-    bottom: 754px;
+    bottom: 812px;
 }
 
 .rules-fixed-bottom {
     position: absolute;
-    bottom: 195px;
+    bottom: 253px;
 }
 
 .button-fixed-bottom-alt {
     position: absolute;
-    bottom: 756px;
+    bottom: 812px;
 }
 
 .rules-fixed-bottom-alt {
     position: absolute;
-    bottom: 196px;
+    bottom: 253px;
 }
 /* End of classes dynamically added and removed using JavaScript */
 
