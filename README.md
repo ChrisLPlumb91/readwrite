@@ -235,3 +235,9 @@ Live links to this project:
 <hr>
 
 ## Credits
+
+The fonts used across the website were taken from Google Fonts:
+- [Unbounded](https://fonts.google.com/specimen/Unbounded?query=unbounded)
+- [Poppins](https://fonts.google.com/specimen/Poppins?query=poppin)
+
+Using https://gauger.io/fonticon/, I converted a FontAwesome icon into a favicon for the website. The icon I used is here: https://fontawesome.com/v5/icons/globe?s=solid&f=classic.
