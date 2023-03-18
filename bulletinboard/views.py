@@ -94,6 +94,7 @@ class BulletinDetail(View):
             comment.bulletin = specific_bulletin
             comment.author = request.user
             comment.save()
+            messages.success(request, 'You left a comment on this bulletin.')
         else:
             comment_form = CommentForm()
 
