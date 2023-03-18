@@ -4,7 +4,8 @@
  * to those elements once they have been rendered in the browser.
  * 
  * The resize event listener below is able to make changes to these pages via ids because the containers for the form are exposed
- * in the templates.
+ * in the templates. However, because these changes only occur after a resize event is fired, if a page is loaded in a small viewport,
+ * code is needed in the ready listener that checks the width and makes the same changes that the resize listener does.
  * 
  * If the user is not on an accounts page, exceptions are avoided by using an if-else construct. The edit and add bulletin pages,
  * for instance, do not contain the same elements as the accounts pages, and so any attempts to get those elements would produce
@@ -29,6 +30,62 @@ $(document).ready(function() {
         var accountFooter = $('footer');
         accountFooter.addClass('position-fixed');
         accountFooter.addClass('bottom-0');
+
+        var accountFormContainer = $('.account-form-container');
+        var infoContainer = $('.info-container');
+
+        if ($(window).innerWidth() <= 1650 && $(window).innerWidth() > 1110) {
+            accountFormContainer.removeClass('col-4');
+            accountFormContainer.removeClass('offset-4');
+            accountFormContainer.removeClass('col-8');
+            accountFormContainer.removeClass('offset-2');
+            accountFormContainer.addClass('col-6');
+            accountFormContainer.addClass('offset-3');
+        } else if ($(window).innerWidth() <= 1110 && $(window).innerWidth() > 830) {
+            accountFormContainer.removeClass('col-4');
+            accountFormContainer.removeClass('offset-4');
+            accountFormContainer.removeClass('col-6');
+            accountFormContainer.removeClass('offset-3');
+            accountFormContainer.removeClass('col-10');
+            accountFormContainer.removeClass('offset-1');
+            accountFormContainer.addClass('col-8');
+            accountFormContainer.addClass('offset-2');
+        } else if ($(window).innerWidth() <= 830) {
+            accountFormContainer.removeClass('col-4');
+            accountFormContainer.removeClass('offset-4');
+            accountFormContainer.removeClass('col-6');
+            accountFormContainer.removeClass('offset-3');
+            accountFormContainer.removeClass('col-8');
+            accountFormContainer.removeClass('offset-2');
+            accountFormContainer.addClass('col-10');
+            accountFormContainer.addClass('offset-1');
+        } else {
+            accountFormContainer.removeClass('col-6');
+            accountFormContainer.removeClass('offset-3');
+            accountFormContainer.addClass('col-4');
+            accountFormContainer.addClass('offset-4');
+        }
+
+        if ($(window).innerWidth() <= 600 && $(window).innerWidth() > 450) {
+            infoContainer.removeClass('col-6');
+            infoContainer.removeClass('offset-3');
+            infoContainer.removeClass('col-10');
+            infoContainer.removeClass('offset-1');
+            infoContainer.addClass('col-8');
+            infoContainer.addClass('offset-2');
+        } else if ($(window).innerWidth() <= 450) {
+            infoContainer.removeClass('col-8');
+            infoContainer.removeClass('offset-2');
+            infoContainer.addClass('col-10');
+            infoContainer.addClass('offset-1');
+        } else {
+            infoContainer.removeClass('col-8');
+            infoContainer.removeClass('offset-2');
+            infoContainer.removeClass('col-10');
+            infoContainer.removeClass('offset-1');
+            infoContainer.addClass('col-6');
+            infoContainer.addClass('offset-3');
+        }
 
         if (window.location.href.includes('/signup/')) {
             var signUpLink = $('#sign-up-link');
