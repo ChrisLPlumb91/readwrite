@@ -27,10 +27,19 @@
  */
 $(document).ready(function() {  
     if (window.location.href.includes('/accounts/')) {
+        console.log('On account page (ready listener)');
         var accountFooter = $('footer');
-        accountFooter.addClass('position-fixed');
-        accountFooter.addClass('bottom-0');
-
+        
+        if ($(window).innerHeight() >= 865) {
+            console.log('fixing footer from ready listener');
+            accountFooter.addClass('position-fixed');
+            accountFooter.addClass('bottom-0');
+        } else {
+            console.log('Removing fixed footer from ready listener');
+            accountFooter.removeClass('position-fixed');
+            accountFooter.removeClass('bottom-0');
+        }
+            
         var accountFormContainer = $('.account-form-container');
         var infoContainer = $('.info-container');
 
@@ -39,6 +48,8 @@ $(document).ready(function() {
             accountFormContainer.removeClass('offset-4');
             accountFormContainer.removeClass('col-8');
             accountFormContainer.removeClass('offset-2');
+            accountFormContainer.removeClass('col-10');
+            accountFormContainer.removeClass('offset-1');
             accountFormContainer.addClass('col-6');
             accountFormContainer.addClass('offset-3');
         } else if ($(window).innerWidth() <= 1110 && $(window).innerWidth() > 830) {
@@ -62,6 +73,10 @@ $(document).ready(function() {
         } else {
             accountFormContainer.removeClass('col-6');
             accountFormContainer.removeClass('offset-3');
+            accountFormContainer.removeClass('col-8');
+            accountFormContainer.removeClass('offset-2');
+            accountFormContainer.removeClass('col-10');
+            accountFormContainer.removeClass('offset-1');
             accountFormContainer.addClass('col-4');
             accountFormContainer.addClass('offset-4');
         }
@@ -76,6 +91,8 @@ $(document).ready(function() {
         } else if ($(window).innerWidth() <= 450) {
             infoContainer.removeClass('col-8');
             infoContainer.removeClass('offset-2');
+            infoContainer.removeClass('col-6');
+            infoContainer.removeClass('offset-3');
             infoContainer.addClass('col-10');
             infoContainer.addClass('offset-1');
         } else {
@@ -124,10 +141,20 @@ $(document).ready(function() {
         }
     } else if (window.location.href.includes('/edit/') || window.location.href.includes('/add')) {
         var editPageFooter = $('footer');
-        editPageFooter.addClass('position-fixed');
-        editPageFooter.addClass('bottom-0');
+
+        if($(window).innerHeight() > 865)
+            editPageFooter.addClass('position-fixed');
+            editPageFooter.addClass('bottom-0');
 
     } else if (!window.location.href.includes('/accounts/') && !window.location.href.includes('/edit/') && !window.location.href.includes('/add')) {
+
+        var cardHeaderTitles = $('.card-header>a');
+
+        if ($(window).innerWidth() <= 767) {
+            cardHeaderTitles.addClass('title-ellipsis');
+        } else {
+            cardHeaderTitles.removeClass('title-ellipsis');
+        }
         
         if(!window.location.href.includes('/post/')) {
             var homePageLink = $('#home-page-link');
@@ -276,92 +303,94 @@ $(document).ready(function() {
  * "You are logged in as _____" is not displayed, and so the total height of the side section is different.
 */
 $(document).scroll(function() {
-    var body = $('body');
-    var loggedInAs = $('#logged-in-side');
-    var newBulletinButton = $('.new-bulletin-button-container');
-    var rulesCard = $('.rules');
-    
-    var sidePanel = $(loggedInAs).outerHeight(true) + 18 + $(newBulletinButton).outerHeight(true) + $(rulesCard).outerHeight(true);
-    var sidePanelAlt = $(newBulletinButton).outerHeight(true) + $(rulesCard).outerHeight(true);
+    if (!window.location.href.includes('/accounts/') && !window.location.href.includes('/edit/') && !window.location.href.includes('/add')) {
+        var body = $('body');
+        var loggedInAs = $('#logged-in-side');
+        var newBulletinButton = $('.new-bulletin-button-container');
+        var rulesCard = $('.rules');
+        
+        var sidePanel = $(loggedInAs).outerHeight(true) + 18 + $(newBulletinButton).outerHeight(true) + $(rulesCard).outerHeight(true);
+        var sidePanelAlt = $(newBulletinButton).outerHeight(true) + $(rulesCard).outerHeight(true);
 
-    var y = $(document).scrollTop() + sidePanel;
-    var yAlt = $(document).scrollTop() + sidePanelAlt; 
+        var y = $(document).scrollTop() + sidePanel;
+        var yAlt = $(document).scrollTop() + sidePanelAlt; 
 
-    var navBarHeight = $('#navbar').outerHeight(true) + 30;
-    var navBarHeightAlt = $('#navbar').outerHeight(true) + 48; 
-    
-    var lastChild = $('#content-container-base').children().last();
-    var lastBulletin = lastChild.prev(); 
-    
-    if ($('#pagination-nav').length) {
-        lastBulletin = lastBulletin.prev();
-    }
+        var navBarHeight = $('#navbar').outerHeight(true) + 30;
+        var navBarHeightAlt = $('#navbar').outerHeight(true) + 48; 
+        
+        var lastChild = $('#content-container-base').children().last();
+        var lastBulletin = lastChild.prev(); 
+        
+        if ($('#pagination-nav').length) {
+            lastBulletin = lastBulletin.prev();
+        }
 
-    var lastBulletinPosition = lastBulletin.position().top;
-    var lastBulletinPositionBottom = lastBulletinPosition + lastBulletin.innerHeight();
+        var lastBulletinPosition = lastBulletin.position().top;
+        var lastBulletinPositionBottom = lastBulletinPosition + lastBulletin.innerHeight();
 
-    var childrenOfBody = $('body').children();
-    var childrenOfSidePanel = $('#side-panel').children();
+        var childrenOfBody = $('body').children();
+        var childrenOfSidePanel = $('#side-panel').children();
 
-    if ($(childrenOfBody[2]).css('display') != 'block') {
+        if ($(childrenOfBody[2]).css('display') != 'block') {
 
-        if (childrenOfSidePanel[0].getAttribute('class').includes('text-center logged-in-as')) {
+            if (childrenOfSidePanel[0].getAttribute('class').includes('text-center logged-in-as')) {
 
-            if(lastBulletinPositionBottom >= navBarHeightAlt + sidePanel) {
+                if(lastBulletinPositionBottom >= navBarHeightAlt + sidePanel) {
 
-                if((y - sidePanel) > navBarHeight && y < lastBulletinPositionBottom) {
-                    body.removeClass('position-relative');
-                    loggedInAs.removeClass('logged-in-as-fixed-bottom');
-                    newBulletinButton.removeClass('button-fixed-bottom');
-                    rulesCard.removeClass('rules-fixed-bottom');
+                    if((y - sidePanel) > navBarHeight && y < lastBulletinPositionBottom) {
+                        body.removeClass('position-relative');
+                        loggedInAs.removeClass('logged-in-as-fixed-bottom');
+                        newBulletinButton.removeClass('button-fixed-bottom');
+                        rulesCard.removeClass('rules-fixed-bottom');
+                            
+                        loggedInAs.addClass('logged-in-as-fixed');
+                        newBulletinButton.addClass('button-fixed');
+                        rulesCard.addClass('rules-fixed');
+                            
+                    } else if (y >= lastBulletinPositionBottom) {
+                        loggedInAs.removeClass('logged-in-as-fixed');
+                        newBulletinButton.removeClass('button-fixed');
+                        rulesCard.removeClass('rules-fixed');
                         
-                    loggedInAs.addClass('logged-in-as-fixed');
-                    newBulletinButton.addClass('button-fixed');
-                    rulesCard.addClass('rules-fixed');
-                        
-                } else if (y >= lastBulletinPositionBottom) {
-                    loggedInAs.removeClass('logged-in-as-fixed');
-                    newBulletinButton.removeClass('button-fixed');
-                    rulesCard.removeClass('rules-fixed');
+                        body.addClass('position-relative');
+                        loggedInAs.addClass('logged-in-as-fixed-bottom');
+                        newBulletinButton.addClass('button-fixed-bottom');
+                        rulesCard.addClass('rules-fixed-bottom');
+
+                    } else {
+                        loggedInAs.removeClass('logged-in-as-fixed');
+                        newBulletinButton.removeClass('button-fixed');
+                        rulesCard.removeClass('rules-fixed');
+                            
+                    }
+                }        
+            } else {
+                if(lastBulletinPositionBottom >= navBarHeightAlt + sidePanelAlt) {
+
+                    if((yAlt - sidePanelAlt) > navBarHeightAlt && yAlt < lastBulletinPositionBottom) {
+                        body.removeClass('position-relative');
+                        rulesCard.removeClass('rules-fixed-bottom-alt');
+                        newBulletinButton.removeClass('button-fixed-bottom-alt');
                     
-                    body.addClass('position-relative');
-                    loggedInAs.addClass('logged-in-as-fixed-bottom');
-                    newBulletinButton.addClass('button-fixed-bottom');
-                    rulesCard.addClass('rules-fixed-bottom');
+                        newBulletinButton.addClass('button-fixed-alt');
+                        rulesCard.addClass('rules-fixed-alt');
 
-                } else {
-                    loggedInAs.removeClass('logged-in-as-fixed');
-                    newBulletinButton.removeClass('button-fixed');
-                    rulesCard.removeClass('rules-fixed');
-                        
-                }
-            }        
-        } else {
-            if(lastBulletinPositionBottom >= navBarHeightAlt + sidePanelAlt) {
+                    } else if(yAlt >= lastBulletinPositionBottom) {
+                        rulesCard.removeClass('rules-fixed-alt');
+                        newBulletinButton.removeClass('button-fixed-alt');
+                    
+                        body.addClass('position-relative');
+                        newBulletinButton.addClass('button-fixed-bottom-alt');
+                        rulesCard.addClass('rules-fixed-bottom-alt');
 
-                if((yAlt - sidePanelAlt) > navBarHeightAlt && yAlt < lastBulletinPositionBottom) {
-                    body.removeClass('position-relative');
-                    rulesCard.removeClass('rules-fixed-bottom-alt');
-                    newBulletinButton.removeClass('button-fixed-bottom-alt');
-                
-                    newBulletinButton.addClass('button-fixed-alt');
-                    rulesCard.addClass('rules-fixed-alt');
-
-                } else if(yAlt >= lastBulletinPositionBottom) {
-                    rulesCard.removeClass('rules-fixed-alt');
-                    newBulletinButton.removeClass('button-fixed-alt');
-                
-                    body.addClass('position-relative');
-                    newBulletinButton.addClass('button-fixed-bottom-alt');
-                    rulesCard.addClass('rules-fixed-bottom-alt');
-
-                } else {
-                    rulesCard.removeClass('rules-fixed-alt');
-                    newBulletinButton.removeClass('button-fixed-alt');
+                    } else {
+                        rulesCard.removeClass('rules-fixed-alt');
+                        newBulletinButton.removeClass('button-fixed-alt');
+                    }
                 }
             }
         }
-    }
+    }  
 });
 
 /** 
@@ -377,6 +406,7 @@ $(document).scroll(function() {
 */
 $(window).resize(function() {
     var cardHeaderTitles = $('.card-header>a');
+    var footer = $('footer');
 
     if ($(window).innerWidth() <= 767) {
         cardHeaderTitles.addClass('title-ellipsis');
@@ -385,7 +415,6 @@ $(window).resize(function() {
     }
 
     if($('#404-container').length) {
-        var footer = $('footer');
         var navbarHeader = $('.navbar');
         var contentContainer = $('#404-container');
         var row = $('404-container>div');
@@ -395,7 +424,6 @@ $(window).resize(function() {
         $(contentContainer).height(contentHeight);
         $(row).height(contentHeight);
     } else if($('#500-container').length) {
-        var footer = $('footer');
         var navbarHeader = $('.navbar');
         var contentContainer = $('#500-container');
         var row = $('500-container>div');
@@ -409,11 +437,27 @@ $(window).resize(function() {
     if (window.location.href.includes('/accounts/')) {
         var accountFormContainer = $('.account-form-container');
         var infoContainer = $('.info-container');
+
+        console.log('On accounts page in resize listener');
+
+        if($(window).innerHeight() > 865) {
+            console.log('fixing footer in resize listener');
+            footer.addClass('position-fixed');
+            footer.addClass('bottom-0');
+        } else {
+            console.log('removing fixed footer in resize listener');
+            footer.removeClass('position-fixed');
+            footer.removeClass('bottom-0');
+        }
+            
+
         if ($(window).innerWidth() <= 1650 && $(window).innerWidth() > 1110) {
             accountFormContainer.removeClass('col-4');
             accountFormContainer.removeClass('offset-4');
             accountFormContainer.removeClass('col-8');
             accountFormContainer.removeClass('offset-2');
+            accountFormContainer.removeClass('col-10');
+            accountFormContainer.removeClass('offset-1');
             accountFormContainer.addClass('col-6');
             accountFormContainer.addClass('offset-3');
         } else if ($(window).innerWidth() <= 1110 && $(window).innerWidth() > 830) {
@@ -437,6 +481,10 @@ $(window).resize(function() {
         } else {
             accountFormContainer.removeClass('col-6');
             accountFormContainer.removeClass('offset-3');
+            accountFormContainer.removeClass('col-8');
+            accountFormContainer.removeClass('offset-2');
+            accountFormContainer.removeClass('col-10');
+            accountFormContainer.removeClass('offset-1');
             accountFormContainer.addClass('col-4');
             accountFormContainer.addClass('offset-4');
         }
@@ -449,6 +497,8 @@ $(window).resize(function() {
             infoContainer.addClass('col-8');
             infoContainer.addClass('offset-2');
         } else if ($(window).innerWidth() <= 450) {
+            infoContainer.removeClass('col-6');
+            infoContainer.removeClass('offset-3');
             infoContainer.removeClass('col-8');
             infoContainer.removeClass('offset-2');
             infoContainer.addClass('col-10');
