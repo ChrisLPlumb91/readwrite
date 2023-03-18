@@ -1,9 +1,9 @@
 /**
- * The below code executes when the page has loaded fully. It is necessary because of how the form elements of the account pages
- * are injected into the HTML, and cannot be changed in their templates. Thus, this code adds classes to those elements once
- * they have been rendered in the browser.
+ * The below code executes when the page has loaded fully. The first half of it is necessary because of how the form elements
+ * of the account pages are injected into the HTML, and cannot be changed in their templates. Thus, this code adds classes
+ * to those elements once they have been rendered in the browser.
  * 
- * The resize event listener above is able to make changes to these pages via ids because the containers for the form are exposed
+ * The resize event listener below is able to make changes to these pages via ids because the containers for the form are exposed
  * in the templates.
  * 
  * If the user is not on an accounts page, exceptions are avoided by using an if-else construct. The edit and add bulletin pages,
@@ -19,6 +19,9 @@
  * jump to the top of the document until the user scrolls. Using a ready listener with the exact same code prevents this. For an explanation
  * of this code, please see the comment above the scroll listener below.
  * 
+ * There are also a handful of lines of code within this ready listener that are responsible for assigning the active class to links
+ * in the site's navigation menu.
+ * 
  * Finally, the last few lines are used to temporarily display Django messages to the user.
  */
 $(document).ready(function() {  
@@ -28,10 +31,13 @@ $(document).ready(function() {
         accountFooter.addClass('bottom-0');
 
         if (window.location.href.includes('/signup/')) {
+            var signUpLink = $('#sign-up-link');
             var textField = $('input[type="text"]');
             var emailField = $('input[type="email"]');
             var passwordField1 = $('input[name="password1"]');
             var passwordField2 = $('input[name="password2"]'); 
+
+            signUpLink.addClass('active');
 
             textField.addClass('float-end');
             emailField.addClass('float-end');
@@ -39,10 +45,13 @@ $(document).ready(function() {
             passwordField2.addClass('float-end');
 
         } else if (window.location.href.includes('/login/')) {
+            var logInLink = $('#log-in-link');
             var textField = $('input[type="text"]');
             var passwordField = $('input[type="password"]');
             var rememberMe = $('label:contains("Remember Me:")');
             var parentP = $(rememberMe).parent();
+
+            logInLink.addClass('active');
 
             textField.addClass('float-end');
             passwordField.addClass('float-end');
@@ -51,13 +60,24 @@ $(document).ready(function() {
             parentP.addClass('text-center');
             parentP.addClass('pt-1');
 
-        } 
+        } else if (window.location.href.includes('/logout/')) {
+            var logOutLink = $('#log-out-link');
+
+            logOutLink.addClass('active');
+        }
     } else if (window.location.href.includes('/edit/') || window.location.href.includes('/add')) {
         var editPageFooter = $('footer');
         editPageFooter.addClass('position-fixed');
         editPageFooter.addClass('bottom-0');
 
     } else if (!window.location.href.includes('/accounts/') && !window.location.href.includes('/edit/') && !window.location.href.includes('/add')) {
+        
+        if(!window.location.href.includes('/post/')) {
+            var homePageLink = $('#home-page-link');
+
+            homePageLink.addClass('active');
+        }
+        
         var errorPageFooter = $('footer');
         var navbarHeader = $('.navbar');
 
@@ -84,7 +104,7 @@ $(document).ready(function() {
         } else {
             errorPageFooter.removeClass('position-fixed');
             errorPageFooter.removeClass('bottom-0');
-        }
+        }      
 
         var body = $('body');
         var loggedInAs = $('#logged-in-side');
@@ -117,7 +137,7 @@ $(document).ready(function() {
 
             if (childrenOfSidePanel[0].getAttribute('class').includes('text-center logged-in-as')) {
 
-                if(!lastBulletinPositionBottom < navBarHeightAlt + sidePanel) {
+                if(lastBulletinPositionBottom >= navBarHeightAlt + sidePanel) {
 
                     if((y - sidePanel) > navBarHeight && y < lastBulletinPositionBottom) {
                         body.removeClass('position-relative');
@@ -146,8 +166,7 @@ $(document).ready(function() {
                     }
                 }        
             } else {
-                if(!lastBulletinPositionBottom < navBarHeightAlt + sidePanelAlt) {
-
+                if(lastBulletinPositionBottom >= navBarHeightAlt + sidePanelAlt) {
                     if((yAlt - sidePanelAlt) > navBarHeightAlt && yAlt < lastBulletinPositionBottom) {
                         body.removeClass('position-relative');
                         rulesCard.removeClass('rules-fixed-bottom-alt');
@@ -163,7 +182,7 @@ $(document).ready(function() {
                         body.addClass('position-relative');
                         newBulletinButton.addClass('button-fixed-bottom-alt');
                         rulesCard.addClass('rules-fixed-bottom-alt');
-                        
+
                     } else {
                         rulesCard.removeClass('rules-fixed-alt');
                         newBulletinButton.removeClass('button-fixed-alt');
@@ -231,7 +250,7 @@ $(document).scroll(function() {
 
         if (childrenOfSidePanel[0].getAttribute('class').includes('text-center logged-in-as')) {
 
-            if(!lastBulletinPositionBottom < navBarHeightAlt + sidePanel) {
+            if(lastBulletinPositionBottom >= navBarHeightAlt + sidePanel) {
 
                 if((y - sidePanel) > navBarHeight && y < lastBulletinPositionBottom) {
                     body.removeClass('position-relative');
@@ -261,7 +280,7 @@ $(document).scroll(function() {
                 }
             }        
         } else {
-            if(!lastBulletinPositionBottom < navBarHeightAlt + sidePanelAlt) {
+            if(lastBulletinPositionBottom >= navBarHeightAlt + sidePanelAlt) {
 
                 if((yAlt - sidePanelAlt) > navBarHeightAlt && yAlt < lastBulletinPositionBottom) {
                     body.removeClass('position-relative');
