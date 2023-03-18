@@ -22,19 +22,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
+development = os.environ.get('DEVELOPMENT', False)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-hhtyd*%v!b-+@1tz2=sy%tq+&-q*hxjsbo)ge0h=$tyisg7-^5')
+SECRET_KEY = os.environ.get('SECRET_KEY', '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = development
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
-ALLOWED_HOSTS = ['clp1991-readwrite.herokuapp.com', 'localhost']
+if development:
+    ALLOWED_HOSTS = ['localhost']
+else:
+    ALLOWED_HOSTS = ['clp1991-readwrite.herokuapp.com']
 
 # Application definition
 
@@ -117,6 +121,7 @@ WSGI_APPLICATION = 'readwrite.wsgi.application'
 #     }
 # }
 
+# Not using sqlite3 database for my development environment because the ElephantSQL one contains all the test data I made.
 DATABASES = {
     'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
 }

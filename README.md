@@ -200,27 +200,36 @@ The process I followed to deploy this project is as follows:
     <li>Next, I created a new database instance in ElephantSQL, choosing the Tiny Turtle plan, and selecting an Irish data centre.</li>
     <li>I copied the database URL on the details page for the above database instance, and pasted it into env.py as an environmental variable using os.environ['DATABASE_URL']</li>
     <li>In settings.py in my Django files, I added the following imports: import os, import dj_database_url, and import env within if os.path.isfile('env.py'):</li>
-    <li>Back in env.py, I added os.environ['SECRET_KEY'] and set a value for it.</li>
-    <li>Back in settings.py, I added the line os.environ.get('SECRET_KEY'), and also provided a fall-back key as a second argument.</li>
+    <li>In the user settings of the GitPod workspaces page, I created a new variable called SECRET_KEY, setting it to a randomly generated Django secret key, and setting its scope to chrislplumb91/readwrite</li>
+    <li>Back in settings.py, I added the line os.environ.get('SECRET_KEY'), and provided a blank string as a second argument. My app would now pull the secret key from the GitPod environment, rather than from my env.py file.</li>
+    <li>At this point, I stopped and started my workspace.</li>
     <li>Still in settings.py, I added this line: DATABASES = {'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))}, and commented out the default sqlite3 database used by Django. At this point, the app was now connected to the remote ElephantSQL database.</li>
     <li>I used the CLI command python3 manage.py migrate to migrate my database models and data to the remote ElephantSQL database.</li>
-    <li>In the settings for my Heroku app, I expanded the Config Vars section. Here, I added the SECRET_KEY and DATABASE_URL environmental variables created above as config vars for the Heroku app, and with the exact same values. The latter connected my Heroku app to the ElephantSQL database.</li>
-    <li>For reasons of compatibility with Python, I added config var called PORT, and set it to 8000.</li>
+    <li>In the settings for my Heroku app, I expanded the Config Vars section. Here, I added the DATABASE_URL environmental variable created above as a config var for the Heroku app, and with the exact same value. This connected my Heroku app to the ElephantSQL database.</li>
+    <li>Next, I added a SECRET_KEY config var to my Heroku app, setting it to a different randomly generated Django secret key.</li>
+    <li>For reasons of compatibility with Python, I next added a Heroku config var called PORT, and set it to 8000.</li>
     <li>Next, I logged in to Cloudinary, and on the dashboard, I copied the API environment variable.</li>
     <li>Back in env.py, I added os.environ['CLOUDINARY_URL'], and set it to the copied API environment variable.</li>
+    <li>Over in my Heroku app, I added the same CLOUDINARY_URL environmental variable as a config var.</li>
     <li>In my Django project's settings.py file again, I added 'cloudinary', and 'cloudinary_storage' to the INSTALLED_APPS list</li>
     <li>Further down in settings.py, I added the following lines: STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage', STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')], STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles'), MEDIA_URL = '/media/', and DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'. Together, these lines instructed Django to use Cloudinary to store my project's static files.</li>
-    <li>Next, and still in settings.py, I added my Heroku app URL, and localhost, to ALLOWED_HOSTS.</li>
-    <li>Next, I created a Procfile for Heroku in GitPod, and within it, I added the line 'web: gunicorn codestar.wsgi'. This enables gunicorn to handle HTTP requests in my Heroku app the same way that runserver does in GitPod.</li>
-    <li>In settings.py, I set DEBUG to False.</li>
-    <li>Also in settings.py, I added the line X_FRAME_OPTIONS = 'SAMEORIGIN' in order to permit the loading of Django Summernote.</li>
-    <li>In the settings for my Heroku app, I removed the config var DISABLE_COLLECTSTATIC.</li>
+    <li>Next, I created a Procfile for Heroku in the root directory of my project in GitPod, and within it, I added the line 'web: gunicorn codestar.wsgi'. This enabled gunicorn to handle HTTP requests in my Heroku app the same way that runserver does in GitPod.</li>
+    <li>In settings.py, I added the line X_FRAME_OPTIONS = 'SAMEORIGIN' in order to permit the loading of Django Summernote.</li>
+    <li>From the CLI in GitPod, using the command pip3 freeze --local > requirements.txt, I created a requirements.txt file.</li>
+    <li>In my projects requirements.txt file, I added the following to the end of backports.zoneinfo==0.2.1: ;python_version<"3.9". I found this was necessary for my project to deploy to Heroku successfully.</li>
+    <li>Next, from GitPod, I ran the command python3 manage.py collectstatic in order to send copies of my static files to Cloudinary.</li>
+    <li>In the user settings of the GitPod workspaces page, I created another environmental variable called DEVELOPMENT and set it to True. I did not create this same variable as a config var in my Heroku app.</li>
+    <li>In settings.py, I added this line: development = os.environ.get('DEVELOPMENT', False), which assigns the value of DEVELOPMENT (True) to development if DEVELOPMENT can be found in the environment. If it cannot be found (as will be the case when the app searches Heroku's environment), False is assigned to development instead.</li>
+    <li>Still in settings.py, I set DEBUG to development, meaning that in GitPod, DEBUG will be set to True, but in Heroku, it will be set to False.</li>
+    <li>I also used <em>development</em> to determine the value of ALLOWED_HOSTS in settings.py. If development equals True, then localhost is the allowed host, but if it is equal to false, then the allowed host is clp1991-readwrite.herokuapp.com.</li>
+    <li>After this, I pushed my project to GitHub.</li>
+    <li>Next, I added DISABLE_COLLECTSTATIC as a config var to Heroku, and set it to 1.</li>
     <li>Under the Deploy tab for my Heroku app, I clicked Connect to GitHub, entered in my repository name, and clicked connect.</li>
     <li>Finally, while still on the Deploy tab of my Heroku app, I scrolled down to the bottom of the page and clicked Deploy Branch, making sure to deploy it to the main branch.</li>
 </ol>
 
 Live links to this project:
-- Heroku app:
+- Heroku app: https://clp1991-readwrite.herokuapp.com/
 - Repository: https://github.com/ChrisLPlumb91/readwrite
 - Project board: https://github.com/users/ChrisLPlumb91/projects/5
 <hr>
