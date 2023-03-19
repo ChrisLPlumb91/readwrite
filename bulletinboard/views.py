@@ -79,34 +79,38 @@ class BulletinDetail(View):
         to the Comment table, it now displays among the other
         comments.
         """
-        queryset = Bulletin.objects.filter(status=1)
-        specific_bulletin = get_object_or_404(queryset, slug=slug)
+        if request.user.is_authenticated:
+            queryset = Bulletin.objects.filter(status=1)
+            specific_bulletin = get_object_or_404(queryset, slug=slug)
 
-        comments = (Comment.objects.filter(bulletin=specific_bulletin)
-                    .annotate(likes_temp=Max('likes'))
-                    .order_by(F('likes_temp')
-                    .desc(nulls_last=True)))
+            comments = (Comment.objects.filter(bulletin=specific_bulletin)
+                        .annotate(likes_temp=Max('likes'))
+                        .order_by(F('likes_temp')
+                        .desc(nulls_last=True)))
 
-        comment_form = CommentForm(data=request.POST)
+            comment_form = CommentForm(data=request.POST)
+            
+            if comment_form.is_valid():
+                comment = comment_form.save(commit=False)
+                comment.bulletin = specific_bulletin
+                comment.author = request.user
+                comment.save()
+                messages.success(request, 'You left a comment on ' +
+                                 'this bulletin.')
+            else:
+                comment_form = CommentForm()
 
-        if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
-            comment.bulletin = specific_bulletin
-            comment.author = request.user
-            comment.save()
-            messages.success(request, 'You left a comment on this bulletin.')
+            return render(
+                request,
+                'bulletin.html',
+                {
+                    'bulletin': specific_bulletin,
+                    'comments': comments,
+                    'comment_form': CommentForm()
+                },
+            )
         else:
-            comment_form = CommentForm()
-
-        return render(
-            request,
-            'bulletin.html',
-            {
-                'bulletin': specific_bulletin,
-                'comments': comments,
-                'comment_form': CommentForm()
-            },
-        )
+            raise Http404
 
 
 class AddBulletin(View):
@@ -158,28 +162,31 @@ class AddBulletin(View):
         and they are also used to inform the user that an admin
         must review their submission, if it is successful.
         """
-        bulletin_form = BulletinForm(data=request.POST)
+        if request.user.is_authenticated:
+            bulletin_form = BulletinForm(data=request.POST)
 
-        if bulletin_form.is_valid():
-            post = bulletin_form.save(commit=False)
-            post.slug = slugify(post.title)
-            post.author = request.user
-            post.save()
+            if bulletin_form.is_valid():
+                post = bulletin_form.save(commit=False)
+                post.slug = slugify(post.title)
+                post.author = request.user
+                post.save()
 
-            messages.info(request, 'Your post will appear below ' +
-                          'if and when it is approved by a moderator')
+                messages.info(request, 'Your post will appear below ' +
+                              'if and when it is approved by a moderator')
 
-            return redirect('home')
+                return redirect('home')
+            else:
+                messages.error(request, 'This title has already been used. ' +
+                               'Please choose another.')
+                return render(
+                    request,
+                    'add_bulletin.html',
+                    {
+                        'bulletin_form': bulletin_form
+                    },
+                )
         else:
-            messages.error(request, 'This title has already been used. ' +
-                           'Please choose another.')
-            return render(
-                request,
-                'add_bulletin.html',
-                {
-                    'bulletin_form': bulletin_form
-                },
-            )
+            raise Http404
 
 
 class EditBulletin(View):
@@ -251,7 +258,7 @@ class EditBulletin(View):
         been taken (see the add bulletin view above).
         """
         queryset = Bulletin.objects.filter(status=1)
-        bulletin = get_object_or_404(queryset, slug=slug)
+        bulletin = get_object_or_404(queryset, slug=slug, author=request.user)
 
         bulletin_form = BulletinForm(data=request.POST, instance=bulletin)
 
