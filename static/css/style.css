@@ -189,6 +189,11 @@ ol > li {
     color: #000;
 }
 
+.comment-number:hover {
+    cursor: default;
+    color: #000;
+}
+
 .comment-icon {
     font-size: 1.5rem;
     color: #69eba3;
@@ -422,6 +427,10 @@ footer .col-12 {
     z-index: 1;
 }
 
+textarea {
+    resize: none;
+}
+
 
 /* Media queries */
 
@@ -584,7 +593,7 @@ footer .col-12 {
     }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 767px) {
     .logged-in-as-top-container {
         width: 100%;
 

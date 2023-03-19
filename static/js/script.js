@@ -27,18 +27,7 @@
  */
 $(document).ready(function() {  
     if (window.location.href.includes('/accounts/')) {
-        console.log('On account page (ready listener)');
         var accountFooter = $('footer');
-        
-        if ($(window).innerHeight() >= 865) {
-            console.log('fixing footer from ready listener');
-            accountFooter.addClass('position-fixed');
-            accountFooter.addClass('bottom-0');
-        } else {
-            console.log('Removing fixed footer from ready listener');
-            accountFooter.removeClass('position-fixed');
-            accountFooter.removeClass('bottom-0');
-        }
             
         var accountFormContainer = $('.account-form-container');
         var infoContainer = $('.info-container');
@@ -118,6 +107,14 @@ $(document).ready(function() {
             passwordField1.addClass('float-end');
             passwordField2.addClass('float-end');
 
+            if ($(window).innerHeight() >= 865 || $(window).innerHeight() == 800) {
+                accountFooter.addClass('position-fixed');
+                accountFooter.addClass('bottom-0');
+            } else {
+                accountFooter.removeClass('position-fixed');
+                accountFooter.removeClass('bottom-0');
+            }
+
         } else if (window.location.href.includes('/login/')) {
             var logInLink = $('#log-in-link');
             var textField = $('input[type="text"]');
@@ -134,21 +131,44 @@ $(document).ready(function() {
             parentP.addClass('text-center');
             parentP.addClass('pt-1');
 
+            if ($(window).innerHeight() >= 840 || $(window).innerHeight() == 740 || $(window).innerHeight() == 800) {
+                accountFooter.addClass('position-fixed');
+                accountFooter.addClass('bottom-0');
+            } else {
+                accountFooter.removeClass('position-fixed');
+                accountFooter.removeClass('bottom-0');
+            }
+
         } else if (window.location.href.includes('/logout/')) {
             var logOutLink = $('#log-out-link');
 
             logOutLink.addClass('active');
+
+            if ($(window).innerHeight() >= 600) {
+                accountFooter.addClass('position-fixed');
+                accountFooter.addClass('bottom-0');
+            } else {
+                accountFooter.removeClass('position-fixed');
+                accountFooter.removeClass('bottom-0');
+            }
         }
     } else if (window.location.href.includes('/edit/') || window.location.href.includes('/add')) {
         var editPageFooter = $('footer');
 
-        if($(window).innerHeight() > 865)
+        if($(window).innerHeight() >= 844) {
             editPageFooter.addClass('position-fixed');
             editPageFooter.addClass('bottom-0');
+        } else {
+            editPageFooter.removeClass('position-fixed');
+            editPageFooter.removeClass('bottom-0');
+        }
+            
 
     } else if (!window.location.href.includes('/accounts/') && !window.location.href.includes('/edit/') && !window.location.href.includes('/add')) {
 
+        var body = $('body');
         var cardHeaderTitles = $('.card-header>a');
+        var footer = $('footer');
 
         if ($(window).innerWidth() <= 767) {
             cardHeaderTitles.addClass('title-ellipsis');
@@ -156,16 +176,62 @@ $(document).ready(function() {
             cardHeaderTitles.removeClass('title-ellipsis');
         }
         
-        if(!window.location.href.includes('/post/')) {
+        if(window.location.href.includes('/post/')) {
+            if ($(body).innerHeight() <= $(window).innerHeight() && $(window).innerHeight() >= 844 || 
+                $(body).innerHeight() <= $(window).innerHeight() && $(window).innerHeight() == 740 ||
+                $(body).innerHeight() <= $(window).innerHeight() && $(window).innerHeight() == 720 ||
+                $(body).innerHeight() <= $(window).innerHeight() && $(window).innerHeight() == 667) {
+
+                footer.addClass('position-fixed');
+                footer.addClass('bottom-0');
+            } else {
+                footer.removeClass('position-fixed');
+                footer.removeClass('bottom-0');
+            }
+        } else {
             var homePageLink = $('#home-page-link');
 
             homePageLink.addClass('active');
+
+            var sidePanelChildren = $('#side-panel').children();
+            var sidePanelFirstChild = sidePanelChildren[0];
+
+            var bodyChildren = $('body').children();
+            var bodyThirdChild = bodyChildren[2];
+
+            if ($(sidePanelFirstChild).attr('id') == 'logged-in-side' || $(bodyThirdChild).attr('id') == 'logged-in-top-container') {
+                if ($(body).innerHeight() <= $(window).innerHeight() && $(window).innerHeight() >= 844 || 
+                    $(body).innerHeight() <= $(window).innerHeight() && $(window).innerHeight() == 740 ||
+                    $(body).innerHeight() <= $(window).innerHeight() && $(window).innerHeight() == 720) {
+
+                    footer.addClass('position-fixed');
+                    footer.addClass('bottom-0');
+
+                } else {
+                    footer.removeClass('position-fixed');
+                    footer.removeClass('bottom-0');
+                }
+            } else {
+                if ($(body).innerHeight() <= $(window).innerHeight() && $(window).innerHeight() >= 844 || 
+                    $(body).innerHeight() <= $(window).innerHeight() && $(window).innerHeight() == 740 ||
+                    $(body).innerHeight() <= $(window).innerHeight() && $(window).innerHeight() == 720 ||
+                    $(body).innerHeight() <= $(window).innerHeight() && $(window).innerHeight() == 667) {
+
+                    footer.addClass('position-fixed');
+                    footer.addClass('bottom-0');
+                    
+                } else {
+                    footer.removeClass('position-fixed');
+                    footer.removeClass('bottom-0');
+                }
+            }
+
+                    
         }
-        
-        var errorPageFooter = $('footer');
+
         var navbarHeader = $('.navbar');
 
-        var contentHeight = $(document).innerHeight() - $(errorPageFooter).outerHeight(true) - $(navbarHeader).outerHeight(true);  
+        var contentHeight = $(document).innerHeight() - $(footer).outerHeight(true) - $(navbarHeader).outerHeight(true);  
 
         if ($('#404-container').length) {
             var PageNotFoundContainer = $('#404-container');
@@ -174,8 +240,8 @@ $(document).ready(function() {
             $(PageNotFoundContainer).height(contentHeight);
             $(row).height(contentHeight);
 
-            errorPageFooter.addClass('position-fixed');
-            errorPageFooter.addClass('bottom-0');
+            footer.addClass('position-fixed');
+            footer.addClass('bottom-0');
         } else if ($('#500-container').length) {
             var InternalServerErrorContainer = $('#500-container');
             var row = $('#500-container>div');
@@ -183,14 +249,10 @@ $(document).ready(function() {
             $(InternalServerErrorContainer).height(contentHeight);
             $(row).height(contentHeight);
 
-            errorPagefooter.addClass('position-fixed');
+            footer.addClass('position-fixed');
             footer.addClass('bottom-0');
-        } else {
-            errorPageFooter.removeClass('position-fixed');
-            errorPageFooter.removeClass('bottom-0');
-        }      
+        }    
 
-        var body = $('body');
         var loggedInAs = $('#logged-in-side');
         var newBulletinButton = $('.new-bulletin-button-container');
         var rulesCard = $('.rules');
@@ -275,6 +337,13 @@ $(document).ready(function() {
                 }
             }
         }   
+    }
+
+    if (window.location.href.includes('/edit_comment/')) {
+        console.log('on comment edit page.')
+        var commentForm = document.getElementById('div_id_comment');
+
+        commentForm.scrollIntoView(true);
     }
 
     setTimeout(function () {
@@ -438,19 +507,6 @@ $(window).resize(function() {
         var accountFormContainer = $('.account-form-container');
         var infoContainer = $('.info-container');
 
-        console.log('On accounts page in resize listener');
-
-        if($(window).innerHeight() > 865) {
-            console.log('fixing footer in resize listener');
-            footer.addClass('position-fixed');
-            footer.addClass('bottom-0');
-        } else {
-            console.log('removing fixed footer in resize listener');
-            footer.removeClass('position-fixed');
-            footer.removeClass('bottom-0');
-        }
-            
-
         if ($(window).innerWidth() <= 1650 && $(window).innerWidth() > 1110) {
             accountFormContainer.removeClass('col-4');
             accountFormContainer.removeClass('offset-4');
@@ -511,8 +567,90 @@ $(window).resize(function() {
             infoContainer.addClass('col-6');
             infoContainer.addClass('offset-3');
         }
-    }
 
+        if (window.location.href.includes('/logout/')) {
+            if ($(window).innerHeight() >= 600) {
+                footer.addClass('position-fixed');
+                footer.addClass('bottom-0');
+            } else {
+                foooter.removeClass('position-fixed');
+                footer.removeClass('bottom-0');
+            }
+        } else if (window.location.href.includes('/signup/')) {
+            if ($(window).innerHeight() >= 865 || $(window).innerHeight() == 800) {
+                footer.addClass('position-fixed');
+                footer.addClass('bottom-0');
+            } else {
+                footer.removeClass('position-fixed');
+                footer.removeClass('bottom-0');
+            }
+        } else if (window.location.href.includes('/login/')) {
+            if ($(window).innerHeight() >= 840 || $(window).innerHeight() == 740 || $(window).innerHeight() == 800) {
+                footer.addClass('position-fixed');
+                footer.addClass('bottom-0');
+            } else {
+                footer.removeClass('position-fixed');
+                footer.removeClass('bottom-0');
+            }
+        }
+    } else if (window.location.href.includes('/add') || window.location.href.includes('/edit/')) {
+        if($(window).innerHeight() >= 844) {
+            footer.addClass('position-fixed');
+            footer.addClass('bottom-0');
+        } else {
+            footer.removeClass('position-fixed');
+            footer.removeClass('bottom-0');
+        }
+    } else if (!window.location.href.includes('/accounts/') && !window.location.href.includes('/edit/') && !window.location.href.includes('/add')) {
+        var body = $('body');
+
+        if (window.location.href.includes('/post/')) {
+            if ($(body).innerHeight() <= $(window).innerHeight() && $(window).innerHeight() >= 844 || 
+                $(body).innerHeight() <= $(window).innerHeight() && $(window).innerHeight() == 740 ||
+                $(body).innerHeight() <= $(window).innerHeight() && $(window).innerHeight() == 720 ||
+                $(body).innerHeight() <= $(window).innerHeight() && $(window).innerHeight() == 667) {
+                    
+                footer.addClass('position-fixed');
+                footer.addClass('bottom-0');
+            } else {
+                footer.removeClass('position-fixed');
+                footer.removeClass('bottom-0');
+            }
+        } else {
+            var sidePanelChildren = $('#side-panel').children();
+            var sidePanelFirstChild = sidePanelChildren[0];
+
+            var bodyChildren = $('body').children();
+            var bodyThirdChild = bodyChildren[2];
+
+            if ($(sidePanelFirstChild).attr('id') == 'logged-in-side' || $(bodyThirdChild).attr('id') == 'logged-in-top-container') {
+                if ($(body).innerHeight() <= $(window).innerHeight() && $(window).innerHeight() >= 844 || 
+                    $(body).innerHeight() <= $(window).innerHeight() && $(window).innerHeight() == 740 ||
+                    $(body).innerHeight() <= $(window).innerHeight() && $(window).innerHeight() == 720) {
+
+                    footer.addClass('position-fixed');
+                    footer.addClass('bottom-0');
+
+                } else {
+                    footer.removeClass('position-fixed');
+                    footer.removeClass('bottom-0');
+                }
+            } else {
+                if ($(body).innerHeight() <= $(window).innerHeight() && $(window).innerHeight() >= 844 || 
+                    $(body).innerHeight() <= $(window).innerHeight() && $(window).innerHeight() == 740 ||
+                    $(body).innerHeight() <= $(window).innerHeight() && $(window).innerHeight() == 720 ||
+                    $(body).innerHeight() <= $(window).innerHeight() && $(window).innerHeight() == 667) {
+
+                    footer.addClass('position-fixed');
+                    footer.addClass('bottom-0');
+                    
+                } else {
+                    footer.removeClass('position-fixed');
+                    footer.removeClass('bottom-0');
+                }
+            }
+        }
+    }
 });
 
 /**

@@ -241,10 +241,10 @@ class EditBulletin(View):
         update the bulletin.
 
         Because the edit page can be accessed from either the main
-        page or an individual bulletins page, there is an if statement
-        that checks the urls passed via query string to see which
-        page the user has come from. The user is redirected
-        accordingly.
+        page or an individual bulletins page, there are several if
+        statements that check the urls passed via query string
+        to see which page the user has come from. The user is
+        redirected accordingly.
 
         Finally, the else at the bottom alerts the user if they
         have changed the bulletins title to one that has already
@@ -271,9 +271,22 @@ class EditBulletin(View):
             post.edited = True
             post.save()
 
+            query = request.GET.get('query')
+
+            if 'page=' in query:
+                split_query = query.split('page=')
+
             if '/post/' not in request.GET.get('query'):
-                messages.success(request, 'You edited your bulletin.')
-                return HttpResponseRedirect(reverse('home'))
+                if 'page=' in query:
+                    messages.success(request, 'You edited your bulletin.')
+                    return HttpResponseRedirect(f'/?page={split_query[1]}')
+                elif '/edit_comment/ in query':
+                    messages.success(request, 'You edited your bulletin.')
+                    return HttpResponseRedirect(reverse('bulletin',
+                                                args=[post.slug]))
+                else:
+                    messages.success(request, 'You edited your bulletin.')
+                    return HttpResponseRedirect(reverse('home'))
             else:
                 messages.success(request, 'You edited your bulletin.')
                 return HttpResponseRedirect(reverse('bulletin',
@@ -348,7 +361,7 @@ class BulletinLike(View):
         user is authenticated, and the like code only executes
         if they are. Otherwise, they are shown a 404 page.
 
-        The like code itself simply adds the current user to the
+        The like code itself first adds the current user to the
         likes/users bridge table for the given bulletin if they
         aren't already on it, and removes them if they are.
         At the template level, this determines the appearance
@@ -369,8 +382,21 @@ class BulletinLike(View):
             else:
                 bulletin.likes.add(request.user)
 
+            query = request.GET.get('query')
+
+            print(query)
+
+            if 'page=' in query:
+                split_query = query.split('page=')
+
             if '/post/' not in request.GET.get('query'):
-                return HttpResponseRedirect(reverse('home'))
+                if 'page=' in query:
+                    return HttpResponseRedirect(f'/?page={split_query[1]}')
+                elif '/edit_comment/' in query:
+                    return HttpResponseRedirect(reverse('bulletin',
+                                                        args=[slug]))
+                else:
+                    return HttpResponseRedirect(reverse('home'))
             else:
                 return HttpResponseRedirect(reverse('bulletin', args=[slug]))
         else:
