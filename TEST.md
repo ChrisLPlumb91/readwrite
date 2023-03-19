@@ -6,6 +6,8 @@ This document is divided into four sections:
     <li>Functionality Testing</li>
     <li>Site Navigation Testing</li>
     <li>Form Testing</li>
+    <li>Validator Results</li>
+    <li>Coverage Report</li>
 </ol>
 <hr>
 
@@ -286,9 +288,9 @@ This particular testing involved trying every link and URL on the site to ensure
     <li>A bulletin's edit button (main page, page 1) directs the user to that bulletin's edit page when clicked. (1 test)</li>
     <li>A bulletin's edit button (main page, page 2) directs the user to that bulletin's edit page when clicked. (1 test)</li>
     <li>A bulletin's edit button (bulletin page) directs the user to that bulletin's edit page when clicked. (1 test)</li>
-    <li>A bulletin's delete button (main page, page 1), displays a modal dialog box, and clicking "Yes, delete" deletes the bulletin and redirects the user to the main page (page 1) (2 tests)</li>
-    <li>A bulletin's delete button (main page, page 2), displays a modal dialog box, and clicking "Yes, delete" deletes the bulletin and redirects the user to the main page (page 1) (2 tests)</li>
-    <li>A bulletin's delete button (bulletin page), displays a modal dialog box, and clicking "Yes, delete" deletes the bulletin and redirects the user to the main page (page 1) (2 tests)</li>
+    <li>A bulletin's delete button (main page, page 1), displays a modal dialog box, and clicking "Yes, delete" deletes the bulletin and redirects the user to the main page (page 1) (also displays Django message telling user that their bulletin has been deleted) (2 tests)</li>
+    <li>A bulletin's delete button (main page, page 2), displays a modal dialog box, and clicking "Yes, delete" deletes the bulletin and redirects the user to the main page (page 1) (also displays Django message telling user that their bulletin has been deleted) (2 tests)</li>
+    <li>A bulletin's delete button (bulletin page), displays a modal dialog box, and clicking "Yes, delete" deletes the bulletin and redirects the user to the main page (page 1) (also displays Django message telling user that their bulletin has been deleted) (2 tests)</li>
     <li>The external links of the ten bulletins on the first page of the main page all opened in their own tabs in the browser. (10 tests)</li>
     <li>The external links of the ten bulletins on the first page of the main page all worked even when truncated with an ellipsis. (10 tests)</li>
     <li>The external links in the bulletin pages of the ten bulletins on the first page of the main page all opened in their own tabs in the browser. (10 tests)</li>
@@ -299,7 +301,10 @@ This particular testing involved trying every link and URL on the site to ensure
     <li>The external links in the bulletin pages of the ten bulletins on the second page of the main page all worked even when truncated with an ellipsis. (10 tests)</li>
 <strong>COMMENTS</strong>
     <li>A comment's edit button directs the user to that bulletin's edit page when clicked. (1 test)</li>
-    <li>A comment's delete button displays a modal dialog box, and clicking "Yes, delete" deletes the bulletin and redirects the user back to the bulletin page where the comment previously existed.</li>
+    <li>A comment's delete button displays a modal dialog box, and clicking "Yes, delete" deletes the bulletin and redirects the user back to the bulletin page where the comment previously existed. (Also displays a Django message that tells the user that they have deleted their comment) (1 test)</li>
+<strong>OTHER</strong>
+    <li>The logout button on the logout page logs out the user, and a Django message is displayed telling them as much. (1 test)</li>
+    <li>The "Next" pagination button appears on the first page of the main page if there are more than 10 bulletins on the site, and if there are more than 20, both the "Next" and "Prev" buttons will be visible on the second page of the main page. If there are between 21 and 30 bulletins, the third page of the main page will have a "Prev" button only. Both of these buttons function as expected. (2 tests)</li>
 </ul>
 <br>
 
@@ -318,3 +323,132 @@ This particular testing involved trying every link and URL on the site to ensure
     <li>If not logged in, entering the URL that triggers the view that deletes a comment displays a 404 page. (1 test)</li>
     <li>If logged in, but not the poster of a specific comment, entering the URL that triggers the view that deletes that comment displays a 404 page. (1 test)</li>
 </ul>
+<hr>
+<br>
+
+<hr>
+
+## Form Testing
+<hr>
+There are six forms on the site: The add bulletin form, the edit bulletin form, the add comment form, the edit comment form, the sign up form, and the login form. I tested each one to ensure that they all submit as they should, and that it isn't possible to submit them if they are incomplete, or supplied with the wrong kind of data.
+<br>
+<br>
+
+### The add bulletin form (navigated to from: main page (page 1), main page (page 2), bulletin page, edit comment page)
+<ul>
+    <li>All fields blank - does not submit - small message tells user to fill out the title field. (4 tests)</li>
+    <li>Title blank; other fields completed - does not submit - small message tells user to fill out the title field. (4 tests)</li>
+    <li>Content blank; other fields completed - does not submit - small message tells user to fill out the content field. (4 tests)</li>
+    <li>Link blank; other fields completed - does not submit - small message tells user to fill out the link field. (4 tests)</li>
+    <li>Title and content blank; link completed - does not submit - small message tells user to fill out the title field. (4 tests)</li>
+    <li>Title and link blank; content completed - does not submit - small message tells user to fill out the title field. (4 tests)</li>
+    <li>Content and link blank; title completed - does not submit - small message tells user to fill out the content field. (4 tests)</li>
+    <li>Link not a URL; title and content completed - does not submit - small message tells user to provide a URL for link. (4 tests)</li>
+    <li>Link not a URL; title completed; content blank - does not submit - small message tells user to fill out the content field. (4 tests)</li>
+    <li>Link not a URL; title blank; content completed - does not submit - small message tells user to fill out the title field. (4 tests)</li>
+    <li>User attempts to type more than 40 characters into title field - text entry will not allow any more than 40. (4 tests)</li>
+    <li>Title provided already being used by another bulletin - does not submit - Django message appears informing user as much. (4 tests)</li>
+    <li>All fields completed and link is a URL - submits successfully - Django message appears informing user that admin must approve bulletin. (4 tests)</li>
+</ul>
+<br>
+
+### The edit bulletin form (navigated to from: main page (page 1), main page (page 2), bulletin page, edit comment page)
+<ul>
+    <li>All fields blank - does not submit - small message tells user to fill out the title field. (4 tests)</li>
+    <li>Title blank; other fields completed - does not submit - small message tells user to fill out the title field. (4 tests)</li>
+    <li>Content blank; other fields completed - does not submit - small message tells user to fill out the content field. (4 tests)</li>
+    <li>Link blank; other fields completed - does not submit - small message tells user to fill out the link field. (4 tests)</li>
+    <li>Title and content blank; link completed - does not submit - small message tells user to fill out the title field. (4 tests)</li>
+    <li>Title and link blank; content completed - does not submit - small message tells user to fill out the title field. (4 tests)</li>
+    <li>Content and link blank; title completed - does not submit - small message tells user to fill out the content field. (4 tests)</li>
+    <li>Link not a URL; title and content completed - does not submit - small message tells user to provide a URL for link. (4 tests)</li>
+    <li>Link not a URL; title completed; content blank - does not submit - small message tells user to fill out the content field. (4 tests)</li>
+    <li>Link not a URL; title blank; content completed - does not submit - small message tells user to fill out the title field. (4 tests)</li>
+    <li>No changes made - does not submit - Django message appears informing user that no changes were made. (4 tests)</li>
+    <li>Title changed to one that is already being used by another bulletin - does not submit - Django message appears informing user as much. (4 tests)</li>
+    <li>User attempts to type more than 40 characters into title field - text entry will not allow any more than 40. (4 tests)</li>
+    <li>All fields completed, link is a URL, and at least one of the fields' values has been modified - submits successfully - Django message appears informing user that their bulletin has been edited. (4 tests)</li>
+</ul>
+<br>
+
+### The add comment form
+<ul>
+    <li>Left blank - does not submit - small message tells user to fill out the field. (1 test)</li>
+    <li>Comment field completed - submits successfully - Django message appears informing user that they have posted a comment. (1 test)</li>
+</ul>
+<br>
+
+### The edit comment form
+<ul>
+    <li>Left blank - does not submit. (1 test)</li>
+    <li>No changes made - does not submit - Django message appears informing user that no changes were made. (1 test)</li>
+    <li>Comment field text changed - submits successfully - Django message appears informing user that they have edited their comment. (1 test)</li>
+</ul>
+<br>
+
+### The sign up form
+<ul>
+    <li>Left blank - does not submit - small message tells user to fill out the username field. (1 test)</li>
+    <li>Username field completed; rest left blank - does not submit - small message tells user to fill out password field. (1 test)</li>
+    <li>Password field completed; rest left blank - does not submit - small message tells user to fill out username field. (1 test)</li>
+    <li>Re-enter password field completed; rest left blank - does not submit - small message tells user to fill out username field. (1 test)</li>
+    <li>Username and password fields completed; rest left blank - does not submit - small message tells user to fill out re-enter password field. (1 test)</li>
+    <li>Username and re-enter password fields completed; rest left blank - does not submit - small message tells user to fill out password field. (1 test)</li>
+    <li>Password and re-enter password fields completed; rest left blank - does not submit - small message tells user to fill out username field. (1 test)</li>
+    <li>Mismatched passwords entered - does not submit - text appears between fields that informs user of mistake and of password requirements. (1 test)</li>
+    <li>Passwords that do not meet length requirements submitted - does not submit - text appears between fields to inform user of mistake and of password requirements. (1 test)</li>
+    <li>Existing username submitted but with different password - does not submit - text appears above fields to inform user that a user with this username already exists. (1 test)</li>
+    <li>Existing username submitted and with same password - does not submit - text appears above fields to inform user that a user with this username already exists. (1 test)</li>
+    <li>Email address provided does not follow email address format - does not submit - small message appears telling user to add an @. (1 test)</li>
+    <li>Form submitted without email address - submits successfully as email address optional - Django message appears telling user that they have been signed in. (1 test)</li>
+    <li>All four fields completed with valid data - submits successfully - Django message appears telling user that they have been signed in. (1 test)</li>
+</ul>
+<br>
+
+### The login form
+<ul>
+    <li>Left blank - does not submit - small message tells user to fill out the username field. (1 test)</li>
+    <li>Username field completed; rest left blank - does not submit - small message tells user to fill out password field. (1 test)</li>
+    <li>Password field completed; rest left blank - does not submit - small message tells user to fill out username field. (1 test)</li>
+    <li>Correct username but wrong password entered - does not submit - text appears between fields that informs user that username or password is wrong. (1 test)</li>
+    <li>Correct password but wrong username entered - does not submit - text appears between fields that informs user that username or password is wrong. (1 test)</li>
+    <li>Both fields completed with valid data - submits successfully - Django message appears telling user that they have been signed in. (1 test)</li>
+</ul>
+<hr>
+<br>
+
+<hr>
+
+## Validator Results
+<hr>
+
+### W3C (HTML validation)
+<br>
+Index page (not logged in): <img src="static/images/index-not-logged-in-validated.png" alt="An image of base.html / index.html (not logged in) passing validation.">
+Index page (logged in): <img src="static/images/index-logged-in-validated.png" alt="An image of base.html / index.html (logged in) passing validation.">
+Bulletin page (not logged in): <img src="static/images/bulletin-page-not-logged-in-validated.png" alt="An image of base.html / bulletin.html (not logged in) passing validation.">
+Bulletin page (logged in): <img src="static/images/bulletin-page-logged-in-validated.png" alt="An image of base.html / bulletin.html (logged in) passing validation.">
+Add Bulletin page: <img src="static/images/add-bulletin-page-validated.png" alt="An image of base_alt.html / add_bulletin.html passing validation.">
+Edit Bulletin page: <img src="static/images/edit-bulletin-page-validated.png" alt="An image of base_alt.html / edit_bulletin.html passing validation.">
+Edit Comment page: <img src="static/images/edit-comment-page-validated.png" alt="An image of base.html / add_bulletin.html during comment editing passing validation.">
+Sign Up page: <img src="static/images/sign-up-page-validated.png" alt="An image of base_alt.html / signup.html passing validation.">
+Sign In page: <img src="static/images/sign-in-page-validated.png" alt="An image of base_alt.html / login.html passing validation.">
+Sign Out page: <img src="static/images/sign-out-page-validated.png" alt="An image of base_alt.html / logout.html passing validation.">
+<br>
+<hr>
+<br>
+
+### Jigsaw (CSS validation)
+<br>
+style.css validation: <img src="static/images/css-validated.png" alt="An image of style.css passing validation.">
+Warnings about use of vendor extensions: <img src="static/images/css-validated-warnings.png" alt="An image of warnings from the same results as the image above.">
+<br>
+<hr>
+<br>
+
+<hr>
+
+## Coverage Report
+<hr>
+<br>
+<img src="static/images/coverage-report.png" alt="An image of the coverage report for my app's Python code.">

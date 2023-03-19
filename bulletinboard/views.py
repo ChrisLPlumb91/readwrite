@@ -89,7 +89,7 @@ class BulletinDetail(View):
                         .desc(nulls_last=True)))
 
             comment_form = CommentForm(data=request.POST)
-            
+
             if comment_form.is_valid():
                 comment = comment_form.save(commit=False)
                 comment.bulletin = specific_bulletin
@@ -287,7 +287,7 @@ class EditBulletin(View):
                 if 'page=' in query:
                     messages.success(request, 'You edited your bulletin.')
                     return HttpResponseRedirect(f'/?page={split_query[1]}')
-                elif '/edit_comment/ in query':
+                elif '/edit_comment/' in query:
                     messages.success(request, 'You edited your bulletin.')
                     return HttpResponseRedirect(reverse('bulletin',
                                                 args=[post.slug]))
@@ -390,8 +390,6 @@ class BulletinLike(View):
                 bulletin.likes.add(request.user)
 
             query = request.GET.get('query')
-
-            print(query)
 
             if 'page=' in query:
                 split_query = query.split('page=')

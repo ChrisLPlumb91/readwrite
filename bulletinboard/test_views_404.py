@@ -51,7 +51,7 @@ class Test404Views(TestCase):
 
         self.client.login(username=self.user_1.username,
                           password='test')
-    
+
     def test_404_when_try_edit_other_bulletin(self):
         self.client.logout()
         user_2 = User.objects.create_user(username='test_user_2',

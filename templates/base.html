@@ -41,7 +41,8 @@
         <div class="container-fluid">
 
             <!-- site logo -->
-            <a class="navbar-brand px-4" href="{% url 'home' %}">
+            <a class="navbar-brand px-4" href="{% url 'home' %}"
+                aria-label="This is the site logo. Click on it to go to the home page.">
                 <span class="big-r">R</span><span>ead</span><span class="big-w">W</span><span>rite</span>
             </a>
 
@@ -58,18 +59,18 @@
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 ml-auto py-5">
 
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{% url 'home' %}" id="home-page-link">Home</a>
+                        <a class="nav-link" aria-current="page" href="{% url 'home' %}" id="home-page-link" aria-label="Go to the home page.">Home</a>
                     </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'account_logout' %}" id="log-out-link">Logout</a>
+                        <a class="nav-link" href="{% url 'account_logout' %}" id="log-out-link" aria-label="Go to the logout confirmation page.">Logout</a>
                     </li>
                     {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'account_signup' %}" id="sign-up-link">Register</a>
+                        <a class="nav-link" href="{% url 'account_signup' %}" id="sign-up-link" aria-label="Go to the registration page.">Register</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'account_login' %}" id="log-in-link">Login</a>
+                        <a class="nav-link" href="{% url 'account_login' %}" id="log-in-link" aria-label="Go to the login page.">Login</a>
                     </li>
                     {% endif %}
                 </ul>
@@ -92,7 +93,8 @@
 
     <div class="text-center new-bulletin-button-container-top d-sm-block d-md-none">
         {% if user.is_authenticated %}
-        <a href="{% url 'add' %}" class="btn btn-lg new-bulletin-button my-4">New Bulletin</a>
+        <a href="{% url 'add' %}" class="btn btn-lg new-bulletin-button my-4"
+            aria-label="Go to the add bulletin page.">New Bulletin</a>
         {% else %}
         <button class="btn btn-lg greyed-out-button mt-4 mb-3">New Bulletin</button>
         {% endif %}
@@ -121,7 +123,8 @@
                 <!-- new bulletin button -->
                 <div class="text-center new-bulletin-button-container">
                     {% if user.is_authenticated %}
-                    <a href="{% url 'add' %}" class="btn btn-lg new-bulletin-button my-4">New Bulletin</a>
+                    <a href="{% url 'add' %}" class="btn btn-lg new-bulletin-button my-4"
+                        aria-label="Go to the add bulletin page.">New Bulletin</a>
                     {% else %}
                     <button class="btn btn-lg greyed-out-button mt-3 mb-4">New Bulletin</button>
                     {% endif %}

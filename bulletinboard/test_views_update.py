@@ -43,7 +43,7 @@ class TestUpdateViews(TestCase):
         self.bulletin.delete()
         self.comment.delete()
 
-    def test_post_edit_bulletin_page_home_redirect(self):        
+    def test_post_edit_bulletin_page_home_redirect(self):
         url_1 = reverse('home')
         url_2 = reverse('edit', args=[self.bulletin.slug])
 
@@ -58,7 +58,7 @@ class TestUpdateViews(TestCase):
 
         updated_bulletin = Bulletin.objects.get(id=self.bulletin.id)
 
-        self.assertEqual(updated_bulletin.slug, 'edited-bulletin')       
+        self.assertEqual(updated_bulletin.slug, 'edited-bulletin')
         self.assertRedirects(response, '/')
 
     def test_post_edit_bulletin_page_post_redirect(self):
@@ -112,7 +112,8 @@ class TestUpdateViews(TestCase):
         self.assertRedirects(response_1, home_url)
 
         response_2 = self.client.post(full_url)
-        self.assertFalse(self.bulletin.likes.filter(id=self.user_1.id).exists())
+        (self.assertFalse(self.bulletin.likes.filter(id=self.user_1.id)
+                          .exists()))
         self.assertRedirects(response_2, home_url)
 
     def test_post_like_bulletin_bulletin_page(self):
@@ -126,7 +127,8 @@ class TestUpdateViews(TestCase):
         self.assertRedirects(response_1, bulletin_url)
 
         response_2 = self.client.post(full_url)
-        self.assertFalse(self.bulletin.likes.filter(id=self.user_1.id).exists())
+        (self.assertFalse(self.bulletin.likes.filter(id=self.user_1.id)
+                          .exists()))
         self.assertRedirects(response_2, bulletin_url)
 
     def test_post_like_comment_bulletin_page(self):

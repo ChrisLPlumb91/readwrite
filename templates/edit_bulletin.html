@@ -7,14 +7,16 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-8 offset-2 my-4 edit-bulletin-form-container">
-            <form method="POST">
+            <form method="POST" action="{% url 'edit' bulletin.slug %}?query={{ original_url_query }}">
                 {{ bulletin_form | crispy }}
                 {% csrf_token %}
-                <button type="submit" action="{% url 'edit' bulletin.slug %}?query={{ original_url_query }}" class="btn btn-signup btn-primary btn-lg">Submit</button>
+                <button type="submit" class="btn btn-signup btn-primary btn-lg">Submit</button>
                 {% if '/post/' not in original_url_query %}
-                <a href="{% url 'home' %}" class="btn btn-secondary btn-lg">Cancel</a>
+                <a href="{% url 'home' %}" class="btn btn-secondary btn-lg"
+                    aria-label="This is the cancel button. Click on it to return to the home page.">Cancel</a>
                 {% else %}
-                <a href="{% url 'bulletin' bulletin.slug %}" class="btn btn-secondary btn-lg">Cancel</a>
+                <a href="{% url 'bulletin' bulletin.slug %}" class="btn btn-secondary btn-lg"
+                    aria-label="This is the cancel button. Click on it to return to this bulletin's page.">Cancel</a>
                 {% endif %}
             </form>
         </div>

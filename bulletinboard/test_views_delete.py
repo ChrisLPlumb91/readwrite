@@ -44,12 +44,14 @@ class TestDeleteViews(TestCase):
         self.comment.delete()
 
     def test_delete_bulletin_page(self):
-        another_bulletin = Bulletin.objects.create(title='Another New Bulletin',
+        another_bulletin = Bulletin.objects.create(title='Another ' +
+                                                   'New Bulletin',
                                                    slug='another-new-bulletin',
                                                    author=self.user_1,
                                                    content='This is a test ' +
                                                    'bulletin.',
-                                                   link='https://www.google.ie/',
+                                                   link='https://www.' +
+                                                   'google.ie/',
                                                    status=1,
                                                    edited=False)
 

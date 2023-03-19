@@ -22,7 +22,7 @@
                 <!-- bulletin edit button -->
                 <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
                     class="btn btn-lg float-end edit-bulletin-button edit-bulletin-button-your-post me-2"><i
-                        class="fas fa-pencil-alt"></i></a>
+                        class="fas fa-pencil-alt" aria-label="Go to the edit page for this bulletin."></i></a>
                 
                 <!-- bulletin like button form -->
                 <form method="POST"
@@ -44,8 +44,8 @@
                 <h2 class="title-ellipsis">{{ bulletin.title }}</h2>
 
                 <!-- link to news article -->
-                <a class="bulletin-link d-block my-2 link-ellipsis" href="{{ bulletin.link }}"
-                    target="_blank">{{ bulletin.link }}</a>
+                <a class="bulletin-link d-block my-2 link-ellipsis" href="{{ bulletin.link }}" target="_blank"
+                    aria-label="Go to the news article that this user has shared">{{ bulletin.link }}</a>
 
             </div>
 
@@ -75,8 +75,8 @@
                 <h2 class="title-ellipsis">{{ bulletin.title }}</h2>
 
                 <!-- link to news article -->
-                <a class="bulletin-link d-block my-2 link-ellipsis" href="{{ bulletin.link }}"
-                    target="_blank">{{ bulletin.link }}</a>
+                <a class="bulletin-link d-block my-2 link-ellipsis" href="{{ bulletin.link }}" target="_blank"
+                    aria-label="Go to the news article that this user has shared">{{ bulletin.link }}</a>
 
             </div>
 
@@ -92,8 +92,8 @@
                 <h2 class="title-ellipsis">{{ bulletin.title }}</h2>
 
                 <!-- link to news article -->
-                <a class="bulletin-link d-block my-2 link-ellipsis" href="{{ bulletin.link }}"
-                    target="_blank">{{ bulletin.link }}</a>
+                <a class="bulletin-link d-block my-2 link-ellipsis" href="{{ bulletin.link }}" target="_blank"
+                    aria-label="Go to the news article that this user has shared">{{ bulletin.link }}</a>
 
             </div>
             {% endif %}
@@ -175,7 +175,8 @@
 
                 <!-- comment edit button -->
                 <a href="{% url 'comment_edit' bulletin.slug %}?query={{ comment.id }}"
-                    class="float-end btn btn-lg edit-comment-button me-2"><i class="fas fa-pencil-alt"></i></a>
+                    class="float-end btn btn-lg edit-comment-button me-2"
+                    aria-label="Go to the edit page for this comment."><i class="fas fa-pencil-alt"></i></a>
 
             </div>
 
@@ -300,7 +301,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel"></h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">/</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">

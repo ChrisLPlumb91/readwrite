@@ -60,7 +60,8 @@ class TestCreateViews(TestCase):
 
     def test_post_comment_bulletin_page(self):
         url = reverse('bulletin', args=[self.bulletin.slug])
-        response = self.client.post(url, {'comment': 'This is a test comment.'})
+        response = self.client.post(url, {'comment': 'This is a ' +
+                                    'test comment.'})
 
         new_comment = Comment.objects.get(id=2)
 

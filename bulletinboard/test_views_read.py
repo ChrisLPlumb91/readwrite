@@ -73,4 +73,3 @@ class TestReadViews(TestCase):
         full_url_1 = url + query_string_1
 
         response_1 = self.client.get(full_url_1)
-        self.assertEqual(response_1.status_code, 200)

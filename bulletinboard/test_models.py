@@ -23,7 +23,8 @@ class TestModels(TestCase):
 
         self.comment = Comment.objects.create(bulletin=self.bulletin,
                                               author=self.user,
-                                              comment='This is a test comment.')
+                                              comment='This is ' +
+                                              'a test comment.')
 
     def tearDown(self):
         self.bulletin.delete()

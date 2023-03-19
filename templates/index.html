@@ -13,7 +13,8 @@
 
             <!-- 1h. The header of the first bulletin -->
             <div class="card-header blue-header">
-                <a href="{% url 'bulletin' bulletin.slug %}"><strong>{{ bulletin.title }}</strong></a>
+                <a href="{% url 'bulletin' bulletin.slug %}"
+                    aria-label="Click on this bulletin's title to go to its details page."><strong>{{ bulletin.title }}</strong></a>
                 {% if bulletin.edited %}
                 <p class="float-end post-info ps-1 edit-text"><em>Edited on {{ bulletin.updated_on }}</em></p>
                 <p class="float-end post-info px-1 divider"><strong>|</strong></p>
@@ -29,8 +30,8 @@
 
                 <!-- 1b1. link to news article -->
                 <div class="link-container d-inline-block px-2 py-2 link-container-your-post">
-                    <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
-                        target="_blank">{{ bulletin.link }}</a>
+                    <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2" target="_blank"
+                        aria-label="Go to the news article that this user has shared">{{ bulletin.link }}</a>
                 </div>
 
                 <div class="button-container d-inline float-end px-1 py-1 button-container-with-options">
@@ -53,7 +54,8 @@
 
                     <!-- 1b1. edit button -->
                     <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
-                        class="btn btn-lg float-start edit-bulletin-button me-2"><i class="fas fa-pencil-alt"></i></a>
+                        class="btn btn-lg float-start edit-bulletin-button me-2"
+                        aria-label="Go to the edit page for this bulletin."><i class="fas fa-pencil-alt"></i></a>
 
                     <!-- 1b1. delete button -->
                     <button type="button" class="btn btn-lg float-start delete-bulletin-button modal-button"
@@ -76,9 +78,9 @@
 
                 <!-- 1b2. link to news article -->
                 <div class="link-container d-inline-block px-2 py-2">
-                    <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
-                        target="_blank">{{ bulletin.link }}</a>
-                </div>            
+                    <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2" target="_blank"
+                        aria-label="Go to the news article that this user has shared">{{ bulletin.link }}</a>
+                </div>
 
                 <div class="button-container d-inline float-end px-1 py-1 button-container-without-options">
                     
@@ -113,8 +115,8 @@
 
                 <!-- 1b3. link to news article -->
                 <div class="link-container d-inline-block px-2 py-2">
-                    <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
-                        target="_blank">{{ bulletin.link }}</a>
+                    <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2" target="_blank"
+                        aria-label="Go to the news article that this user has shared">{{ bulletin.link }}</a>
                 </div>
 
                 <!-- 1b3. non-functioning like button and comment icon with count -->
@@ -144,7 +146,8 @@
             <!-- 2h1. The header of the last bulletin if the iteration number is even -->
             {% if forloop.counter|divisibleby:2 %}
             <div class="card-header red-header">
-                <a href="{% url 'bulletin' bulletin.slug %}"><strong>{{ bulletin.title }}</strong></a>
+                <a href="{% url 'bulletin' bulletin.slug %}"
+                    aria-label="Click on this bulletin's title to go to its details page."><strong>{{ bulletin.title }}</strong></a>
                 {% if bulletin.edited %}
                 <p class="float-end post-info ps-1 edit-text"><em>Edited on {{ bulletin.updated_on }}</em></p>
                 <p class="float-end post-info px-1 divider"><strong>|</strong></p>
@@ -157,7 +160,8 @@
             <!-- 2h2. The header of the last bulletin if the iteration number is odd -->
             {% else %}
             <div class="card-header blue-header">
-                <a href="{% url 'bulletin' bulletin.slug %}"><strong>{{ bulletin.title }}</strong></a>
+                <a href="{% url 'bulletin' bulletin.slug %}"
+                    aria-label="Click on this bulletin's title to go to its details page."><strong>{{ bulletin.title }}</strong></a>
                 {% if bulletin.edited %}
                 <p class="float-end post-info ps-1 edit-text"><em>Edited on {{ bulletin.updated_on }}</em></p>
                 <p class="float-end post-info px-1 divider"><strong>|</strong></p>
@@ -174,8 +178,8 @@
 
                 <!-- 2b1. link to news article -->
                 <div class="link-container d-inline-block px-2 py-2 link-container-your-post">
-                    <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
-                        target="_blank">{{ bulletin.link }}</a>
+                    <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2" target="_blank"
+                        aria-label="Go to the news article that this user has shared">{{ bulletin.link }}</a>
                 </div>
                
                 <div class="button-container d-inline float-end px-1 py-1 button-container-with-options">
@@ -198,7 +202,8 @@
 
                     <!-- 2b1. edit button -->
                     <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
-                        class="btn btn-lg float-start edit-bulletin-button me-2"><i class="fas fa-pencil-alt"></i></a>
+                        class="btn btn-lg float-start edit-bulletin-button me-2"
+                        aria-label="Go to the edit page for this bulletin."><i class="fas fa-pencil-alt"></i></a>
 
                     <!-- 2b1. delete button -->
                     <button type="button" class="btn btn-lg float-start delete-bulletin-button modal-button"
@@ -221,8 +226,8 @@
 
                 <!-- 2b2. link to news article -->
                 <div class="link-container d-inline-block px-2 py-2">
-                    <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
-                        target="_blank">{{ bulletin.link }}</a>
+                    <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2" target="_blank"
+                        aria-label="Go to the news article that this user has shared">{{ bulletin.link }}</a>
                 </div>
 
                 <div class="button-container d-inline float-end px-1 py-1 button-container-without-options">
@@ -258,8 +263,8 @@
 
                 <!-- 2b3. link to news article -->
                 <div class="link-container d-inline-block px-2 py-2">
-                    <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
-                        target="_blank">{{ bulletin.link }}</a>
+                    <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2" target="_blank"
+                        aria-label="Go to the news article that this user has shared">{{ bulletin.link }}</a>
                 </div>
 
                 <!-- 2b3. non-functioning like button and comment icon with count -->
@@ -289,7 +294,8 @@
             <!-- 3h1. The header of the current bulletin if the iteration number is even -->
             {% if forloop.counter|divisibleby:2 %}
             <div class="card-header red-header">
-                <a href="{% url 'bulletin' bulletin.slug %}"><strong>{{ bulletin.title }}</strong></a>
+                <a href="{% url 'bulletin' bulletin.slug %}"
+                    aria-label="Click on this bulletin's title to go to its details page."><strong>{{ bulletin.title }}</strong></a>
                 {% if bulletin.edited %}
                 <p class="float-end post-info ps-1 edit-text"><em>Edited on {{ bulletin.updated_on }}</em></p>
                 <p class="float-end post-info px-1 divider"><strong>|</strong></p>
@@ -302,7 +308,8 @@
             <!-- 3h2. The header of the current bulletin if the iteration number is odd -->
             {% else %}
             <div class="card-header blue-header">
-                <a href="{% url 'bulletin' bulletin.slug %}"><strong>{{ bulletin.title }}</strong></a>
+                <a href="{% url 'bulletin' bulletin.slug %}"
+                    aria-label="Click on this bulletin's title to go to its details page."><strong>{{ bulletin.title }}</strong></a>
                 {% if bulletin.edited %}
                 <p class="float-end post-info ps-1 edit-text"><em>Edited on {{ bulletin.updated_on }}</em></p>
                 <p class="float-end post-info px-1 divider"><strong>|</strong></p>
@@ -319,8 +326,8 @@
 
                 <!-- 3b1. link to news article -->
                 <div class="link-container d-inline-block px-2 py-2 link-container-your-post">
-                    <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
-                        target="_blank">{{ bulletin.link }}</a>
+                    <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2" target="_blank"
+                        aria-label="Go to the news article that this user has shared">{{ bulletin.link }}</a>
                 </div>
 
                 <div class="button-container d-inline float-end px-1 py-1 button-container-with-options">
@@ -344,7 +351,8 @@
 
                     <!-- 3b1. edit button -->
                     <a href="{% url 'edit' bulletin.slug %}?query={{ request.get_full_path|urlencode }}"
-                        class="btn btn-lg float-start edit-bulletin-button me-2"><i class="fas fa-pencil-alt"></i></a>
+                        class="btn btn-lg float-start edit-bulletin-button me-2"
+                        aria-label="Go to the edit page for this bulletin."><i class="fas fa-pencil-alt"></i></a>
 
                     <!-- 3b1. delete button -->
                     <button type="button" class="btn btn-lg float-start delete-bulletin-button modal-button"
@@ -367,8 +375,8 @@
 
                 <!-- 3b2. link to news article -->
                 <div class="link-container d-inline-block px-2 py-2">
-                    <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
-                        target="_blank">{{ bulletin.link }}</a>
+                    <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2" target="_blank"
+                        aria-label="Go to the news article that this user has shared">{{ bulletin.link }}</a>
                 </div>
 
                 <div class="button-container d-inline float-end px-1 py-1 button-container-without-options">
@@ -404,8 +412,8 @@
 
                 <!-- 3b3. link to news article -->
                 <div class="link-container d-inline-block px-2 py-2">
-                    <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2"
-                        target="_blank">{{ bulletin.link }}</a>
+                    <a href="{{ bulletin.link }}" class="d-inline-block link-ellipsis px-2" target="_blank"
+                        aria-label="Go to the news article that this user has shared">{{ bulletin.link }}</a>
                 </div>
 
                 <!-- 3b3. non-functioning like button and comment icon with count -->
@@ -433,11 +441,12 @@
     <nav aria-label="Page navigation" id="pagination-nav">
         <ul class="pagination justify-content-center">
             {% if page_obj.has_previous %}
-            <li><a href="?page={{ page_obj.previous_page_number }}"
-                    class="page-link btn btn-lg prev-button"><strong>&laquo; PREV </strong></a></li>
+            <li><a href="?page={{ page_obj.previous_page_number }}" class="page-link btn btn-lg prev-button"
+                    aria-label="Go to the previous page of bulletins."><strong>&laquo; PREV </strong></a></li>
             {% endif %}
             {% if page_obj.has_next %}
-            <li><a href="?page={{ page_obj.next_page_number }}" class="page-link btn btn-lg next-button"><strong> NEXT
+            <li><a href="?page={{ page_obj.next_page_number }}" class="page-link btn btn-lg next-button"
+                    aria-label="Go to the next page of bulletins."><strong> NEXT
                         &raquo;</strong></a></li>
             {% endif %}
         </ul>
@@ -450,7 +459,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel"></h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">/</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">

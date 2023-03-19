@@ -11,7 +11,8 @@
                 {{ bulletin_form | crispy }}
                 {% csrf_token %}
                 <button type="submit" class="btn btn-signup btn-primary btn-lg">Submit</button>
-                <a href="{% url 'home' %}" class="btn btn-secondary btn-lg">Cancel</a>
+                <a href="{% url 'home' %}" class="btn btn-secondary btn-lg"
+                    aria-label="This is the cancel button. Click it to return to the home page.">Cancel</a>
             </form>
         </div>
     </div>
